@@ -3,9 +3,9 @@ ofxSurfingImGuiExtra
 
 ## Overview
 
-This is a _complementary repository_ with extra files and a kind of sandbox for testing **openFrameworks** projects using **ofxSurfingImGui**.  
+This is a _complementary repository_ with extra files and a kind of sandbox for testing **openFrameworks** projects using [ofxSurfingImGui](https://github.com/moebiussurfing/ofxSurfingImGui).  
 
-[ofxSurfingImGui](https://github.com/moebiussurfing/ofxSurfingImGui) is an **ImGui** toolkit for **openFrameworks** projects.  
+**ofxSurfingImGui** is an **ImGui** toolkit for **openFrameworks** projects.  
 
 Some stuff stills in **WIP** like a _Timeline/Sequencer_ or _Node Patching_ TESTING PROJECTS.   
 
@@ -13,11 +13,31 @@ Some stuff stills in **WIP** like a _Timeline/Sequencer_ or _Node Patching_ TEST
 
 ## INDEX
 
-### 5. [TIMELINES AND SEQUENCERS](#5-timelines-and-sequencers-wip-1) [WIP]
+### 1. [MISCELLANEOUS] [WIP]
 
-### 6. [NODES PATCHING](#6-nodes-patching-wip-1) [WIP]
+### 2. [TIMELINES AND SEQUENCERS](#5-timelines-and-sequencers-wip-1) [WIP]
 
-## 5. TIMELINES AND SEQUENCERS [WIP]
+### 3. [NODES PATCHING](#6-nodes-patching-wip-1) [WIP]
+
+-------------------
+## 1. MISCELLANEOUS [WIP]
+
+<details>
+  <summary>3_1_Layout_ImTools1</summary>
+  <p>
+
+Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**: "_ It's a class for manage docking panes in an easy way, display (panes, menu, pane dialog), load/save, auto layout, etc..._". **WIP** porting to use in my oF projects.  
+
+An alternative to my Docking Layout Engine but without presets and with more development required.  
+Nice to learn about ImGui Docking.  
+
+![image](/docs/3_1_Layout_ImTools1.PNG?raw=true "image")  
+  </p>
+</details>
+
+--------------
+
+## 2. TIMELINES AND SEQUENCERS [WIP]
 
 These are TESTING projects trying to build an operative but very basic timeline, to run very simple animations:  
 
@@ -44,7 +64,9 @@ Using [Sequentity](https://github.com/alanjfs/sequentity). It's being hard to po
 
 <BR>
 
-## 6. NODES PATCHING [WIP]
+-----------
+
+## 3. NODES PATCHING [WIP]
 
 These are testing [projects](https://github.com/ocornut/imgui/issues/306) with nodes/graph/patching.  
 My target is to build a simple engine to patch between **ofParameters**.  
@@ -99,6 +121,8 @@ Example code by [@Daandelange](https://github.com/Daandelange). Using [ofxVisual
 5_6_ImNodes-Graph-ImGuizmo [BROKEN]  
 
 <BR>
+
+----------
 
 ## Dependencies
 [ofxImGui](https://github.com/Daandelange/ofxImGui/) : AWESOME FORK from @**Daandelange**  
