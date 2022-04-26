@@ -13,8 +13,9 @@ openFrameworks-Info.plist
 Project.xcconfig
 icon.rc
 
-#*.ps1
-#*.bat
+*.ps1
+*.bat
+
 *.ini
 *.XML
 *.xml
