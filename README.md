@@ -4,9 +4,10 @@ ofxSurfingImGuiExtra
 ## Overview
 
 This is a _complementary repository_ with extra files and a kind of sandbox for testing **openFrameworks** projects using **ofxSurfingImGui**.  
-**ofxSurfingImGui** is an **ImGui** toolkit for **openFrameworks** projects.  
 
-Some **WIP** stuff like a Timeline/Sequencer or Node Patching TESTING projects.   
+[ofxSurfingImGui](https://github.com/moebiussurfing/ofxSurfingImGui) is an **ImGui** toolkit for **openFrameworks** projects.  
+
+Some stuff stills in **WIP** like a _Timeline/Sequencer_ or _Node Patching_ TESTING PROJECTS.   
 
 ## WORK IN PROGRESS!
 
@@ -102,6 +103,7 @@ Example code by [@Daandelange](https://github.com/Daandelange). Using [ofxVisual
 ## Dependencies
 [ofxImGui](https://github.com/Daandelange/ofxImGui/) : AWESOME FORK from @**Daandelange**  
 [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)  
+
 [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) : For some examples only  
 
 ## Tested Systems
