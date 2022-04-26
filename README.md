@@ -9,8 +9,11 @@ This is a _complementary repository_ with extra files and a kind of sandbox for 
 
 Some stuff stills in **WIP** like a _Timeline/Sequencer_ or _Node Patching_ TESTING PROJECTS.   
 
+<BR>
 
 ## WORK IN PROGRESS!
+
+<BR>
 
 ## INDEX
 
@@ -38,6 +41,7 @@ Nice to learn about ImGui Docking.
   </p>
 </details>
 
+<BR>
 
 ## 2. TIMELINES AND SEQUENCERS [WIP]
 
@@ -65,7 +69,6 @@ Using [Sequentity](https://github.com/alanjfs/sequentity). It's being hard to po
 </details>
 
 <BR>
-
 
 ## 3. NODES PATCHING [WIP]
 
@@ -123,7 +126,6 @@ Example code by [@Daandelange](https://github.com/Daandelange). Using [ofxVisual
 
 <BR>
 
-
 ## Dependencies
 [ofxImGui](https://github.com/Daandelange/ofxImGui/) : AWESOME FORK from @**Daandelange**  
 [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)  
@@ -133,14 +135,12 @@ Example code by [@Daandelange](https://github.com/Daandelange). Using [ofxVisual
 ## Tested Systems
 - **Windows10** / **VS2017** / **OF ~0.11**
 
-## Author
-An addon by **@moebiusSurfing**  
-*( ManuMolina ) 2021-2022*  
-
 #### Thanks
 _All source snippets from other authors are linked into header files. Thanks!_
 
 #### License
 **MIT License**
 
-<BR>
+## Author
+An addon by **@moebiusSurfing**  
+*( ManuMolina ) 2021-2022*  
