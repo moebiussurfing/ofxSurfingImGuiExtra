@@ -14,12 +14,14 @@ Some stuff stills in **WIP** like a _Timeline/Sequencer_ or _Node Patching_ TEST
 
 ## INDEX
 
-### 1. [MISCELLANEOUS](#1-MISCELLANEOUS) [WIP]
+### 1. [MISCELLANEOUS](#1-miscellaneous-wip-1) [WIP]
 
 ### 2. [TIMELINES AND SEQUENCERS](#2-timelines-and-sequencers-wip-1) [WIP]
 
 ### 3. [NODES PATCHING](#3-nodes-patching-wip-1) [WIP]
 
+<BR>
+<BR>
 
 ## 1. MISCELLANEOUS [WIP]
 
