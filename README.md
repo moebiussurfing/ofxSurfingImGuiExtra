@@ -9,17 +9,18 @@ This is a _complementary repository_ with extra files and a kind of sandbox for 
 
 Some stuff stills in **WIP** like a _Timeline/Sequencer_ or _Node Patching_ TESTING PROJECTS.   
 
+
 ## WORK IN PROGRESS!
 
 ## INDEX
 
-### 1. [MISCELLANEOUS] [WIP]
+### 1. [MISCELLANEOUS](#1-MISCELLANEOUS) [WIP]
 
-### 2. [TIMELINES AND SEQUENCERS](#5-timelines-and-sequencers-wip-1) [WIP]
+### 2. [TIMELINES AND SEQUENCERS](#2-timelines-and-sequencers-wip-1) [WIP]
 
-### 3. [NODES PATCHING](#6-nodes-patching-wip-1) [WIP]
+### 3. [NODES PATCHING](#3-nodes-patching-wip-1) [WIP]
 
--------------------
+
 ## 1. MISCELLANEOUS [WIP]
 
 <details>
@@ -35,7 +36,6 @@ Nice to learn about ImGui Docking.
   </p>
 </details>
 
---------------
 
 ## 2. TIMELINES AND SEQUENCERS [WIP]
 
@@ -64,7 +64,6 @@ Using [Sequentity](https://github.com/alanjfs/sequentity). It's being hard to po
 
 <BR>
 
------------
 
 ## 3. NODES PATCHING [WIP]
 
@@ -122,7 +121,6 @@ Example code by [@Daandelange](https://github.com/Daandelange). Using [ofxVisual
 
 <BR>
 
-----------
 
 ## Dependencies
 [ofxImGui](https://github.com/Daandelange/ofxImGui/) : AWESOME FORK from @**Daandelange**  
