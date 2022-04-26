@@ -3,7 +3,7 @@ ofxSurfingImGuiExtra
 
 ## Overview
 
-This is a complementary repository with extra files and a kind of sandbox for testing **openFrameworks** projects using **ofxSurfingImGui**.  
+This is a _complementary repository_ with extra files and a kind of sandbox for testing **openFrameworks** projects using **ofxSurfingImGui**.  
 **ofxSurfingImGui** is an **ImGui** toolkit for **openFrameworks** projects.  
 
 Some **WIP** stuff like a Timeline/Sequencer or Node Patching TESTING projects.   
@@ -12,59 +12,9 @@ Some **WIP** stuff like a Timeline/Sequencer or Node Patching TESTING projects.
 
 ## INDEX
 
-### 4. [DOCKING AND LAYOUT PRESETS ENGINE](#4-docking-and-layout-presets-engine-wip-1) [WIP]
-
 ### 5. [TIMELINES AND SEQUENCERS](#5-timelines-and-sequencers-wip-1) [WIP]
 
 ### 6. [NODES PATCHING](#6-nodes-patching-wip-1) [WIP]
-
-## 4. DOCKING AND LAYOUT PRESETS ENGINE [WIP]
-
-Examples to improve the layout of Docking Spaces. 
-
-* Learn to split docking spaces by code, or using mouse control by the user.
-* Docking helpers. **Engine Manager** to create layout presets.
-<details>
-  <summary>3_0_Layout_Docking2</summary>
-  <p>
-
-#### LAYOUT PRESETS ENGINE
-
-* Fast adding of windows to the **Gui Manager**.
-* Auto populates **Control Panels** to handle layout presets.
-* Cute workflow for Management.
-* You can add extra parameters to the presets too. 
-
-![image](/docs/3_0_Layout_Docking2.gif?raw=true "gif")  
-  </p>
-</details>
-
-<details>
-  <summary>3_0_Layout_Docking3</summary>
-  <p>
-
-This example shows how to populate many ImGui windows from different scopes on the same viewport.  
-Uses different approaches: from ofApp, from an add-on/class, or with Surfing Layout tools as guiManager.  
-Also useful to check viewport modes, docking merging windows or autodraw modes.  
-
-![image](/docs/3_0_Layout_Docking3.PNG?raw=true "png")  
-  </p>
-</details>
-
-<details>
-  <summary>3_1_Layout_ImTools1</summary>
-  <p>
-
-Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**: "_ It's a class for manage docking panes in an easy way, display (panes, menu, pane dialog), load/save, auto layout, etc..._". **WIP** porting to use into my oF projects.  
-
-An alternative to my Docking Layout Engine but without presets and with more development required.  
-Nice to learn about ImGui Docking.  
-
-![image](/docs/3_1_Layout_ImTools1.PNG?raw=true "image")  
-  </p>
-</details>
-
-<BR>
 
 ## 5. TIMELINES AND SEQUENCERS [WIP]
 
@@ -168,21 +118,3 @@ _All source snippets from other authors are linked into header files. Thanks!_
 **MIT License**
 
 <BR>
-
-<details>
-  <summary>Some Reference Links</summary>
-  <p>
-
-https://github.com/HankiDesign/awesome-dear-imgui -> Collected widgets  
-https://github.com/soufianekhiat/DearWidgets -> Cute widgets already included  
-https://github.com/yumataesu/ImGui_Widgets -> oF ready widgets  
-https://github.com/aiekick/ImTools/tree/main/LayoutManager  
-https://github.com/Organic-Code/ImTerm -> Interesting terminal to look into  
-https://github.com/d3cod3/ofxVisualProgramming -> oF node patched system  
-https://github.com/d3cod3/Mosaic -> oF node patched system  
-https://github.com/mnesarco/imgui_sugar/blob/main/imgui_sugar.hpp -> macros  
-https://github.com/njazz/AutomationCurveEditor  
-https://github.com/leiradel/ImGuiAl  
-
-  </p>
-</details>
