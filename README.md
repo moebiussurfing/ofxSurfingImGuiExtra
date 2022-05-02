@@ -5,7 +5,8 @@ ofxSurfingImGuiExtra
 
 This is a _complementary repository_ with extra files and a kind of sandbox for testing **openFrameworks** projects using [ofxSurfingImGui](https://github.com/moebiussurfing/ofxSurfingImGui).  
 
-**ofxSurfingImGui** is an **ImGui** toolkit for **openFrameworks** projects.  
+**ofxSurfingImGui** is an **ImGui** toolkit for **openFrameworks** projects. 
+
 
 Some stuff stills in **WIP** like a _Timeline/Sequencer_ or _Node Patching_ TESTING PROJECTS.   
 
@@ -138,9 +139,71 @@ Example code by [@Daandelange](https://github.com/Daandelange). Using [ofxVisual
 #### Thanks
 _All source snippets from other authors are linked into header files. Thanks!_
 
+  </p>
+</details>
+
 #### License
 **MIT License**
 
 ## Author
 An addon by **@moebiusSurfing**  
 *( ManuMolina ) 2021-2022*  
+
+----------
+
+
+
+## NOTES
+
+
+
+<details>
+  <summary>Code</summary>
+  <p>
+
+ofApp.h
+
+```.cpp
+
+```
+
+ofApp.cpp
+
+```.cpp
+
+```
+</p>
+</details>
+
+
+
+
+<details>
+  <summary>SOME EXAMPLE CASES</summary>
+  <p>
+
+**CASE 1**:  
+_Draw an **ofParameter<float>** as slider (default), drag number or/and +/- stepper box._  
+
+**CASE 2**:  
+_Draw an **ofParameter<bool>** as a check box (default), or as a big toggle button with custom dimensions._  
+
+**CASE 3**:  
+_You added an **ofParameter<bool>** inside an **ofParameterGroup**. Add a style for the type of widget. You want to customize how it will be drawn (instead of using the default style), but when the group is rendered._  
+  </p>
+</details>
+
+
+
+<details>
+  <summary>TODO</summary>
+  <p>
+
+* macOS testing and fixing. Any help on this is appreciated!  
+* Split repo to simplify current examples. Move extra examples to new repo.
+* Fix Bugs on all the ofParameter Helpers/Styles/Docking sections.
+* Create some selected examples to simplify learning.
+* Add more ImGui raw widgets/add-ons with examples.
+* Convert some more widgets to ofParameters.
+  </p>
+</details>
