@@ -51,7 +51,7 @@ void ofApp::setup_ImGui()
 	guiManager.addWindowSpecial("myWindow 2");
 	guiManager.addWindowSpecial("myWindow 3");
 
-	//// Customize names to help integrate into your guis.
+	//// Customize names to help integrate into your gui's.
 	//guiManager.setNameWindowsSpecialsPanel("My Add-on");//rename "Organizer" to custom name.
 
 	// Startup
@@ -74,8 +74,8 @@ void ofApp::draw() {
 		//-
 		
 		/*
-			Another window called "Organizer" (by defaut) will be auto drawn!
-			It's a panel who controls all the spcial windows.
+			Another window called "Organizer" (by default) will be auto drawn!
+			It's a panel who controls all the special windows.
 			Features:
 			- creates toggles to show/ hide each window.
 			- hide/show all/none.
@@ -133,4 +133,33 @@ void ofApp::draw_SurfingWidgets_3() {
 		guiManager.AddGroup(params_3);
 	}
 	guiManager.endWindowSpecial();
+}
+
+//--------------------------------------------------------------
+void ofApp::keyPressed(int key) {
+
+	if (false) {}
+
+	else if (key == 'h') {
+		guiManager.setSpecialWindowsOrganizerOrientationHorizontal();
+	}
+	else if (key == 'v') {
+		guiManager.setSpecialWindowsOrganizerOrientationVertical();
+	}
+	else if (key == 'o') {
+		guiManager.setToggleSpecialWindowsOrganizerOrientation();
+	}
+
+	else if (key == '0') {
+		guiManager.setWindowSpecialToggleVisible(0);
+	}
+	else if (key == '1') {
+		guiManager.setWindowSpecialToggleVisible(1);
+	}
+	else if (key == '2') {
+		guiManager.setWindowSpecialToggleVisible(2);
+	}
+	else if (key == '3') {
+		guiManager.setWindowSpecialToggleVisible(3);
+	}
 }
