@@ -76,7 +76,8 @@ https://github.com/d3cod3/Mosaic -> oF node patched system for inspiration
 https://github.com/mnesarco/imgui_sugar/blob/main/imgui_sugar.hpp -> Useful ImGui style macros  
 https://github.com/njazz/AutomationCurveEditor -> Curve editor for param automations  
 https://github.com/leiradel/ImGuiAl -> Some widgets    
-
+  </p>
+</details>
 
 <details>
   <summary>Title</summary>
