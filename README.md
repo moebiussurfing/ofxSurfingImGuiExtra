@@ -5,9 +5,9 @@ ofxSurfingImGuiExtra
 
 This is a _complementary repository_ with extra files, complementary docs and a kind of sandbox for testing **openFrameworks** projects using [ofxSurfingImGui](https://github.com/moebiussurfing/ofxSurfingImGui).  
 
-![GIFS](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/tree/master/readme_media/gi)  
+![GIFS](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/tree/master/readme_media/gif/README.md)  
 
-![SCREENSHOTS](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/tree/master/readme_media/image)  
+![SCREENSHOTS](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/tree/master/readme_media/image/README.md)  
 
 More Info [README_DEV](/README_DEV.md).  
 
