@@ -1,13 +1,15 @@
 
 #pragma once
 
-#include "ofMain.h"
-#include "ofxSurfingImGui.h"
+//#include "ofMain.h"
+//#include "ofxSurfingImGui.h"
+#include "imgui.h"
 #include "metrics_gui.h"
-
 //#include <stdint.h>
 //#include <stdio.h>
 //#include <windows.h>
+
+// Look into main.cpp file to copy code from!
 
 class surfingMetrics {
 
@@ -16,10 +18,7 @@ public:
 	surfingMetrics() {};
 	~surfingMetrics() {};
 
-	//MetricsGuiMetric frameTimeMetric("Frame time", "s", MetricsGuiMetric::USE_SI_UNIT_PREFIX);
 	MetricsGuiMetric frameTimeMetric;
-
-	//MetricsGuiMetric sineMetric("Sine", "", MetricsGuiMetric::KNOWN_MIN_VALUE | MetricsGuiMetric::KNOWN_MAX_VALUE);
 	MetricsGuiMetric sineMetric;
 
 	MetricsGuiPlot frameTimePlot;
@@ -35,15 +34,11 @@ public:
 		// Note: MetricsGuiPlot does not assume ownership over added metrics, so it
 		// is the users responsibility to manage the lifetime of MetricsGuiMetric
 		// instances.
-		//MetricsGuiMetric frameTimeMetric("Frame time", "s", MetricsGuiMetric::USE_SI_UNIT_PREFIX);
-		//frameTimeMetric("Frame time", "s", MetricsGuiMetric::USE_SI_UNIT_PREFIX);
 		frameTimeMetric.mDescription = "Frame time";
 		frameTimeMetric.mUnits = "s";
 		frameTimeMetric.mFlags = MetricsGuiMetric::USE_SI_UNIT_PREFIX;
 		frameTimeMetric.mSelected = true;
 
-		//MetricsGuiMetric sineMetric("Sine", "", MetricsGuiMetric::KNOWN_MIN_VALUE | MetricsGuiMetric::KNOWN_MAX_VALUE);
-		//sineMetric("Sine", "", MetricsGuiMetric::KNOWN_MIN_VALUE | MetricsGuiMetric::KNOWN_MAX_VALUE);
 		sineMetric.mDescription = "Sine";
 		sineMetric.mUnits = "";
 		sineMetric.mFlags = MetricsGuiMetric::KNOWN_MIN_VALUE | MetricsGuiMetric::KNOWN_MAX_VALUE;
@@ -54,40 +49,39 @@ public:
 		// Metrics are drawn using a MetricsGuiPlot.  MetricsGuiPlot holds pointers
 		// to one or more metrics, and maintains value extents for the metrics
 		// added to it.
-		//MetricsGuiPlot frameTimePlot;
 		frameTimePlot.mShowAverage = true;
 		frameTimePlot.mShowLegendAverage = true;
 		frameTimePlot.mShowLegendColor = false;
 		frameTimePlot.AddMetric(&frameTimeMetric);
 
-		//MetricsGuiPlot sinePlot;
 		sinePlot.mShowAverage = true;
 		sinePlot.mShowLegendAverage = true;
 		sinePlot.mShowLegendColor = false;
+
 		sinePlot.AddMetric(&sineMetric);
 
 		// If you link the legends of two or more plots, then their labels will all
 		// be aligned.
 		frameTimePlot.LinkLegends(&sinePlot);
 
-		//MetricsGuiPlot listPlot;
 		listPlot.mShowInlineGraphs = true;
 		listPlot.mShowOnlyIfSelected = true;
 		listPlot.mShowLegendColor = false;
 		listPlot.mShowLegendDesc = false;
 		listPlot.mShowLegendMin = true;
 		listPlot.mShowLegendMax = true;
+
 		listPlot.AddMetric(&frameTimeMetric);
 		listPlot.AddMetric(&sineMetric);
 		listPlot.SortMetricsByName();
 
-		//MetricsGuiPlot combinedPlot;
 		combinedPlot.mBarGraph = true;
 		combinedPlot.mStacked = true;
 		combinedPlot.mShowAverage = true;
 		combinedPlot.mShowLegendAverage = true;
 		combinedPlot.mShowLegendUnits = false;
 		combinedPlot.mPlotRowCount = 7;
+
 		combinedPlot.AddMetric(&frameTimeMetric);
 		combinedPlot.AddMetric(&sineMetric);
 	}
@@ -95,23 +89,36 @@ public:
 	//--------------------------------------------------------------
 	void update()
 	{
-		//// Show window and enter application loop
+		//--
+		
+		float freq = 0.01f;
+
+		//count frames
+		//int t = ofGetFrameNum();
+		//int t = ImGui::GetIO().time();
+		static uint32_t t = 0;
+		t++;
+
+		frameTimeMetric.AddNewValue(1.f / ImGui::GetIO().Framerate);
+		//frameTimeMetric.AddNewValue(1.f / ofGetFrameRate());
+
+		sineMetric.AddNewValue(sin(t * freq));
+		//sineMetric.AddNewValue((float)sin((double)(t.QuadPart - t0.QuadPart) / freq.QuadPart));
+
+		//--
+		 
 		//LARGE_INTEGER freq;
 		//LARGE_INTEGER t0;
 		//QueryPerformanceFrequency(&freq);
 		//QueryPerformanceCounter(&t0);
-		// Update metrics values
+
+		//// Update metrics values
 		//LARGE_INTEGER t;
 		//QueryPerformanceCounter(&t);
-		
-		float freq = 0.01f;
-		int t = ofGetFrameNum();
-
-		frameTimeMetric.AddNewValue(1.f / ImGui::GetIO().Framerate);
-		//frameTimeMetric.AddNewValue(1.f / ofGetFrameRate());
-		
-		sineMetric.AddNewValue(sin(t * freq));
+		//frameTimeMetric.AddNewValue(1.f / ImGui::GetIO().Framerate);
 		//sineMetric.AddNewValue((float)sin((double)(t.QuadPart - t0.QuadPart) / freq.QuadPart));
+
+		//--
 
 		// After adding metric values, update all the plot axes.
 		frameTimePlot.UpdateAxes();
@@ -204,6 +211,8 @@ public:
 					sinePlot.DrawHistory();
 					ImGui::TreePop();
 				}
+
+				//TODO: it seems is not working fine. time plot is not linked well, to the passed pointer..
 
 				ImGui::Separator();
 				ImGui::SetNextTreeNodeOpen(true, ImGuiCond_FirstUseEver);
