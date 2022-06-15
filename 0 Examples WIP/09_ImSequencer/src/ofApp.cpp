@@ -4,7 +4,7 @@
 void ofApp::setup() {
 	ofSetFrameRate(60);
 	ofSetWindowPosition(-1920, 25);
-	guiManager.setImGuiAutodraw(true);
+
 	guiManager.setup();
 
 	sequencer.setup();
@@ -21,6 +21,12 @@ void ofApp::update() {
 //--------------------------------------------------------------
 void ofApp::draw()
 {
+	float value = ofxSurfingHelpers::getFadeBlink();
+	//float value = sequencer;
+
+	ofClear(value * 255.f);
+
+
 	guiManager.begin(); // global begin
 	{
 		drawWidgets();
@@ -41,7 +47,7 @@ void ofApp::drawWidgets()
 
 			// round toggles widgets
 			ofxImGuiSurfing::ToggleRoundedButton("Show Timeline", &bOpen1);
-			ofxImGuiSurfing::ToggleRoundedButton("Show Window 2", &bOpen2);
+			//ofxImGuiSurfing::ToggleRoundedButton("Show Window 2", &bOpen2);
 
 			ImGui::Dummy(ImVec2(0, 5)); // spacing
 
@@ -56,6 +62,8 @@ void ofApp::drawWidgets()
 //--------------------------------------------------------------
 void ofApp::drawTimeline()
 {
+	if (!bOpen1)return;
+
 	{
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
 		//if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
@@ -73,54 +81,4 @@ void ofApp::drawTimeline()
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key) {
 	if (key = ' ') { bPlay = !bPlay; }
-}
-
-//--------------------------------------------------------------
-void ofApp::keyReleased(int key) {
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y) {
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button) {
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button) {
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button) {
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseEntered(int x, int y) {
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseExited(int x, int y) {
-
-}
-
-//--------------------------------------------------------------
-void ofApp::windowResized(int w, int h) {
-
-}
-
-//--------------------------------------------------------------
-void ofApp::gotMessage(ofMessage msg) {
-
-}
-
-//--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo) {
-
 }
