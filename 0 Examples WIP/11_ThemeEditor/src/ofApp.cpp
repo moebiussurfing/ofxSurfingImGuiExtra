@@ -11,7 +11,8 @@ void ofApp::setup() {
 	// We can activate one of the bundled Themes:
 	// Must be called after setup() to overwrite the default loaded theme.
 
-	ofxImGuiSurfing::ImGui_ThemeOlekristensen();
+	ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
+	//ofxImGuiSurfing::ImGui_ThemeOlekristensen();
 	//ofxImGuiSurfing::ImGui_ThemeSequentity();
 
 	//--
@@ -126,7 +127,7 @@ void ofApp::drawMainWindow()
 		//if (guiManager.Add(fontSize))
 		//{
 		//}
-		
+
 		guiManager.AddSpacingBigSeparated();
 
 		if (guiManager.Add(fontIndex))
@@ -225,7 +226,7 @@ void ofApp::drawWindowStylized()
 				}
 
 				guiManager.Add(bEnable, OFX_IM_TOGGLE);
-				guiManager.Add(amount2); 
+				guiManager.Add(amount2);
 				guiManager.AddLabel(txt, false, true);
 			}
 			if (bStyleFonts) guiManager.popStyleFont();
@@ -242,7 +243,7 @@ void ofApp::drawWindowStylized()
 				}
 
 				guiManager.Add(bEnable, OFX_IM_TOGGLE);
-				guiManager.Add(amount2); 
+				guiManager.Add(amount2);
 				guiManager.AddLabel(txt, false, true);
 			}
 			if (bStyleFonts) guiManager.popStyleFont();
