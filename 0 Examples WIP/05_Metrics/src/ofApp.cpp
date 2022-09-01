@@ -5,7 +5,7 @@ void ofApp::setup()
 {
 	metrics.setup();
 
-	guiManager.setup();
+	ui.setup();
 }
 
 //--------------------------------------------------------------
@@ -17,11 +17,11 @@ void ofApp::update()
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	guiManager.begin();
+	ui.Begin();
 	{
 		metrics.draw();
 	}
-	guiManager.end();
+	ui.End();
 
 }
 

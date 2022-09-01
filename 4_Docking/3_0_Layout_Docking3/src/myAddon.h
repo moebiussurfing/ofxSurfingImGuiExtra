@@ -16,13 +16,13 @@ public:
 	int val = 0;
 	int x, y;
 
-	void setup(string name = "guiManager-myAddon", int val = 0, int x = 0, int y = 0);
+	void setup(string name = "ui-myAddon", int val = 0, int x = 0, int y = 0);
 	void draw();
 	void exit();
 
 	void drawWindow(string _title, int& _value, int _x = 300, int _y = 300, ImGuiWindowFlags _flags = ImGuiWindowFlags_None);
 
-	ofxSurfing_ImGui_Manager guiManager;
+	ofxSurfingGui ui;
 
 protected:
 	float value1;

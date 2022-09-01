@@ -37,7 +37,7 @@ public:
 
     ofParameter<bool> bGui{"Show Gui", true};
 
-    ofxSurfing_ImGui_Manager guiManager;
+    ofxSurfingGui ui;
 
     neoSequencer seq;
 };

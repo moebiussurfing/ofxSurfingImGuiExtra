@@ -10,7 +10,7 @@ public:
 		void setup();
 		void draw();
 			
-		ofxSurfing_ImGui_Manager guiManager; 
+		ofxSurfingGui ui; 
 
 		void drawWidgets();
 		void drawMainWindow();

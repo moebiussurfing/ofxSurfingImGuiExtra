@@ -6,7 +6,7 @@ void ofApp::setup()
 	// Profiler
 	profilerActive = true;
 
-	guiManager.setup();
+	ui.setup();
 }
 
 //--------------------------------------------------------------
@@ -50,14 +50,14 @@ void ofApp::draw()
 
 	//--
 
-	guiManager.begin();
+	ui.Begin();
 	{
 		// PROFILER
 		if (profilerActive) {
 			profiler.Render(&profilerActive);
 		}
 	}
-	guiManager.end();
+	ui.End();
 
 }
 

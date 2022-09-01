@@ -31,7 +31,7 @@ void ofApp::setup_ImGui()
 //--------------------------------------------------------------
 void ofApp::draw() {
 
-	gui.begin();
+	gui.Begin();
 	{
 		ImGui::Begin("Progress Indicators");
 
@@ -56,9 +56,9 @@ void ofApp::draw() {
 		ofxImGuiSurfing::AddProgressBar(p);
 		//OFX_IM_PROGRESS_BAR_NO_TEXT:
 		ofxImGuiSurfing::AddProgressBar(p, -1, true);
-		//guiManager.Add(timer_Progress, OFX_IM_PROGRESS_BAR_NO_TEXT);//-> To use when using a guiManager
+		//ui.Add(timer_Progress, OFX_IM_PROGRESS_BAR_NO_TEXT);//-> To use when using a ui
 
 		ImGui::End();
 	}
-	gui.end();
+	gui.End();
 }

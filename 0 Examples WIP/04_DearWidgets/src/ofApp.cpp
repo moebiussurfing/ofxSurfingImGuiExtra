@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup_ImGui()
 {
-	guiManager.setup(IM_GUI_MODE_INSTANTIATED);
+	ui.setup(IM_GUI_MODE_INSTANTIATED);
 }
 
 //--------------------------------------------------------------
@@ -39,7 +39,7 @@ void ofApp::setup() {
 
 //--------------------------------------------------------------
 void ofApp::draw() {
-	guiManager.begin();
+	ui.Begin();
 	{
 		ImGuiColorEditFlags _flagw;
 		string name;
@@ -80,7 +80,7 @@ void ofApp::draw() {
 			draw_MoreWidgets();
 		}
 	}
-	guiManager.end();
+	ui.End();
 }
 
 //--------------------------------------------------------------
@@ -159,7 +159,7 @@ void ofApp::draw_MoreWidgets()
 		ImDrawList* draw_list = ImGui::GetWindowDrawList();
 
 		ofxImGuiSurfing::drawTimecode(draw_list, ofGetElapsedTimef());
-		ofxImGuiSurfing::AddTooltipHelp("Urbs, Virus y Bits se propone como un piloto de lo que imaginamos como una escuela que se aproxime a la ciudad desde las humanidades ambientales. Propone un acercamiento a las humanidades ambientales desde las prácticas digitales, artísticas y de invención de ciudad, respondiendo a los desafíos climáticos y de justicia ambiental.");
+		ofxImGuiSurfing::AddTooltipHelp("Urbs, Virus y Bits se propone como un piloto de lo que imaginamos como una escuela que se aproxime a la ciudad desde las humanidades ambientales. Propone un acercamiento a las humanidades ambientales desde las prï¿½cticas digitales, artï¿½sticas y de invenciï¿½n de ciudad, respondiendo a los desafï¿½os climï¿½ticos y de justicia ambiental.");
 		ofxImGuiSurfing::AddLinkURL("Open URL Info", "http://google.com");
 
 		ImGui::TextWrapped(

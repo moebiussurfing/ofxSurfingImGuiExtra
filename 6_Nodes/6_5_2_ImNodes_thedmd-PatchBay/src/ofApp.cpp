@@ -7,8 +7,8 @@ void ofApp::setup() {
 
 	ofxSurfingHelpers::setThemeDark_ofxGui();
 
-	guiManager.setImGuiAutodraw(true);
-	guiManager.setup();
+	ui.setImGuiAutodraw(true);
+	ui.setup();
 
 	setupPatches();
 
@@ -110,10 +110,10 @@ void ofApp::draw()
 {
 	drawPatches();
 
-	guiManager.begin();
+	ui.Begin();
 	{
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-		if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+		if (ui.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 		if (bOpen0) {
 			ImGui::Begin("Panels", &bOpen0, window_flags);
@@ -143,7 +143,7 @@ void ofApp::draw()
 			ImLog.ImGui("LOG", ImGuiWindowFlags_None, &bLog);
 		}
 	}
-	guiManager.end();
+	ui.End();
 }
 
 //--------------------------------------------------------------

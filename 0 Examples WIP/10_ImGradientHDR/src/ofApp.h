@@ -16,7 +16,7 @@ public:
 
     ofParameter<bool> bGui{"ImGradientHDR", true};
 
-    ofxSurfing_ImGui_Manager guiManager;
+    ofxSurfingGui ui;
 
     SurfingImGradientHDR gradient;
 };

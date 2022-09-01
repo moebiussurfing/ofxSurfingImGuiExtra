@@ -3,22 +3,22 @@
 //--------------------------------------------------------------
 void ofApp::setup() 
 {
-	guiManager.setup();
+	ui.setup();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw() 
 {
-	guiManager.begin();
+	ui.Begin();
 	{
-		if (guiManager.beginWindow(bGui))
+		if (ui.BeginWindow(bGui))
 		{
 			gradient.draw();
 
-			guiManager.endWindow();
+			ui.EndWindow();
 		}
 	}
-	guiManager.end();
+	ui.End();
 }
 
 //--------------------------------------------------------------

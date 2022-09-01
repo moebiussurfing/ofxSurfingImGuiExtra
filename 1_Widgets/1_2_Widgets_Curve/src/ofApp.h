@@ -15,7 +15,7 @@ public:
     
 	void setup_ImGui();
 
-	ofxSurfing_ImGui_Manager gui;
+	ofxSurfingGui gui;
 
 	ofxImGuiSurfing::SurfingCurve surfingCurve;
 	ofParameter<float> value{ "Value", 0, 0, 1 };

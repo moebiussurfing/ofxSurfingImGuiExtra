@@ -29,7 +29,7 @@ public:
 	std::map<int, std::shared_ptr<simpleNode>> nodesMap;
 
 	// GUI
-	ofxSurfing_ImGui_Manager guiManager;
+	ofxSurfingGui ui;
 
 	ofxInfiniteCanvas canvas;
 	ofRectangle canvasViewport;

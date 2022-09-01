@@ -109,7 +109,7 @@ ofApp.h
 ```.cpp
 #include "ofxSurfingImGui.h"
 
-ofxSurfing_ImGui_Manager guiManager;
+ofxSurfingGui ui;
 
 ofParameter<bool> bGui{ "Show Gui", true };
 
@@ -124,7 +124,7 @@ ofApp.cpp
 ```.c++
 void ofApp::setup() 
 { 
-    guiManager.setup(); 
+    ui.setup(); 
 
     // Instantiates and configures all the required ofxImGui stuff inside:
     // Font, theme, autodraw, layout store/recall, multi context/instances, ofParams Helpers and other customizations.
@@ -132,10 +132,10 @@ void ofApp::setup()
 
 void ofApp::draw() 
 { 
-    guiManager.begin();
+    ui.Begin();
     if (bGui) // -> This param makes the close button functional
     {
-        guiManager.beginWindow("Window", (bool *)&bGui.get(), ImGuiWindowFlags_None);
+        ui.BeginWindow("Window", (bool *)&bGui.get(), ImGuiWindowFlags_None);
         {
             ofxImGuiSurfing::AddToggleRoundedButton(bEnable);
             if (bEnable)
@@ -174,9 +174,9 @@ void ofApp::draw()
                 if (ImGui::Button("REPLAY", ImVec2(_w3, _h))) {}
             }
         }
-        guiManager.endWindow();
+        ui.EndWindow();
     }
-    guiManager.end();
+    ui.End();
 }
 ```
 </p>
@@ -282,7 +282,7 @@ Examples to improve the layout of Docking Spaces.
   <p>
 
 This example shows how to populate many ImGui windows from different scopes on the same viewport.  
-Uses different approaches: from ofApp, from an add-on/class, or with Surfing Layout tools as guiManager.  
+Uses different approaches: from ofApp, from an add-on/class, or with Surfing Layout tools as ui.  
 Also useful to check viewport modes, docking merging windows or auto draw modes.  
 
 ![image](/docs/readme_media/image/3_StylesEngine/3_0_Layout_Docking3.PNG?raw=true "png")  

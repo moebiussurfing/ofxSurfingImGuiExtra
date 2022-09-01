@@ -8,24 +8,24 @@ void ofApp::setup()
 
 	notifier.setMessagesLifeTime(4000);
 
-	guiManager.setup();
+	ui.setup();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	guiManager.begin();
+	ui.Begin();
 	{
-		if (guiManager.beginWindow(bGui))
+		if (ui.BeginWindow(bGui))
 		{
-			guiManager.Add(guiManager.bAutoResize);
+			ui.Add(ui.bAutoResize);
 
 			notification_manager.Draw();
 
-			guiManager.endWindow();
+			ui.EndWindow();
 		}
 	}
-	guiManager.end();
+	ui.End();
 
 	notifier.draw();
 }

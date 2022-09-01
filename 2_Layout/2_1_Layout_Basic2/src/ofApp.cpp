@@ -9,16 +9,16 @@ void ofApp::setup() {
 	// Must uncomment only one mode!
 
 	// MODE A
-	guiManager.setImGuiAutodraw(true); // -> required when only one single ImGui instance is instantiated on all the oF project.
-	guiManager.setup(); // ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
+	ui.setImGuiAutodraw(true); // -> required when only one single ImGui instance is instantiated on all the oF project.
+	ui.setup(); // ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
 
 	// MODE B
-	//guiManager.setup(gui); // can be instantiated out of the class, locally
+	//ui.setup(gui); // can be instantiated out of the class, locally
 
 	// Pick another theme
 	//ofxImGuiSurfing::ImGui_ThemeSequentity();
 
-	guiManager.bAutoResize = false;
+	ui.bAutoResize = false;
 
 	//-
 
@@ -54,7 +54,7 @@ void ofApp::setup() {
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	guiManager.begin(); // global begin
+	ui.Begin(); // global begin
 	{
 		// Main Window
 		drawMainWindow();
@@ -84,18 +84,18 @@ void ofApp::draw()
 			ImGui::End();
 		}
 	}
-	guiManager.end(); // global end
+	ui.End(); // global end
 }
 
 //--------------------------------------------------------------
 void ofApp::drawMainWindow() {
 	ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-	if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+	if (ui.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 	// A raw standard raw ImGui window begin/end
 	//ImGui::Begin("Show Windows", &bOpen0, window_flags);
-	//ofxImGuiSurfing::pushName(); //-> required when usign raw begin/end pair instead of guiManager.begin/end
-	guiManager.beginWindow("Show Windows", &bOpen0, window_flags);
+	//ofxImGuiSurfing::pushName(); //-> required when usign raw begin/end pair instead of ui.Begin/end
+	ui.BeginWindow("Show Windows", &bOpen0, window_flags);
 	{
 
 		// round toggles widgets
@@ -106,18 +106,18 @@ void ofApp::drawMainWindow() {
 
 		ImGui::Dummy(ImVec2(0, 5)); // spacing
 
-		ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAutoResize); // a public bool variable to allow handle auto-resize. Applied here to all the windows.
+		ofxImGuiSurfing::AddToggleRoundedButton(ui.bAutoResize); // a public bool variable to allow handle auto-resize. Applied here to all the windows.
 	}
-	guiManager.endWindow();
-	//ofxImGuiSurfing::popName(); //-> required when usign raw begin/end pair instead of guiManager.begin/end
-	////ofxImGuiSurfing::clearNames(); //-> required when usign raw begin/end pair instead of guiManager.begin/end
+	ui.EndWindow();
+	//ofxImGuiSurfing::popName(); //-> required when usign raw begin/end pair instead of ui.Begin/end
+	////ofxImGuiSurfing::clearNames(); //-> required when usign raw begin/end pair instead of ui.Begin/end
 	//ImGui::End();
 }
 
 //--------------------------------------------------------------
 void ofApp::drawWindow1()
 {
-	// A window but using my ofxSurfing_ImGui_Manager.h class helper
+	// A window but using my ofxSurfingGui.h class helper
 	// Uses my own simpler helpers: 
 	// ofxSurfing_ImGui_Helpers.h
 	// Notice that you can add an ofParameterGroup out of a ofxImGui window. 
@@ -131,9 +131,9 @@ void ofApp::drawWindow1()
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(ww, hh));
 	{
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-		if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+		if (ui.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
-		guiManager.beginWindow("Window 1", &bOpen1, window_flags);
+		ui.BeginWindow("Window 1", &bOpen1, window_flags);
 		{
 			//ofxImGuiSurfing::pushName();
 			//ImGui::PushID("Window 1");
@@ -211,7 +211,7 @@ void ofApp::drawWindow1()
 			//ImGui::PopID();
 			//ofxImGuiSurfing::clearNames();
 		}
-		guiManager.endWindow();
+		ui.EndWindow();
 	}
 	ImGui::PopStyleVar();
 }
@@ -225,13 +225,13 @@ void ofApp::drawWindow2()
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(ww, hh));
 	{
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-		if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+		if (ui.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
-		guiManager.beginWindow("Window 2", &bOpen2, window_flags);
+		ui.BeginWindow("Window 2", &bOpen2, window_flags);
 		{
 			ofxImGuiSurfing::AddGroup(params1); // a group
 		}
-		guiManager.endWindow();
+		ui.EndWindow();
 	}
 	ImGui::PopStyleVar();
 
@@ -241,9 +241,9 @@ void ofApp::drawWindow2()
 void ofApp::drawWindow3()
 {
 	ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-	if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+	if (ui.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
-	guiManager.beginWindow("Window3", &bOpen3, window_flags);
+	ui.BeginWindow("Window3", &bOpen3, window_flags);
 	{
 		ofxImGuiSurfing::AddToggleRoundedButton(bEnable);
 		if (bEnable)
@@ -278,7 +278,7 @@ void ofApp::drawWindow3()
 			if (ImGui::Button("REPLAY", ImVec2(_w3, _h))) {}
 		}
 	}
-	guiManager.endWindow();
+	ui.EndWindow();
 }
 
 //--------------------------------------------------------------
@@ -336,8 +336,8 @@ void ofApp::drawWidgets() {
 			ImGui::Text("A hidden by default Extra section");
 			ImGui::Text("An Advanced section inside to debug:");
 
-			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bExtra);
-			if (guiManager.bExtra)
+			ofxImGuiSurfing::AddToggleRoundedButton(ui.bExtra);
+			if (ui.bExtra)
 			{
 				ImGui::Indent();
 				{
@@ -353,8 +353,8 @@ void ofApp::drawWidgets() {
 
 					//--
 
-					ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAdvanced);
-					if (guiManager.bExtra) guiManager.drawAdvancedSubPanel();
+					ofxImGuiSurfing::AddToggleRoundedButton(ui.bAdvanced);
+					if (ui.bExtra) ui.drawAdvancedSubPanel();
 				}
 				ImGui::Unindent();
 			}

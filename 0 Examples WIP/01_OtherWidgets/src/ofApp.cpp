@@ -30,7 +30,7 @@ void ofApp::setup()
 
 	//--
 
-	guiManager.setup(IM_GUI_MODE_INSTANTIATED);
+	ui.setup(IM_GUI_MODE_INSTANTIATED);
 
 	ofxImGuiSurfing::ImGui_ThemeYave();
 	//ofxImGuiSurfing::ImGui_Xemu();
@@ -40,11 +40,11 @@ void ofApp::setup()
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	guiManager.begin();
+	ui.Begin();
 	{
-		if (guiManager.beginWindow(bGui))
+		if (ui.BeginWindow(bGui))
 		{
-			guiManager.Add(guiManager.bAutoResize);
+			ui.Add(ui.bAutoResize);
 
 			static bool btoggle = false;
 			static float mfloat = 1.f;
@@ -52,20 +52,20 @@ void ofApp::draw()
 			//ofxSurfingImGui::Toggle("MyToggle", &btoggle, "MyToggle description");
 			//ofxSurfingImGui::Slider("MySlider ", &mfloat, "MySlider description");
 
-			//guiManager.AddGroup(params2);
+			//ui.AddGroup(params2);
 
 			//ofxSurfingImGui::Separator();//breaks
 
-			//guiManager.AddGroup(params3);
+			//ui.AddGroup(params3);
 
 
 			notification_manager.Draw();
 
 
-			guiManager.endWindow();
+			ui.EndWindow();
 		}
 	}
-	guiManager.end();
+	ui.End();
 }
 
 //--------------------------------------------------------------

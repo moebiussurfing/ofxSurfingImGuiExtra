@@ -64,7 +64,7 @@ class ofApp : public ofBaseApp{
 
 		//-
 
-		ofxSurfing_ImGui_Manager guiManager;
+		ofxSurfingGui ui;
 
 		//-
 

@@ -5,9 +5,9 @@ void ofApp::setup() {
 	ofSetFrameRate(60);
 	//ofSetWindowPosition(1920, 25);
 
-	guiManager.setImGuiAutodraw(true); // -> required when only one single ImGui instance is instantiated on all the oF project.
-	guiManager.setup();
-	guiManager.bAutoResize = false;
+	ui.setImGuiAutodraw(true); // -> required when only one single ImGui instance is instantiated on all the oF project.
+	ui.setup();
+	ui.bAutoResize = false;
 
 	//-
 
@@ -73,7 +73,7 @@ void ofApp::drawMainWindow()
 {
 	ImGuiWindowFlags window_flags;
 	window_flags = ImGuiWindowFlags_None;
-	if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+	if (ui.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 	{
 		// This was previously when using ofxImGui original helpers:
@@ -88,7 +88,7 @@ void ofApp::drawMainWindow()
 
 		ImGui::Begin("Show Windows", &bOpen0, window_flags);
 		{
-			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAutoResize);
+			ofxImGuiSurfing::AddToggleRoundedButton(ui.bAutoResize);
 
 			ImGui::Dummy(ImVec2(0, 10)); // spacing
 
@@ -115,14 +115,14 @@ void ofApp::drawMainWindow()
 			{
 				ImGui::Dummy(ImVec2(0, 10)); // spacing
 
-				ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bExtra);
-				if (guiManager.bExtra)
+				ofxImGuiSurfing::AddToggleRoundedButton(ui.bExtra);
+				if (ui.bExtra)
 				{
 					ImGui::Indent();
 
 					//..more widgets
-					ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAdvanced);
-					if (guiManager.bExtra) guiManager.drawAdvanced();
+					ofxImGuiSurfing::AddToggleRoundedButton(ui.bAdvanced);
+					if (ui.bExtra) ui.drawAdvanced();
 
 					ImGui::Unindent();
 				}
@@ -135,7 +135,7 @@ void ofApp::drawMainWindow()
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	guiManager.begin();
+	ui.Begin();
 	{
 		drawMainWindow();
 
@@ -148,11 +148,11 @@ void ofApp::draw()
 			if (bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 			// window
-			guiManager.beginWindow("Window 1", &bOpen1, window_flags);
+			ui.BeginWindow("Window 1", &bOpen1, window_flags);
 			{
 				drawWidgets();
 			}
-			guiManager.endWindow();
+			ui.EndWindow();
 
 			//-
 
@@ -167,7 +167,7 @@ void ofApp::draw()
 			//}
 		}
 	}
-	guiManager.end();
+	ui.End();
 }
 
 //--------------------------------------------------------------
@@ -181,10 +181,10 @@ void ofApp::drawWidgets()
 	//--
 
 	// Simple default usage:
-	//guiManager.AddGroup(params1);
+	//ui.AddGroup(params1);
 
 	//// Customized hardcoded usage:
-	//guiManager.AddGroup(params1, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_TREE_EX);
+	//ui.AddGroup(params1, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_TREE_EX);
 
 	//-
 
@@ -199,7 +199,7 @@ void ofApp::drawWidgets()
 		if (typeFlags == 3) { flagInfo = "ImGuiTreeNodeFlags_Bullet"; flags |= ImGuiTreeNodeFlags_Bullet; } // bullet mark
 		if (typeFlags == 4) { flagInfo = "ImGuiTreeNodeFlags_NoTreePushOnOpen"; flags |= ImGuiTreeNodeFlags_NoTreePushOnOpen; } // no push
 
-		guiManager.AddGroup(params1, flags, SurfingImGuiTypesGroups(typeGroups.get()));
+		ui.AddGroup(params1, flags, SurfingImGuiTypesGroups(typeGroups.get()));
 	}
 
 	//--

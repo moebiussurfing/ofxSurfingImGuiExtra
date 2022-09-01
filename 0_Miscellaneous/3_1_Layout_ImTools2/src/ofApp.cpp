@@ -51,14 +51,14 @@ void ofApp::setup() {
 
 	//-
 
-	guiManager.setImGuiDocking(1);
+	ui.setImGuiDocking(1);
 	// -> required false to allow custom docking layout. 
 	// instead of the default centralized.
-	guiManager.setImGuiDockingModeCentered(0);
+	ui.setImGuiDockingModeCentered(0);
 
-	guiManager.setImGuiAutodraw(true); // -> required when only one ImGui instance (= n oother addons using ImGui)
-	//guiManager.setImGuiDockingShift(true);
-	guiManager.setup();
+	ui.setImGuiAutodraw(true); // -> required when only one ImGui instance (= n oother addons using ImGui)
+	//ui.setImGuiDockingShift(true);
+	ui.setup();
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -140,7 +140,7 @@ bool ofApp::setFromXml(tinyxml2::XMLElement* vElem, tinyxml2::XMLElement* vParen
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	guiManager.begin(); // global begin
+	ui.Begin(); // global begin
 	{
 		if (!binitiated) {
 			binitiated = true;
@@ -286,7 +286,7 @@ void ofApp::draw()
 					// A raw standard raw ImGui window
 					{
 						ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-						if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+						if (ui.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 						ImGui::Begin("Show Windows", &bOpen0, window_flags);
 						{
@@ -296,7 +296,7 @@ void ofApp::draw()
 
 							ImGui::Dummy(ImVec2(0, 5)); // spacing
 
-							ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAutoResize); // a public bool variable to allow handle auto-resize. Applied here to all the windows.
+							ofxImGuiSurfing::AddToggleRoundedButton(ui.bAutoResize); // a public bool variable to allow handle auto-resize. Applied here to all the windows.
 						}
 						ImGui::End();
 					}
@@ -304,18 +304,18 @@ void ofApp::draw()
 					/*
 					if (bOpen1)
 					{
-						guiManager.beginWindow("Top", &bOpen1, ImGuiWindowFlags_None);
+						ui.BeginWindow("Top", &bOpen1, ImGuiWindowFlags_None);
 						{
 							//ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
 							////flags |= ImGuiTreeNodeFlags_Framed; // uncomment to draw dark tittle bar
 							//flags |= ImGuiTreeNodeFlags_DefaultOpen; // comment to start closed
 							//ofxImGuiSurfing::AddGroup(params3, flags);
 
-							guiManager.AddGroup(params3);
+							ui.AddGroup(params3);
 
-							guiManager.drawAdvancedSubPanel();
+							ui.drawAdvancedSubPanel();
 						}
-						guiManager.endWindow();
+						ui.EndWindow();
 					}
 					*/
 
@@ -326,7 +326,7 @@ void ofApp::draw()
 					/*
 					if (bOpen2)
 					{
-						guiManager.beginWindow("Central", &bOpen2, ImGuiWindowFlags_None);
+						ui.BeginWindow("Central", &bOpen2, ImGuiWindowFlags_None);
 						{
 							float _w100 = ofxImGuiSurfing::getWidgetsWidth(1); // full width
 							float _w50 = ofxImGuiSurfing::getWidgetsWidth(2); // half width
@@ -353,7 +353,7 @@ void ofApp::draw()
 							ofxImGuiSurfing::AddParameter(separation);
 							ofxImGuiSurfing::AddParameter(shapeType);
 						}
-						guiManager.endWindow();
+						ui.EndWindow();
 					}
 					*/
 
@@ -364,7 +364,7 @@ void ofApp::draw()
 		}
 		ImGui::End();
 	}
-	guiManager.end(); // global end
+	ui.End(); // global end
 }
 
 //--------------------------------------------------------------

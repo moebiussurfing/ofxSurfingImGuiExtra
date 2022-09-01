@@ -4,8 +4,8 @@
 void ofApp::setup() {
 	ofSetFrameRate(60);
 
-	guiManager.setImGuiAutodraw(true); // -> required when only one single ImGui instance is instantiated on all the oF project.
-	guiManager.setup();
+	ui.setImGuiAutodraw(true); // -> required when only one single ImGui instance is instantiated on all the oF project.
+	ui.setup();
 
 	//-
 
@@ -29,7 +29,7 @@ void ofApp::setup() {
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	guiManager.begin();
+	ui.Begin();
 	{
 		drawMainWindow();
 
@@ -42,20 +42,20 @@ void ofApp::draw()
 			if (bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 			// window
-			guiManager.beginWindow("Window 1", &bOpen1, window_flags);
+			ui.BeginWindow("Window 1", &bOpen1, window_flags);
 			{
 				drawWidgets();
 			}
-			guiManager.endWindow();
+			ui.EndWindow();
 		}
 	}
-	guiManager.end();
+	ui.End();
 }
 
 //--------------------------------------------------------------
 void ofApp::drawWidgets()
 {
-	guiManager.AddGroup(params1);
+	ui.AddGroup(params1);
 }
 
 //--------------------------------------------------------------
@@ -63,11 +63,11 @@ void ofApp::drawMainWindow()
 {
 	ImGuiWindowFlags window_flags;
 	window_flags = ImGuiWindowFlags_None;
-	if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+	if (ui.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 	{
 		ImGui::Begin("Show Windows", &bOpen0, window_flags);
 		{
-			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAutoResize);
+			ofxImGuiSurfing::AddToggleRoundedButton(ui.bAutoResize);
 			ofxImGuiSurfing::ToggleRoundedButton("Show Window 1", &bOpen1);
 		}
 		ImGui::End();

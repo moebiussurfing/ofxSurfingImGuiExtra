@@ -15,7 +15,7 @@ class ofApp : public ofBaseApp{
 		void draw();
 		void keyPressed(int key);
 
-		ofxSurfing_ImGui_Manager guiManager;
+		ofxSurfingGui ui;
 		void drawWidgets();
 		void drawTimeline();
 

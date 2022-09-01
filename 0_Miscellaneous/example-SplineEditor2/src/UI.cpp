@@ -19,7 +19,7 @@ selected_frame(0)
 
 void UI::draw()
 {
-    gui.begin();
+    gui.Begin();
     
     bool p_open = true;
     ImGui::Begin("Selected Item", &p_open, ImVec2(200, 300), 0.5f,
@@ -94,5 +94,5 @@ void UI::draw()
     ImGui::PopItemWidth();
     ImGui::End();
     
-    gui.end();
+    gui.End();
 }

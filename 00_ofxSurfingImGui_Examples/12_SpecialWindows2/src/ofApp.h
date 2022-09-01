@@ -69,7 +69,7 @@ public:
 
 	// Gui
 
-	ofxSurfing_ImGui_Manager ui;
+	ofxSurfingGui ui;
 
 	void setup_ImGui();
 

@@ -7,8 +7,8 @@ void ofApp::setup() {
 	
 	setupParams();
 
-	guiManager.setImGuiAutodraw(true);
-	guiManager.setup();
+	ui.setImGuiAutodraw(true);
+	ui.setup();
 
 	ImNodes::CreateContext();
 }
@@ -26,21 +26,21 @@ void ofApp::draw()
 {
 	drawScene();
 
-	guiManager.begin(); // global begin
+	ui.Begin(); // global begin
 	{
 		drawWidgets();
 
 		//-
 		
 		//ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-		//if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+		//if (ui.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 		//ImGui::Begin("Panels", &bOpen0, window_flags);
 		//{
 		//	ofxImGuiSurfing::ToggleRoundedButton("Show 1", &bOpen1);
 		//}
 		//ImGui::End();
 	}
-	guiManager.end(); // global end
+	ui.End(); // global end
 }
 
 //--------------------------------------------------------------

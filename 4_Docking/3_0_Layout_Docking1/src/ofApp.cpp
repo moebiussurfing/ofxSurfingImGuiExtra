@@ -28,7 +28,7 @@ void ofApp::setup() {
 
 	// -> To allow the full engine:
 	// Custom docking layout with presets. 
-	guiManager.setupDocking();
+	ui.setupDocking();
 
 	//-
 
@@ -36,21 +36,21 @@ void ofApp::setup() {
 	// Add the windows just with a name:
 	// Pre add the window names that you will use and rememeber his index!
 	// Each added window will be added too to the layout presets engine
-	guiManager.addWindow("Main Window");
-	guiManager.addWindow("Audio Window");
-	guiManager.addWindow("Video 2");
-	guiManager.addWindow("Video 3");
-	guiManager.addWindow("Advanced");
+	ui.addWindow("Main Window");
+	ui.addWindow("Audio Window");
+	ui.addWindow("Video 2");
+	ui.addWindow("Video 3");
+	ui.addWindow("Advanced");
 
 	/*
 
 	NOTE:
 	Then we can reder the windows:
-	if (guiManager.beginWindow(index)) // -> This is our helpers to render each window passing the index
+	if (ui.BeginWindow(index)) // -> This is our helpers to render each window passing the index
 	{
 		// widgets goes here!
 
-		guiManager.endWindow();
+		ui.EndWindow();
 	}
 
 	NOTE:
@@ -61,17 +61,17 @@ void ofApp::setup() {
 	//-
 
 	// -> Initiates after adding windows and parameters.
-	guiManager.startup();
+	ui.startup();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	guiManager.begin(); // Global begin
+	ui.Begin(); // Global begin
 	{
 		/* Here (between begin/end) we can render ImGui windows and widgets. */
 
-		guiManager.beginDocking();
+		ui.BeginDocking();
 		{
 			/* Here (between beginDocking/endDocking) we can access all the docking space. */
 
@@ -94,14 +94,14 @@ void ofApp::draw()
 				dockingRandom();
 			}
 		}
-		guiManager.endDocking();
+		ui.EndDocking();
 
 		//--
 
 		// Render windows and widgets now!
 		drawImGui();
 	}
-	guiManager.end(); // Global end
+	ui.End(); // Global end
 }
 
 //--------------------------------------------------------------
@@ -131,7 +131,7 @@ void ofApp::drawImGui()
 		// Show all Panels
 		if (ImGui::Button("Show All Panels", ImVec2(_w, _h / 2)))
 		{
-			guiManager.setShowAllPanels(true);
+			ui.setShowAllPanels(true);
 		}
 	}
 	ImGui::End();
@@ -139,7 +139,7 @@ void ofApp::drawImGui()
 
 	//---------
 
-	if (guiManager.beginWindow(0)) // -> This is our helpers to render windows
+	if (ui.BeginWindow(0)) // -> This is our helpers to render windows
 	{
 		//-
 
@@ -151,12 +151,12 @@ void ofApp::drawImGui()
 		ImGui::Text("Hello, left!");
 		ImGui::Text("Hello, left!");
 
-		guiManager.endWindow(); // -> Must be called inside the if / beginWindow brackets!
+		ui.EndWindow(); // -> Must be called inside the if / beginWindow brackets!
 	}
 
 	//---------
 
-	if (guiManager.beginWindow(1))
+	if (ui.BeginWindow(1))
 	{
 		ImGui::Text("Hello, down!");
 		ImGui::Text("Hello, down!");
@@ -164,12 +164,12 @@ void ofApp::drawImGui()
 		ImGui::Text("Hello, down!");
 		ImGui::Text("Hello, down!");
 
-		guiManager.endWindow();
+		ui.EndWindow();
 	}
 
 	//---------
 
-	if (guiManager.beginWindow(2))
+	if (ui.BeginWindow(2))
 	{
 		if (ImGui::BeginTabBar("myTabs"))
 		{
@@ -189,30 +189,30 @@ void ofApp::drawImGui()
 			}
 			if (ImGui::BeginTabItem("Controls"))
 			{
-				guiManager.drawAdvanced();
+				ui.drawAdvanced();
 				ImGui::EndTabItem();
 			}
 
 			ImGui::EndTabBar();
 		}
 
-		guiManager.endWindow();
+		ui.EndWindow();
 	}
 
 	//--------
 
-	if (guiManager.beginWindow(3))
+	if (ui.BeginWindow(3))
 	{
 		ImGui::Text("myWindow3");
-		guiManager.AddGroup(params1);
-		guiManager.AddGroup(params3, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_DEFAULT);
+		ui.AddGroup(params1);
+		ui.AddGroup(params3, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_DEFAULT);
 
-		guiManager.endWindow();
+		ui.EndWindow();
 	}
 
 	//---------
 
-	if (guiManager.beginWindow(4))
+	if (ui.BeginWindow(4))
 	{
 		ImGui::Text("myWindow4");
 
@@ -235,7 +235,7 @@ void ofApp::drawImGui()
 		ofxImGuiSurfing::AddParameter(separation);
 		ofxImGuiSurfing::AddParameter(shapeType);
 
-		guiManager.endWindow();
+		ui.EndWindow();
 	}
 }
 
@@ -274,11 +274,11 @@ void ofApp::dockingReset()
 	//ImGui::DockBuilderDockWindow("Advanced", dock_id_right);
 
 	// We can get the window names by the index to rename easy, just in one place when added on setup.
-	ImGui::DockBuilderDockWindow(guiManager.getWindowName(0).c_str(), dock_id_top);
-	ImGui::DockBuilderDockWindow(guiManager.getWindowName(1).c_str(), dock_id_right);
-	ImGui::DockBuilderDockWindow(guiManager.getWindowName(2).c_str(), dock_id_down);
-	ImGui::DockBuilderDockWindow(guiManager.getWindowName(3).c_str(), dock_id_left);
-	ImGui::DockBuilderDockWindow(guiManager.getWindowName(4).c_str(), dock_id_right);
+	ImGui::DockBuilderDockWindow(ui.getWindowName(0).c_str(), dock_id_top);
+	ImGui::DockBuilderDockWindow(ui.getWindowName(1).c_str(), dock_id_right);
+	ImGui::DockBuilderDockWindow(ui.getWindowName(2).c_str(), dock_id_down);
+	ImGui::DockBuilderDockWindow(ui.getWindowName(3).c_str(), dock_id_left);
+	ImGui::DockBuilderDockWindow(ui.getWindowName(4).c_str(), dock_id_right);
 
 	ImGui::DockBuilderFinish(dockspace_id);
 }
@@ -304,11 +304,11 @@ void ofApp::dockingRandom()
 
 	// we now dock our windows into the docking node we made above
 	// We can get the window names by the index to rename easy, just in one place when added on setup.
-	ImGui::DockBuilderDockWindow(guiManager.getWindowName(0).c_str(), (idice == 0) ? dock_id_top : dock_id_down);
-	ImGui::DockBuilderDockWindow(guiManager.getWindowName(1).c_str(), (idice == 1) ? dock_id_right : dock_id_left);
-	ImGui::DockBuilderDockWindow(guiManager.getWindowName(2).c_str(), (idice == 2) ? dock_id_down : dock_id_top);
-	ImGui::DockBuilderDockWindow(guiManager.getWindowName(3).c_str(), (idice == 0) ? dock_id_left : dock_id_right);
-	ImGui::DockBuilderDockWindow(guiManager.getWindowName(4).c_str(), (idice == 1) ? dock_id_right : dock_id_left);
+	ImGui::DockBuilderDockWindow(ui.getWindowName(0).c_str(), (idice == 0) ? dock_id_top : dock_id_down);
+	ImGui::DockBuilderDockWindow(ui.getWindowName(1).c_str(), (idice == 1) ? dock_id_right : dock_id_left);
+	ImGui::DockBuilderDockWindow(ui.getWindowName(2).c_str(), (idice == 2) ? dock_id_down : dock_id_top);
+	ImGui::DockBuilderDockWindow(ui.getWindowName(3).c_str(), (idice == 0) ? dock_id_left : dock_id_right);
+	ImGui::DockBuilderDockWindow(ui.getWindowName(4).c_str(), (idice == 1) ? dock_id_right : dock_id_left);
 
 	ImGui::DockBuilderFinish(dockspace_id);
 }

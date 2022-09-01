@@ -54,7 +54,7 @@ void ofApp::setup() {
 //	cout << "i:" << i << "  \t   o:" << o << endl;
 //	ofPopStyle();
 //
-//	gui.begin();
+//	gui.Begin();
 //	{
 //		static bool bOpen = true;;
 //		auto mainSettings = ofxImGui::Settings();
@@ -81,7 +81,7 @@ void ofApp::setup() {
 //		}
 //		ofxImGui::EndWindow(mainSettings);
 //	}
-//	gui.end();
+//	gui.End();
 //}
 
 //--------------------------------------------------------------
@@ -107,7 +107,7 @@ void ofApp::draw() {
 
 	//cout << "i:" << i << "  \t   o:" << o << endl;
 
-	gui.begin();
+	gui.Begin();
 	{
 		static bool bOpen = true;;
 		auto mainSettings = ofxImGui::Settings();
@@ -117,15 +117,15 @@ void ofApp::draw() {
 		_flagw = ImGuiWindowFlags_None;
 
 		name = "Window";
-		gui.beginWindow(name.c_str(), &bOpen, _flagw);
+		gui.BeginWindow(name.c_str(), &bOpen, _flagw);
 		//if (ImGui::Begin(name.c_str(), &bOpen, _flagw))
 		{
 			surfingCurve.draw();
 		}
 		//ImGui::End();
-		gui.endWindow();
+		gui.EndWindow();
 	}
-	gui.end();
+	gui.End();
 }
 
 //--------------------------------------------------------------

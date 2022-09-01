@@ -27,7 +27,7 @@ public:
     void draw();
     void exit();
 
-	ofxSurfing_ImGui_Manager guiManager;
+	ofxSurfingGui ui;
 
 	//-
 

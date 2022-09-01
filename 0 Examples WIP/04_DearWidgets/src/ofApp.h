@@ -19,7 +19,7 @@ public:
     void draw();
     
 	void setup_ImGui();
-    ofxSurfing_ImGui_Manager guiManager;
+    ofxSurfingGui ui;
 
     void draw_DearWidgets();
     void draw_DearWidgetsColors();

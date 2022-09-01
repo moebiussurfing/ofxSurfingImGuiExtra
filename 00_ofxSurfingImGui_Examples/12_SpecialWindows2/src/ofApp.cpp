@@ -83,7 +83,7 @@ void ofApp::draw()
 
 	if (!bGui) return;
 
-	ui.begin();
+	ui.Begin();
 	{
 		draw_MainWindow();
 
@@ -94,13 +94,13 @@ void ofApp::draw()
 		draw_SurfingWidgets_5();
 		draw_SurfingWidgets_6();
 	}
-	ui.end();
+	ui.End();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw_MainWindow() {
 
-	if (ui.beginWindow(bGui))
+	if (ui.BeginWindow(bGui))
 	{
 		// Useful common toggles exposed:
 
@@ -116,7 +116,7 @@ void ofApp::draw_MainWindow() {
 		// Draw each Special Window toggle
 		ui.drawWidgetsSpecialWindowsToggles();
 
-		ui.endWindow();
+		ui.EndWindow();
 	}
 }
 
@@ -132,7 +132,7 @@ void ofApp::draw_SurfingWidgets_1()
 	// 1. by passing a bool param (acting as a visible toggle)
 	// 2. by passing a name when adding and passing which index was to drawing!
 
-	if (ui.beginWindowSpecial(0)) 
+	if (ui.BeginWindowSpecial(0)) 
 	{
 		ui.AddLabelBig("> Special \nWindow 1", false);
 		ui.Add(bPrevious0, OFX_IM_TOGGLE_BIG, 2, true);//next on same line
@@ -140,7 +140,7 @@ void ofApp::draw_SurfingWidgets_1()
 		ui.AddGroup(params_0);
 		ui.Add(speed0, OFX_IM_VSLIDER_NO_LABELS);// hide labels
 
-		ui.endWindowSpecial();
+		ui.EndWindowSpecial();
 	}
 }
 
@@ -150,12 +150,12 @@ void ofApp::draw_SurfingWidgets_2()
 	if (!bGui_2) return;
 
 	//// A. we can begin the window passing the index, that we want to remember!
-	//if (ui.beginWindowSpecial(1)) 
+	//if (ui.BeginWindowSpecial(1)) 
 
 	// B. but we can remember the name used on setup too.
 	// it's the same that use the index 1. (as first starts with zero)
 
-	if (ui.beginWindowSpecial(bGui_2))
+	if (ui.BeginWindowSpecial(bGui_2))
 	{
 		ui.AddLabelBig("> Special \nWindow 2", false);
 		ui.AddGroup(params_1);
@@ -164,7 +164,7 @@ void ofApp::draw_SurfingWidgets_2()
 		ui.Add(shapeType1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
 		ui.Add(size1, OFX_IM_VSLIDER_NO_LABELS, 4);
 
-		ui.endWindowSpecial();
+		ui.EndWindowSpecial();
 	}
 }
 
@@ -173,7 +173,7 @@ void ofApp::draw_SurfingWidgets_3()
 {
 	if (!bGui_3) return;
 
-	if (ui.beginWindowSpecial(bGui_3))
+	if (ui.BeginWindowSpecial(bGui_3))
 	{
 		ui.AddLabelBig("> Special \nWindow 3", false);
 		ui.Add(shapeType2, OFX_IM_KNOB, 2, true);
@@ -182,7 +182,7 @@ void ofApp::draw_SurfingWidgets_3()
 		ui.AddSpacingBigSeparated();
 		ui.AddGroup(params_2);
 
-		ui.endWindowSpecial();
+		ui.EndWindowSpecial();
 	}
 }
 
@@ -191,7 +191,7 @@ void ofApp::draw_SurfingWidgets_4()
 {
 	if (!bGui_4) return;
 
-	if (ui.beginWindowSpecial(bGui_4))
+	if (ui.BeginWindowSpecial(bGui_4))
 	{
 		ui.AddLabelBig("> Special \nWindow 4", false);
 		ui.AddGroup(params_3);
@@ -201,7 +201,7 @@ void ofApp::draw_SurfingWidgets_4()
 		ui.Add(speed3, OFX_IM_HSLIDER_SMALL);
 		ui.Add(separation3, OFX_IM_HSLIDER_MINI);
 
-		ui.endWindowSpecial();
+		ui.EndWindowSpecial();
 	}
 }
 
@@ -210,12 +210,12 @@ void ofApp::draw_SurfingWidgets_5()
 {
 	if (!bGui_5) return;
 
-	if (ui.beginWindowSpecial(bGui_5))
+	if (ui.BeginWindowSpecial(bGui_5))
 	{
 		ui.AddLabelBig("> Special \nWindow 5", false);
 		ui.Add(lineWidth1, OFX_IM_VSLIDER_NO_LABELS);
 
-		ui.endWindowSpecial();
+		ui.EndWindowSpecial();
 	}
 }
 
@@ -224,12 +224,12 @@ void ofApp::draw_SurfingWidgets_6()
 {
 	if (!bGui_6) return;
 
-	if (ui.beginWindowSpecial(bGui_6))
+	if (ui.BeginWindowSpecial(bGui_6))
 	{
 		ui.AddLabelBig("> Special \nWindow 6", false);
 		ui.Add(amount2, OFX_IM_KNOB);
 
-		ui.endWindowSpecial();
+		ui.EndWindowSpecial();
 	}
 }
 

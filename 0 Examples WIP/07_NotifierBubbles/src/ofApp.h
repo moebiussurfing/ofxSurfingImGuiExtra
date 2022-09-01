@@ -18,7 +18,7 @@ public:
 
 	ofParameter<bool> bGui{ "Show Gui", true };
 
-	ofxSurfing_ImGui_Manager guiManager;
+	ofxSurfingGui ui;
 
 	NotificationManager notification_manager;
 	ofxNotify notifier;

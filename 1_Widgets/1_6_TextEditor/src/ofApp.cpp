@@ -21,11 +21,11 @@ void ofApp::draw() {
 
 	bMouseOverGui = ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow);
 
-	gui.begin();
+	gui.Begin();
 	{
 		textEditor.draw();
 	}
-	gui.end();
+	gui.End();
 }
 
 //--------------------------------------------------------------
@@ -46,7 +46,7 @@ void ofApp::keyPressed(int key) {
 		break;
 	}
 	case '3': {
-		string str = "García Castellón pone la X de Kitchen a Fernández Díaz\n y tapona la investigación a Rajoy, \nla cúpula del PP y \nel CNI El juez \ndetermina que la decisión \nde espiar a Bárcenas con \nfondos reservados para evitar problemas judiciales \nal presidente y a Cospedal no \ntrascendió del Ministerio del Interior.\nEl cierre de la instrucción llega \ncuando Anticorrupción apunta al CNI en \nel episodio del 'falso cura\n' e investiga una segunda Kitchen \nen la cárcel";
+		string str = "Garcï¿½a Castellï¿½n pone la X de Kitchen a Fernï¿½ndez Dï¿½az\n y tapona la investigaciï¿½n a Rajoy, \nla cï¿½pula del PP y \nel CNI El juez \ndetermina que la decisiï¿½n \nde espiar a Bï¿½rcenas con \nfondos reservados para evitar problemas judiciales \nal presidente y a Cospedal no \ntrascendiï¿½ del Ministerio del Interior.\nEl cierre de la instrucciï¿½n llega \ncuando Anticorrupciï¿½n apunta al CNI en \nel episodio del 'falso cura\n' e investiga una segunda Kitchen \nen la cï¿½rcel";
 		textEditor.setText(str);
 		break;
 	}

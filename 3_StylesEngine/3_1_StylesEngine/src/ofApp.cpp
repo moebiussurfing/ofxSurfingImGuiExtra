@@ -71,9 +71,9 @@ void ofApp::setup() {
 
 	//--
 
-	guiManager.setAutoSaveSettings(true); // -> Enables store/recall some settings from previous app session
-	guiManager.setImGuiAutodraw(true); // -> Required when only one ImGui instance
-	guiManager.setup(); // This instantiates and configures ofxImGui inside the class object.
+	ui.setAutoSaveSettings(true); // -> Enables store/recall some settings from previous app session
+	ui.setImGuiAutodraw(true); // -> Required when only one ImGui instance
+	ui.setup(); // This instantiates and configures ofxImGui inside the class object.
 
 	//-
 
@@ -84,7 +84,7 @@ void ofApp::setup() {
 	// This added style conf will be applied in all the appearances of the param widgets inside all groups.
 	// We can overwrite this customization only draing the simple param "by hand".
 	// ie:
-	// guiManager.Add(bMode3, OFX_IM_TOGGLE_SMALL, false, 3, 2);+
+	// ui.Add(bMode3, OFX_IM_TOGGLE_SMALL, false, 3, 2);+
 
 	//-
 
@@ -113,7 +113,7 @@ void ofApp::setup() {
 //--------------------------------------------------------------
 void ofApp::SetupStyles() {
 
-	guiManager.clearStyles(); // Clear queued styles if there where previously added, We can do this and changes styles on runtime!
+	ui.clearStyles(); // Clear queued styles if there where previously added, We can do this and changes styles on runtime!
 
 	//--
 
@@ -121,45 +121,45 @@ void ofApp::SetupStyles() {
 	// We queue styles for the parameters that will be rendered after, on AddGroup methods on Draw()
 
 	// Two widgets same line
-	guiManager.AddStyle(bMode1, OFX_IM_TOGGLE_BIG, 2, true);
-	guiManager.AddStyle(bMode2, OFX_IM_TOGGLE_BIG, 2, false);
+	ui.AddStyle(bMode1, OFX_IM_TOGGLE_BIG, 2, true);
+	ui.AddStyle(bMode2, OFX_IM_TOGGLE_BIG, 2, false);
 
 	// Two widgets same line
-	guiManager.AddStyle(bMode3, OFX_IM_TOGGLE_BIG, 2, true);
-	guiManager.AddStyle(bMode4, OFX_IM_TOGGLE_BIG, 2, false, 10);
+	ui.AddStyle(bMode3, OFX_IM_TOGGLE_BIG, 2, true);
+	ui.AddStyle(bMode4, OFX_IM_TOGGLE_BIG, 2, false, 10);
 
-	guiManager.AddStyle(bModeA, OFX_IM_TOGGLE_SMALL, 1, false);
-	guiManager.AddStyle(bModeB, OFX_IM_TOGGLE_SMALL, 1, false);
-	guiManager.AddStyle(bModeC, OFX_IM_TOGGLE_SMALL, 1, false);
-	guiManager.AddStyle(bModeD, OFX_IM_TOGGLE_SMALL, 1, false, 10);
+	ui.AddStyle(bModeA, OFX_IM_TOGGLE_SMALL, 1, false);
+	ui.AddStyle(bModeB, OFX_IM_TOGGLE_SMALL, 1, false);
+	ui.AddStyle(bModeC, OFX_IM_TOGGLE_SMALL, 1, false);
+	ui.AddStyle(bModeD, OFX_IM_TOGGLE_SMALL, 1, false, 10);
 
 	//// A. Two widgets same line small
-	//guiManager.AddStyle(bPrevious, OFX_IM_BUTTON_SMALL, 2, true);
-	//guiManager.AddStyle(bNext, OFX_IM_BUTTON_SMALL, 2, false, 10);
+	//ui.AddStyle(bPrevious, OFX_IM_BUTTON_SMALL, 2, true);
+	//ui.AddStyle(bNext, OFX_IM_BUTTON_SMALL, 2, false, 10);
 
 	// B. Two widgets same line big
-	guiManager.AddStyle(bPrevious, OFX_IM_BUTTON_BIG, 2, true);
-	guiManager.AddStyle(bNext, OFX_IM_BUTTON_BIG, 2, false, 10);
+	ui.AddStyle(bPrevious, OFX_IM_BUTTON_BIG, 2, true);
+	ui.AddStyle(bNext, OFX_IM_BUTTON_BIG, 2, false, 10);
 
-	guiManager.AddStyle(shapeType3, OFX_IM_STEPPER);
-	guiManager.AddStyle(size3, OFX_IM_STEPPER);
-	guiManager.AddStyle(amount3, OFX_IM_DRAG, 2, false, 10);
+	ui.AddStyle(shapeType3, OFX_IM_STEPPER);
+	ui.AddStyle(size3, OFX_IM_STEPPER);
+	ui.AddStyle(amount3, OFX_IM_DRAG, 2, false, 10);
 
 	// More widgets
-	guiManager.AddStyle(lineWidth2, OFX_IM_STEPPER);
-	guiManager.AddStyle(speed2, OFX_IM_DRAG);
+	ui.AddStyle(lineWidth2, OFX_IM_STEPPER);
+	ui.AddStyle(speed2, OFX_IM_DRAG);
 
 	//-
 
 	//TODO: some styles fails
 	// Custom group styles before draw
 
-	guiManager.AddStyleGroup(params1, OFX_IM_GROUP_TREE_EX, ImGuiTreeNodeFlags_DefaultOpen); // ok
+	ui.AddStyleGroup(params1, OFX_IM_GROUP_TREE_EX, ImGuiTreeNodeFlags_DefaultOpen); // ok
 }
 
 //--------------------------------------------------------------
 void ofApp::ClearStyles() {
-	guiManager.clearStyles(); // TODO: -> call from beginWindow/group
+	ui.clearStyles(); // TODO: -> call from beginWindow/group
 }
 
 //--------------------------------------------------------------
@@ -178,13 +178,13 @@ void ofApp::draw()
 
 	//-
 
-	guiManager.begin();
+	ui.Begin();
 	{
 		if (bOpenMain) drawWindowMain();
 		if (bOpen1) drawWindow1();
 		if (bOpen2) drawWindow2();
 	}
-	guiManager.end();
+	ui.End();
 }
 
 //--------------------------------------------------------------
@@ -193,7 +193,7 @@ void ofApp::drawWindowMain() {
 	// Window Main
 	{
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-		if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+		if (ui.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 		// Reset window
 		{
@@ -201,7 +201,7 @@ void ofApp::drawWindowMain() {
 			{
 				bReset0 = false;
 
-				guiManager.bAutoResize = false; // avoid bug
+				ui.bAutoResize = false; // avoid bug
 
 				ImGuiCond flag = ImGuiCond_Always;
 				pos0.x = 10;
@@ -230,7 +230,7 @@ void ofApp::drawWindowMain() {
 
 			ofxImGuiSurfing::AddSpacing();
 
-			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAutoResize, ImVec2(50, 30));
+			ofxImGuiSurfing::AddToggleRoundedButton(ui.bAutoResize, ImVec2(50, 30));
 
 			ImGui::Dummy(ImVec2(0, 150)); // spacing
 
@@ -324,7 +324,7 @@ void ofApp::drawWindow1() {
 		// A window but using my ofxSurfing_ImGui_LayoutManager.h class helper
 
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-		if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+		if (ui.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 		// Reset Window
 		{
@@ -339,7 +339,7 @@ void ofApp::drawWindow1() {
 			}
 		}
 
-		guiManager.beginWindow(bOpen1, window_flags);
+		ui.BeginWindow(bOpen1, window_flags);
 		{
 			//--
 
@@ -364,12 +364,12 @@ void ofApp::drawWindow1() {
 				// A.
 				if (!bCustomGroups) // Customized now on Draw
 				{
-					guiManager.AddGroup(params1, flags_typeFlags, SurfingImGuiTypesGroups(typeGroups.get()));
+					ui.AddGroup(params1, flags_typeFlags, SurfingImGuiTypesGroups(typeGroups.get()));
 					//ofxImGuiSurfing::AddGroup(params1, flags_typeFlags, SurfingImGuiTypesGroups(typeGroups.get()));
 				}
 				else // Previously customized on Setup
 				{
-					guiManager.AddGroup(params1);
+					ui.AddGroup(params1);
 					//ofxImGuiSurfing::AddGroup(params1);
 				}
 
@@ -399,12 +399,12 @@ void ofApp::drawWindow1() {
 			//ImGui::SameLine();
 			//ofxImGuiSurfing::AddKnob(separation1);
 			////ofxImGuiSurfing::AddKnob(size1); //TODO: add int
-			////guiManager.Add(speed1);
+			////ui.Add(speed1);
 
 			// A
 			if (bCustom1)
 			{
-				//guiManager.refresh();
+				//ui.refresh();
 
 				ImGui::TextWrapped("* bCustom1 = true");
 				ImGui::TextWrapped("customized");
@@ -419,24 +419,24 @@ void ofApp::drawWindow1() {
 
 				// 1.0.2
 				// This forces the style no matter if a conf is added (AddStyle) for this param
-				guiManager.Add(bModeA, OFX_IM_TOGGLE_BIG); // -> now this is the default bool 
-				guiManager.Add(bModeA, OFX_IM_CHECKBOX); // -> deprecated check box as default bool
+				ui.Add(bModeA, OFX_IM_TOGGLE_BIG); // -> now this is the default bool 
+				ui.Add(bModeA, OFX_IM_CHECKBOX); // -> deprecated check box as default bool
 
 				// 1.1 Toggle full width
-				guiManager.Add(bModeB, OFX_IM_TOGGLE_BIG);
+				ui.Add(bModeB, OFX_IM_TOGGLE_BIG);
 
 				// 1.2 A float param
-				guiManager.Add(lineWidth1, OFX_IM_SLIDER); // force draw
-				guiManager.Add(lineWidth1, OFX_IM_DRAG);
-				guiManager.Add(lineWidth1, OFX_IM_STEPPER, 2, false, 20); // crashes?
+				ui.Add(lineWidth1, OFX_IM_SLIDER); // force draw
+				ui.Add(lineWidth1, OFX_IM_DRAG);
+				ui.Add(lineWidth1, OFX_IM_STEPPER, 2, false, 20); // crashes?
 
 				// 1.3 Three small toggle widgets in one row
 				// with 20px vert spacing at end
-				//guiManager.refresh(); // update sizes to current window shape
-				guiManager.Add(bModeA, OFX_IM_TOGGLE_SMALL, 3, true);
-				guiManager.Add(bModeB, OFX_IM_TOGGLE_SMALL, 3, true);
-				guiManager.Add(bModeC, OFX_IM_TOGGLE_SMALL, 3, false, 2);
-				guiManager.Add(bModeD);
+				//ui.refresh(); // update sizes to current window shape
+				ui.Add(bModeA, OFX_IM_TOGGLE_SMALL, 3, true);
+				ui.Add(bModeB, OFX_IM_TOGGLE_SMALL, 3, true);
+				ui.Add(bModeC, OFX_IM_TOGGLE_SMALL, 3, false, 2);
+				ui.Add(bModeD);
 			}
 
 			// B
@@ -474,7 +474,7 @@ void ofApp::drawWindow1() {
 				pos2.y = posy;
 			}
 		}
-		guiManager.endWindow();
+		ui.EndWindow();
 	}
 }
 
@@ -484,7 +484,7 @@ void ofApp::drawWindow2() {
 	// Window 2
 	{
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-		if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+		if (ui.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 		// Reset window
 		{
@@ -500,7 +500,7 @@ void ofApp::drawWindow2() {
 		//-
 
 		// A. Without flags (default)
-		guiManager.beginWindow(bOpen2, window_flags);
+		ui.BeginWindow(bOpen2, window_flags);
 		{
 			if (bCustom2) {
 				ImGui::Text("* bCustom2 = true");
@@ -516,7 +516,7 @@ void ofApp::drawWindow2() {
 			//-
 
 			// A. Using global flags
-			guiManager.AddGroup(params3, flags_typeFlags, SurfingImGuiTypesGroups(typeGroups.get()));
+			ui.AddGroup(params3, flags_typeFlags, SurfingImGuiTypesGroups(typeGroups.get()));
 
 			//-
 
@@ -547,7 +547,7 @@ void ofApp::drawWindow2() {
 				if (bMore) drawMoreWidgets();
 			}
 		}
-		guiManager.endWindow();
+		ui.EndWindow();
 	}
 }
 
@@ -583,11 +583,11 @@ void ofApp::drawMoreWidgets() {
 	//ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
 	//flags |= ImGuiTreeNodeFlags_Framed; // uncomment to draw dark tittle bar
 	//flags |= ImGuiTreeNodeFlags_DefaultOpen; // comment to start closed
-	//guiManager.AddGroup(params2, flags, OFX_IM_GROUP_DEFAULT);
+	//ui.AddGroup(params2, flags, OFX_IM_GROUP_DEFAULT);
 
 	// B. Global flags
 	// we will use the gui selectable debugger styles
-	guiManager.AddGroup(params2, typeFlags, SurfingImGuiTypesGroups(typeGroups.get()));
+	ui.AddGroup(params2, typeFlags, SurfingImGuiTypesGroups(typeGroups.get()));
 
 	//-
 
@@ -632,10 +632,10 @@ void ofApp::drawMoreWidgets() {
 		ImGui::TextWrapped("customized");
 		ImGui::Dummy(ImVec2(0, 5)); // spacing
 
-		guiManager.Add(bModeA, OFX_IM_TOGGLE_BIG, 4, true);
-		guiManager.Add(bModeB, OFX_IM_TOGGLE_BIG, 4, true);
-		guiManager.Add(bModeC, OFX_IM_TOGGLE_BIG, 4, true);
-		guiManager.Add(bModeD, OFX_IM_TOGGLE_BIG, 4, false);
+		ui.Add(bModeA, OFX_IM_TOGGLE_BIG, 4, true);
+		ui.Add(bModeB, OFX_IM_TOGGLE_BIG, 4, true);
+		ui.Add(bModeC, OFX_IM_TOGGLE_BIG, 4, true);
+		ui.Add(bModeD, OFX_IM_TOGGLE_BIG, 4, false);
 	}
 	else // default ofxImGui styles
 	{

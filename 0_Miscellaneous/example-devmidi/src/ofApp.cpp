@@ -25,14 +25,14 @@ void ofApp::exit() {
 
 //--------------------------------------------------------------
 void ofApp::draw() {
-	gui.begin();
+	gui.Begin();
 
 	ImGui::Text("Hello");
 	ImGui::SliderFloat("Float", &floatValue, 0.0f, 1.0f);
 	
 	twisterSliderFloat("test", 20, val);
 
-	gui.end();
+	gui.End();
 }
 
 //--------------------------------------------------------------

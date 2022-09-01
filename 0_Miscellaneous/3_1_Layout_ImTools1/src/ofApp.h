@@ -22,7 +22,7 @@ public:
 
 	//-
 
-	ofxSurfing_ImGui_Manager guiManager;
+	ofxSurfingGui ui;
 
 	//-
 

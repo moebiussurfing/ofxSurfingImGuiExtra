@@ -4,7 +4,7 @@
 void ofApp::setup() {
 	ofSetWindowPosition(-1920, 28);
 
-	guiManager.setup();
+	ui.setup();
 
 	//--
 
@@ -28,7 +28,7 @@ void ofApp::setup() {
 //--------------------------------------------------------------
 void ofApp::setupFonts()
 {
-	guiManager.clearFonts();
+	ui.clearFonts();
 
 	// NOTE: We can add font manually pushing "Add Font" button.
 	// then we can pick a default font setting "Font Index".
@@ -44,30 +44,30 @@ void ofApp::setupFonts()
 	// Font #0
 	_fontName = "AnonymousPro-Regular.ttf";
 	_fontSize = 12;
-	guiManager.pushFont(_path + _fontName, _fontSize);
+	ui.pushFont(_path + _fontName, _fontSize);
 
 	// Font #1
 	_fontName = "OpenSans-Regular.ttf";
 	_fontSize = 14;
-	guiManager.pushFont(_path + _fontName, _fontSize);
+	ui.pushFont(_path + _fontName, _fontSize);
 
 	// Font #2
 	_fontName = "overpass-mono-bold.otf";
 	_fontSize = 16;
-	guiManager.pushFont(_path + _fontName, _fontSize);
+	ui.pushFont(_path + _fontName, _fontSize);
 
 	// Font #3
 	_fontName = "JetBrainsMonoNL-ExtraBold.ttf";
 	_fontSize = 18;
-	guiManager.pushFont(_path + _fontName, _fontSize);
+	ui.pushFont(_path + _fontName, _fontSize);
 
 	//--
 
 	//TODO:
 	//// default
-	//guiManager.addFont(_path + _fontName, FONT_DEFAULT_SIZE);
+	//ui.addFont(_path + _fontName, FONT_DEFAULT_SIZE);
 
-	int amt = guiManager.getNumFonts();
+	int amt = ui.getNumFonts();
 	fontSize.set("Font Size", 10, 6, 30);
 	fontIndex.set("Font Index", 0, 0, amt - 1);
 }
@@ -75,7 +75,7 @@ void ofApp::setupFonts()
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	guiManager.begin(); // global begin
+	ui.Begin(); // global begin
 	{
 		// Main Window
 		drawMainWindow();
@@ -93,7 +93,7 @@ void ofApp::draw()
 			IMGUI_SUGAR__WINDOWS_CONSTRAINTS_FULL;
 
 			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-			if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+			if (ui.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 			ImGui::Begin("Dear ImGui Style Editor", &bOpenWindowEditor, window_flags);
 			{
@@ -102,77 +102,77 @@ void ofApp::draw()
 			ImGui::End();
 		}
 	}
-	guiManager.end(); // global end
+	ui.End(); // global end
 }
 
 //--------------------------------------------------------------
 void ofApp::drawMainWindow()
 {
 	ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-	if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+	if (ui.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 	string s;
 
-	if (guiManager.beginWindow("MAIN WINDOW", &bOpenWindowMain, window_flags))
+	if (ui.BeginWindow("MAIN WINDOW", &bOpenWindowMain, window_flags))
 	{
 		ofxImGuiSurfing::ToggleRoundedButton("THEME EDITOR", &bOpenWindowEditor);
 
 		//TODO: that should be done with a flag to run inside begin/end
 		//if (ImGui::Button("Add Font"))
 		//{
-		//	guiManager.openFontFileDialog(fontSize);
-		//	fontIndex.setMax(guiManager.getNumFonts() - 1);
+		//	ui.openFontFileDialog(fontSize);
+		//	fontIndex.setMax(ui.getNumFonts() - 1);
 		//}
 
-		//if (guiManager.Add(fontSize))
+		//if (ui.Add(fontSize))
 		//{
 		//}
 
-		guiManager.AddSpacingBigSeparated();
+		ui.AddSpacingBigSeparated();
 
-		if (guiManager.Add(fontIndex))
+		if (ui.Add(fontIndex))
 		{
-			//guiManager.setDefaultFontIndex(fontIndex);
+			//ui.setDefaultFontIndex(fontIndex);
 		}
 
 		s = ofToString(fontIndex) + "/" + ofToString(fontIndex.getMax());
-		guiManager.AddLabel(s.c_str(), false, true);
+		ui.AddLabel(s.c_str(), false, true);
 
-		s = ofToString(guiManager.getFontName(fontIndex));
-		guiManager.AddLabel(s.c_str(), false, true);
+		s = ofToString(ui.getFontName(fontIndex));
+		ui.AddLabel(s.c_str(), false, true);
 
 		//if (ImGui::Button("Set Font")) {
-		//	guiManager.setDefaultFontIndex(fontIndex);
+		//	ui.setDefaultFontIndex(fontIndex);
 		//}
 
 		//-
 
-		guiManager.AddSpacingBigSeparated();
+		ui.AddSpacingBigSeparated();
 
 		ofxImGuiSurfing::ToggleRoundedButton("STYLIZED WINDOW", &bOpenWindowStyled);
 		if (bOpenWindowStyled) {
-			guiManager.AddSpacing();
+			ui.AddSpacing();
 
 			ofxImGuiSurfing::ToggleRoundedButton("STYLIZE FONTS", &bStyleFonts);
 			// -> will crash if styles are not queued!
 		}
 
-		guiManager.AddSpacingBigSeparated();
+		ui.AddSpacingBigSeparated();
 
 		//-
 
 		// a public bool variable to allow handle auto-resize. Applied here to all the windows.
-		guiManager.Add(guiManager.bAutoResize, OFX_IM_TOGGLE_ROUNDED_MINI);
-		//guiManager.Add(guiManager.bAutoResize); 
+		ui.Add(ui.bAutoResize, OFX_IM_TOGGLE_ROUNDED_MINI);
+		//ui.Add(ui.bAutoResize); 
 
-		guiManager.endWindow();
+		ui.EndWindow();
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::drawWindowStylized()
 {
-	// A window but using my ofxSurfing_ImGui_Manager.h class helper
+	// A window but using my ofxSurfingGui.h class helper
 	// Uses my own simpler helpers: 
 	// ofxSurfing_ImGui_Helpers.h
 	// Notice that you can add an ofParameterGroup out of a ofxImGui window. 
@@ -187,86 +187,86 @@ void ofApp::drawWindowStylized()
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(ww, hh));
 	{
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-		if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+		if (ui.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
-		if (guiManager.beginWindow("STYLIZED WINDOW", &bOpenWindowStyled, window_flags))
+		if (ui.BeginWindow("STYLIZED WINDOW", &bOpenWindowStyled, window_flags))
 		{
 			ofxImGuiSurfing::ToggleRoundedButton("STYLIZE FONTS", &bStyleFonts);
 			// -> will crash if styles are not queued!
 
-			guiManager.AddSpacing();
+			ui.AddSpacing();
 
-			if (!bStyleFonts) guiManager.AddLabelHuge("All widgets now using DEFAULT style", false, true);
-			else guiManager.AddLabelHuge("Each widget now using CUSTOM styles", false, true);
+			if (!bStyleFonts) ui.AddLabelHuge("All widgets now using DEFAULT style", false, true);
+			else ui.AddLabelHuge("Each widget now using CUSTOM styles", false, true);
 
-			guiManager.AddSpacingSeparated();
+			ui.AddSpacingSeparated();
 
-			if (bStyleFonts) guiManager.pushStyleFont(0);
+			if (bStyleFonts) ui.pushStyleFont(0);
 			{
 				if (bStyleFonts) {
-					guiManager.AddLabel("Font 0", false, true);
-					guiManager.AddLabel(guiManager.getFontName(0), false, true);
+					ui.AddLabel("Font 0", false, true);
+					ui.AddLabel(ui.getFontName(0), false, true);
 				}
 
-				guiManager.Add(bEnable, OFX_IM_TOGGLE);
-				guiManager.Add(amount2);
-				guiManager.AddLabel(txt, false, true);
+				ui.Add(bEnable, OFX_IM_TOGGLE);
+				ui.Add(amount2);
+				ui.AddLabel(txt, false, true);
 			}
-			if (bStyleFonts) guiManager.popStyleFont();
+			if (bStyleFonts) ui.popStyleFont();
 
-			guiManager.AddSpacingSeparated();
+			ui.AddSpacingSeparated();
 
 			//-
 
-			if (bStyleFonts) guiManager.pushStyleFont(1);
+			if (bStyleFonts) ui.pushStyleFont(1);
 			{
 				if (bStyleFonts) {
-					guiManager.AddLabel("Font 1", false, true);
-					guiManager.AddLabel(guiManager.getFontName(1), false, true);
+					ui.AddLabel("Font 1", false, true);
+					ui.AddLabel(ui.getFontName(1), false, true);
 				}
 
-				guiManager.Add(bEnable, OFX_IM_TOGGLE);
-				guiManager.Add(amount2);
-				guiManager.AddLabel(txt, false, true);
+				ui.Add(bEnable, OFX_IM_TOGGLE);
+				ui.Add(amount2);
+				ui.AddLabel(txt, false, true);
 			}
-			if (bStyleFonts) guiManager.popStyleFont();
+			if (bStyleFonts) ui.popStyleFont();
 
-			guiManager.AddSpacingSeparated();
+			ui.AddSpacingSeparated();
 
 			//-
 
-			if (bStyleFonts) guiManager.pushStyleFont(2);
+			if (bStyleFonts) ui.pushStyleFont(2);
 			{
 				if (bStyleFonts) {
-					guiManager.AddLabel("Font 2", false, true);
-					guiManager.AddLabel(guiManager.getFontName(2), false, true);
+					ui.AddLabel("Font 2", false, true);
+					ui.AddLabel(ui.getFontName(2), false, true);
 				}
 
-				guiManager.Add(bEnable, OFX_IM_TOGGLE);
-				guiManager.Add(amount2);
-				guiManager.AddLabel(txt, false, true);
+				ui.Add(bEnable, OFX_IM_TOGGLE);
+				ui.Add(amount2);
+				ui.AddLabel(txt, false, true);
 			}
-			if (bStyleFonts) guiManager.popStyleFont();
+			if (bStyleFonts) ui.popStyleFont();
 
-			guiManager.AddSpacingSeparated();
+			ui.AddSpacingSeparated();
 
 			//-
 
 			// Take care not pushing a non existing index or it will crash!
-			if (bStyleFonts) guiManager.pushStyleFont(3);
+			if (bStyleFonts) ui.pushStyleFont(3);
 			{
 				if (bStyleFonts) {
-					guiManager.AddLabel("Font 3", false, true);
-					guiManager.AddLabel(guiManager.getFontName(3), false, true);
+					ui.AddLabel("Font 3", false, true);
+					ui.AddLabel(ui.getFontName(3), false, true);
 				}
 
-				guiManager.Add(bEnable, OFX_IM_TOGGLE);
-				guiManager.Add(amount2);
-				guiManager.AddLabel(txt, false, true);
+				ui.Add(bEnable, OFX_IM_TOGGLE);
+				ui.Add(amount2);
+				ui.AddLabel(txt, false, true);
 			}
-			if (bStyleFonts) guiManager.popStyleFont();
+			if (bStyleFonts) ui.popStyleFont();
 
-			guiManager.endWindow();
+			ui.EndWindow();
 		}
 	}
 	ImGui::PopStyleVar();

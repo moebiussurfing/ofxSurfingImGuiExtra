@@ -44,7 +44,7 @@ public:
 
 	void setup_ImGui();
 
-	ofxSurfing_ImGui_Manager guiManager;
+	ofxSurfingGui ui;
 
 	void draw_SurfingWidgets_1();
 	void draw_SurfingWidgets_2();

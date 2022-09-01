@@ -5,8 +5,8 @@ void ofApp::setup() {
 	ofSetFrameRate(60);
 	//ofSetWindowPosition(-1920, 25);
 
-	guiManager.setImGuiAutodraw(true);
-	guiManager.setup();
+	ui.setImGuiAutodraw(true);
+	ui.setup();
 }
 
 //--------------------------------------------------------------
@@ -16,10 +16,10 @@ void ofApp::update() {
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	guiManager.begin();
+	ui.Begin();
 	{
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-		if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+		if (ui.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 		if (bOpen0) {
 			ImGui::Begin("Panels", &bOpen0, window_flags);
@@ -35,7 +35,7 @@ void ofApp::draw()
 
 		if (bOpen1) drawWidgets();
 	}
-	guiManager.end();
+	ui.End();
 }
 
 //--------------------------------------------------------------

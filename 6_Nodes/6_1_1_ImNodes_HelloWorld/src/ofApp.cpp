@@ -4,8 +4,8 @@
 void ofApp::setup() {
 	ofSetFrameRate(60);
 	//ofSetWindowPosition(-1920, 25);
-	guiManager.setImGuiAutodraw(true);
-	guiManager.setup();
+	ui.setImGuiAutodraw(true);
+	ui.setup();
 
 	ImNodes::CreateContext();
 }
@@ -17,10 +17,10 @@ void ofApp::update() {
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	guiManager.begin(); // global begin
+	ui.Begin(); // global begin
 	{
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-		if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+		if (ui.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 		ImGui::SetNextWindowSize(ImVec2(500, 500));
 
@@ -34,7 +34,7 @@ void ofApp::draw()
 			//-
 
 			//ImGui::Dummy(ImVec2(0, 5)); // spacing
-			//ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAutoResize);// a public bool variable to allow handle auto-resize. Applied here to all the windows.
+			//ofxImGuiSurfing::AddToggleRoundedButton(ui.bAutoResize);// a public bool variable to allow handle auto-resize. Applied here to all the windows.
 		}
 		ImGui::End();
 
@@ -42,7 +42,7 @@ void ofApp::draw()
 
 		drawWidgets();
 	}
-	guiManager.end(); // global end
+	ui.End(); // global end
 }
 
 //--------------------------------------------------------------

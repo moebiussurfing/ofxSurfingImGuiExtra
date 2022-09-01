@@ -22,7 +22,7 @@ void ofApp::draw() {
 	ofDrawBitmapStringHighlight(strPath, 20, 400);
 	ofDrawBitmapStringHighlight(strPathName, 20, 420);
 
-	gui.begin();
+	gui.Begin();
 
 	if (ofxImGuiSurfing::drawGui_FileDialog()) {
 		ofLogWarning(__FUNCTION__) << "filePath     : " << ofxImGuiSurfing::filePath;
@@ -31,5 +31,5 @@ void ofApp::draw() {
 		strPathName = filePathName;
 	}
 
-	gui.end();
+	gui.End();
 }

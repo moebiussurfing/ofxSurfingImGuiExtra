@@ -31,7 +31,7 @@ void ofApp::setup() {
 
 	// -> To allow the full engine:
 	// Custom docking layout with presets. 
-	guiManager.setupDocking();
+	ui.setupDocking();
 
 	//-
 
@@ -40,40 +40,40 @@ void ofApp::setup() {
 	// 1. Add the windows:
 	// Pre add the window names that you will use and rememeber his index!
 	// Each added window will be added too to the layout presets engine
-	guiManager.addWindowSpecial("Window 0");
-	guiManager.addWindowSpecial("Window 1");
-	guiManager.addWindowSpecial("Window 2");
-	guiManager.addWindowSpecial("Window 3");
-	guiManager.addWindowSpecial("Window 4");
+	ui.addWindowSpecial("Window 0");
+	ui.addWindowSpecial("Window 1");
+	ui.addWindowSpecial("Window 2");
+	ui.addWindowSpecial("Window 3");
+	ui.addWindowSpecial("Window 4");
 
 	
 #ifdef USE_FBOS_DEMO
-	guiManager.addWindowSpecial("rgbaFbo");
-	//guiManager.addWindowSpecial("rgbaFboFloat");
+	ui.addWindowSpecial("rgbaFbo");
+	//ui.addWindowSpecial("rgbaFboFloat");
 #endif
 
 	//-
 
 	// 2. Add parameters:
 	// -> Extra params to include into layout presets
-	guiManager.addParameterToLayoutPresets(params1);
-	guiManager.addParameterToLayoutPresets(rectParam);
+	ui.addParameterToLayoutPresets(params1);
+	ui.addParameterToLayoutPresets(rectParam);
 
 	//-
 
 	// -> Initiates after adding windows and parameters.
-	guiManager.startup();
+	ui.startup();
 
 	// This will create 4 layout presets as default. 
 	// But you can customize the amount presets using other API methods like instead of startup.
-	// guiManager.setupLayout(6);
+	// ui.setupLayout(6);
 
 	//-
 
 	//TODO:
 	// -> Subscribe external button that will be called to call / flab a bool to a method to reset the layout
-	guiManager.setReset(&bDockingReset1);
-	//guiManager.setReset((bool*)bDockingReset1);
+	ui.setReset(&bDockingReset1);
+	//ui.setReset((bool*)bDockingReset1);
 
 #ifdef USE_FBOS_DEMO
 	setupFbos();
@@ -83,7 +83,7 @@ void ofApp::setup() {
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	guiManager.begin(); // global begin
+	ui.Begin(); // global begin
 	{
 		drawImGui(); // populate all the widgets and panels
 
@@ -94,12 +94,12 @@ void ofApp::draw()
 		updateFbos();
 		GLuint sourceID1;
 		GLuint sourceID2;
-		if (guiManager.getWindowSpecialVisible(5)) DrawFbo(rgbaFbo, sourceID1, "rgbaFbo", ImGuiWindowFlags_None, true);
-		//if (guiManager.getWindowSpecialVisible(6)) DrawFbo(rgbaFboFloat, sourceID2, "rgbaFboFloat", ImGuiWindowFlags_NoResize);
+		if (ui.getWindowSpecialVisible(5)) DrawFbo(rgbaFbo, sourceID1, "rgbaFbo", ImGuiWindowFlags_None, true);
+		//if (ui.getWindowSpecialVisible(6)) DrawFbo(rgbaFboFloat, sourceID2, "rgbaFboFloat", ImGuiWindowFlags_NoResize);
 #endif
 
 	}
-	guiManager.end(); // global end
+	ui.End(); // global end
 
 	//--
 
@@ -114,7 +114,7 @@ void ofApp::draw()
 	ofPopMatrix();
 
 	// log
-	if (ofGetFrameNum() % 60 == 0) guiManager.log.AddText("ONE SEC | frame " + ofToString(ofGetFrameNum()));
+	if (ofGetFrameNum() % 60 == 0) ui.log.AddText("ONE SEC | frame " + ofToString(ofGetFrameNum()));
 }
 
 //--------------------------------------------------------------
@@ -130,7 +130,7 @@ void ofApp::drawImGui()
 
 	//--
 
-	guiManager.beginDocking();
+	ui.BeginDocking();
 	{
 		// Reset layout
 		// We can setup the docking layout using hardcoded methods
@@ -151,17 +151,17 @@ void ofApp::drawImGui()
 
 		//--
 
-		if (guiManager.bMenu) drawMenu();
+		if (ui.bMenu) drawMenu();
 	}
-	guiManager.endDocking();
+	ui.EndDocking();
 
 	//---------
 
 	// -> Render our windows now
 
 	//if(0)
-	//if (guiManager.beginWindowSpecial())
-	if (guiManager.beginWindowSpecial(0))
+	//if (ui.BeginWindowSpecial())
+	if (ui.BeginWindowSpecial(0))
 	{
 		// Calculate layout sizes
 		float _w100 = ofxImGuiSurfing::getWidgetsWidth();
@@ -192,11 +192,11 @@ void ofApp::drawImGui()
 		if (ImGui::CollapsingHeader("Added windows"))
 		{
 			ImGui::TextWrapped("Auto created toggles to set each added window visible");
-			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.getWindowSpecialVisible(0));
-			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.getWindowSpecialVisible(1));
-			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.getWindowSpecialVisible(2));
-			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.getWindowSpecialVisible(3));
-			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.getWindowSpecialVisible(4));
+			ofxImGuiSurfing::AddToggleRoundedButton(ui.getWindowSpecialVisible(0));
+			ofxImGuiSurfing::AddToggleRoundedButton(ui.getWindowSpecialVisible(1));
+			ofxImGuiSurfing::AddToggleRoundedButton(ui.getWindowSpecialVisible(2));
+			ofxImGuiSurfing::AddToggleRoundedButton(ui.getWindowSpecialVisible(3));
+			ofxImGuiSurfing::AddToggleRoundedButton(ui.getWindowSpecialVisible(4));
 		}
 
 		ImGui::Spacing();
@@ -212,31 +212,31 @@ void ofApp::drawImGui()
 
 		//-
 
-		guiManager.endWindow(); // -> Notice that endWindow goes inside the beginWindow bracket!
-		//guiManager.endWindowSpecial();
+		ui.EndWindow(); // -> Notice that endWindow goes inside the beginWindow bracket!
+		//ui.EndWindowSpecial();
 	}
 
 	//--------
 	
 	// -> crash ??
 	if(0) 
-	//if (guiManager.beginWindowSpecial())
-	if (guiManager.beginWindowSpecial(1))
+	//if (ui.BeginWindowSpecial())
+	if (ui.BeginWindowSpecial(1))
 	{
 		ImGui::Text("Window1 Window1 Window1");
 
-		//guiManager.AddGroup(params2, ImGuiTreeNodeFlags_None, OFX_IM_GROUP_COLLAPSED);
-		//guiManager.AddGroup(params3);
+		//ui.AddGroup(params2, ImGuiTreeNodeFlags_None, OFX_IM_GROUP_COLLAPSED);
+		//ui.AddGroup(params3);
 
-		guiManager.endWindow();
-		//guiManager.endWindowSpecial();
+		ui.EndWindow();
+		//ui.EndWindowSpecial();
 	}
 
 	//---------
 
 	//if(0)
-	//if (guiManager.beginWindowSpecial())
-	if (guiManager.beginWindowSpecial(2))
+	//if (ui.BeginWindowSpecial())
+	if (ui.BeginWindowSpecial(2))
 	{
 		float _w100 = ofxImGuiSurfing::getWidgetsWidth(1); // full width
 		float _w50 = ofxImGuiSurfing::getWidgetsWidth(2); // half width
@@ -261,8 +261,8 @@ void ofApp::drawImGui()
 		ofxImGuiSurfing::AddParameter(separation);
 		ofxImGuiSurfing::AddParameter(shapeType);
 
-		guiManager.endWindow();
-		//guiManager.endWindowSpecial();
+		ui.EndWindow();
+		//ui.EndWindowSpecial();
 	}
 
 	//--
@@ -271,22 +271,22 @@ void ofApp::drawImGui()
 	// out of the docking space. cant be docked! ?
 
 	//if(0)
-	//if (guiManager.beginWindowSpecial())
-	if (guiManager.beginWindowSpecial(3))
+	//if (ui.BeginWindowSpecial())
+	if (ui.BeginWindowSpecial(3))
 	{
 		ImGui::Text("Hello, left!");
 		ImGui::Text("Hello, left!");
 		ImGui::Text("Hello, left!");
 
-		guiManager.endWindow();
-		//guiManager.endWindowSpecial();
+		ui.EndWindow();
+		//ui.EndWindowSpecial();
 	}
 
 	//--
 
 	//if(0)
-	//if (guiManager.beginWindowSpecial())
-	if (guiManager.beginWindowSpecial(4))
+	//if (ui.BeginWindowSpecial())
+	if (ui.BeginWindowSpecial(4))
 	{
 		ImGui::Text("Hello, down!");
 		ImGui::Text("Hello, down!");
@@ -294,8 +294,8 @@ void ofApp::drawImGui()
 		ImGui::Text("Hello, down!");
 		ImGui::Text("Hello, down!");
 
-		guiManager.endWindow();
-		//guiManager.endWindowSpecial();
+		ui.EndWindow();
+		//ui.EndWindowSpecial();
 	}
 }
 

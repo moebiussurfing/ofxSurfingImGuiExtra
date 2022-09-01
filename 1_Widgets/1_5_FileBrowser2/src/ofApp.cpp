@@ -20,7 +20,7 @@ void ofApp::draw() {
 	ofDrawBitmapStringHighlight(strFileName, 20, ofGetHeight() - 20);
 	ofDrawBitmapStringHighlight(strPath, 20, ofGetHeight() - 40);
 
-	gui.begin();
+	gui.Begin();
 	{
 		ImGui::Begin("Browser");
 		{
@@ -46,7 +46,7 @@ void ofApp::draw() {
 		}
 		ImGui::End();
 	}
-	gui.end();
+	gui.End();
 }
 
 //--------------------------------------------------------------

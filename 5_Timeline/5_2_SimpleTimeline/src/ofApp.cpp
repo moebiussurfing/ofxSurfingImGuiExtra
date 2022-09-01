@@ -4,8 +4,8 @@
 void ofApp::setup() {
 	ofSetFrameRate(60);
 	ofSetWindowPosition(-1920, 25);
-	guiManager.setImGuiAutodraw(true);
-	guiManager.setup();
+	ui.setImGuiAutodraw(true);
+	ui.setup();
 
 	//sequencer.setup();
 }
@@ -21,12 +21,12 @@ void ofApp::update() {
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	guiManager.begin(); // global begin
+	ui.Begin(); // global begin
 	{
 		drawWidgets();
 		drawTimeline();
 	}
-	guiManager.end(); // global end
+	ui.End(); // global end
 }
 
 //--------------------------------------------------------------
@@ -34,7 +34,7 @@ void ofApp::drawWidgets()
 {
 	{
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-		if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+		if (ui.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 		ImGui::Begin("Panels", &bOpen0, window_flags);
 		{
@@ -47,7 +47,7 @@ void ofApp::drawWidgets()
 
 			ofxImGuiSurfing::ToggleRoundedButton("PLAY", &bPlay);
 
-			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAutoResize);// a public bool variable to allow handle auto-resize. Applied here to all the windows.
+			ofxImGuiSurfing::AddToggleRoundedButton(ui.bAutoResize);// a public bool variable to allow handle auto-resize. Applied here to all the windows.
 		}
 		ImGui::End();
 	}
@@ -59,7 +59,7 @@ void ofApp::drawTimeline()
 	if (bOpen1)
 	{
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-		//if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+		//if (ui.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 		ImGui::Begin("Timeline", &bOpen1, window_flags);
 		{
@@ -94,7 +94,7 @@ void ofApp::drawTimeline()
 			//ImGui::TimelineEvent("Scale", scale);
 			//ImGui::EndTimeline();
 
-			//ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAutoResize);// a public bool variable to allow handle auto-resize. Applied here to all the windows.
+			//ofxImGuiSurfing::AddToggleRoundedButton(ui.bAutoResize);// a public bool variable to allow handle auto-resize. Applied here to all the windows.
 
 
 			//// simple timeline

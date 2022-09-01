@@ -12,7 +12,7 @@ OVERVIEW:
 
 This example shows how to populate many ImGui windows from different scopes on the same viewport.
 Uses different approaches: 
-from ofApp, from an add-on/class, or with Surfing Layout tools as guiManager and special windows too
+from ofApp, from an add-on/class, or with Surfing Layout tools as ui and special windows too
 Also useful to check viewport modes, docking merging windows or autodraw modes.
 
 HOW TO:
@@ -92,7 +92,7 @@ public:
 	ofxImGui::Gui gui;
 
 	// B. -> SurfingImGui
-	ofxSurfing_ImGui_Manager guiManager;
+	ofxSurfingGui ui;
 
 	// C. -> ofxImGui class/add-on
 	myAddon guiInstance;
@@ -104,7 +104,7 @@ public:
 	void clearImGuiWindows();
 	bool bFlagClear = false;
 
-	void setupImGuiManager();
+	void setupImui();
 	void drawImGui();
 	void drawImGuiGroup();
 

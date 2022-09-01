@@ -8,7 +8,7 @@ void ofApp::setup() {
 	//ofSetWindowPosition(1920, 25);
 	ofSetWindowTitle("Mosaic Engine Tester");
 
-	guiManager.setup(IM_GUI_MODE_INSTANTIATED);
+	ui.setup(IM_GUI_MODE_INSTANTIATED);
 
 	//-
 
@@ -73,7 +73,7 @@ void ofApp::draw()
 
 		//-
 
-		this->guiManager.begin();
+		this->ui.Begin();
 		{
 			ImGui::SetNextWindowPos(canvasViewport.getTopLeft(), ImGuiCond_Always);
 			ImGui::SetNextWindowSize(ImVec2(canvasViewport.width, canvasViewport.height), ImGuiCond_Always);
@@ -100,7 +100,7 @@ void ofApp::draw()
 		}
 	
 		// We're done drawing to IMGUI
-		this->guiManager.end();
+		this->ui.End();
 	}
 	canvas.end();
 

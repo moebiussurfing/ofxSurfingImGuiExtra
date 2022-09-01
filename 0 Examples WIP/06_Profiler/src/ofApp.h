@@ -15,7 +15,7 @@ public:
 	void update();
 	void keyPressed(int key);
 
-	ofxSurfing_ImGui_Manager guiManager;
+	ofxSurfingGui ui;
 	
 	const int NUM_PASSES = 5;
 	ImGuiEx::ProfilersWindow profiler;

@@ -7,8 +7,8 @@ void ofApp::setup() {
 	ofSetFrameRate(60);
 	ofSetWindowPosition(-1920, 25);
 
-	//guiManager.setImGuiAutodraw(true);
-	//guiManager.setup();
+	//ui.setImGuiAutodraw(true);
+	//ui.setup();
 	this->gui.setup();
 
 	//-
@@ -72,7 +72,7 @@ void ofApp::draw()
 	ofSetLineWidth(1);
 
 
-	this->gui.begin();
+	this->gui.Begin();
 	{
 		ImGui::SetNextWindowPos(canvasViewport.getTopLeft(), ImGuiCond_Always);
 		ImGui::SetNextWindowSize(ImVec2(canvasViewport.width, canvasViewport.height), ImGuiCond_Always);
@@ -98,7 +98,7 @@ void ofApp::draw()
 		if (isCanvasVisible) nodeCanvas.End();
 	}
 	// We're done drawing to IMGUI
-	this->gui.end();
+	this->gui.End();
 
 
 

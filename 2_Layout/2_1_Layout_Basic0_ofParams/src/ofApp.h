@@ -10,7 +10,7 @@ public:
 		void setup();
 		void draw();
 			
-		ofxSurfing_ImGui_Manager guiManager; 
+		ofxSurfingGui ui; 
 
 		// debug ImGui flags
 		ofParameter<int> typeGroups;

@@ -5,11 +5,11 @@ void ofApp::setup() {
 	ofSetFrameRate(60);
 	//ofSetWindowPosition(1920, 20);
 
-	//guiManager.setImGuiAutodraw(true); // -> required when only one single ImGui instance is instantiated on all the oF project.
-	//guiManager.setImGuiDockingModeCentered(false);
-	//guiManager.setup();
+	//ui.setImGuiAutodraw(true); // -> required when only one single ImGui instance is instantiated on all the oF project.
+	//ui.setImGuiDockingModeCentered(false);
+	//ui.setup();
 
-	guiManager.setup(IM_GUI_MODE_INSTANTIATED);
+	ui.setup(IM_GUI_MODE_INSTANTIATED);
 
 	//-
 
@@ -31,16 +31,16 @@ void ofApp::setup() {
 
 	//--
 
-	guiManager.addWindowSpecial(bMode1);
-	guiManager.addWindowSpecial(bMode2);
+	ui.addWindowSpecial(bMode1);
+	ui.addWindowSpecial(bMode2);
 
-	guiManager.initiatieSpecialWindows();
+	ui.initiatieSpecialWindows();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	guiManager.begin();
+	ui.Begin();
 	{
 		//-
 
@@ -106,13 +106,13 @@ void ofApp::draw()
 
 		ImGui::DockBuilderDockWindow("Window0", dockLeftID);
 
-		if (guiManager.beginWindow("Window0", NULL, ImGuiWindowFlags_None))
+		if (ui.BeginWindow("Window0", NULL, ImGuiWindowFlags_None))
 		{
-			ImGui::Text("Test guiManager.beginWindow(0)");
+			ImGui::Text("Test ui.BeginWindow(0)");
 			ImGui::SliderFloat(lineWidth.getName().c_str(),
 				(float*)&lineWidth.get(), lineWidth.getMin(), lineWidth.getMax());
 		}
-		guiManager.endWindow();
+		ui.EndWindow();
 
 		ImGui::DockBuilderFinish(dockLeftID);
 
@@ -120,15 +120,15 @@ void ofApp::draw()
 
 		ImGui::DockBuilderDockWindow("Window1", dockRightID);
 
-		if (guiManager.beginWindow("Window1", NULL, ImGuiWindowFlags_None))
+		if (ui.BeginWindow("Window1", NULL, ImGuiWindowFlags_None))
 		{
-			ImGui::Text("Test guiManager.beginWindow(1)");
+			ImGui::Text("Test ui.BeginWindow(1)");
 			static int _value = 0;
 			ImGui::InputInt("InputInt", &_value);
 			ImGui::SliderInt("SliderInt", &_value, 0, 10);
 			ImGui::DragInt("DragInt", &_value);
 		}
-		guiManager.endWindow();
+		ui.EndWindow();
 
 		ImGui::DockBuilderFinish(dockRightID);
 
@@ -137,41 +137,41 @@ void ofApp::draw()
 		//--
 
 		// Using some helpers
-		guiManager.drawSpecialWindowsPanels(); // -> Main Panels Controller
+		ui.drawSpecialWindowsPanels(); // -> Main Panels Controller
 
-		if (guiManager.getSpecialWindowsEnableGlobal())
+		if (ui.getSpecialWindowsEnableGlobal())
 		{
-			if (guiManager.beginWindowSpecial(0))
+			if (ui.BeginWindowSpecial(0))
 			{
-				ImGui::Text("Test guiManager.beginWindow(0)");
+				ImGui::Text("Test ui.BeginWindow(0)");
 				ImGui::SliderFloat(lineWidth.getName().c_str(),
 					(float*)&lineWidth.get(), lineWidth.getMin(), lineWidth.getMax());
 			}
-			guiManager.endWindow();
+			ui.EndWindow();
 
-			if (guiManager.getVisible(1)) {
-				if (guiManager.beginWindowSpecial(1))
+			if (ui.getVisible(1)) {
+				if (ui.BeginWindowSpecial(1))
 				{
-					ImGui::Text("Test guiManager.beginWindow(1)");
+					ImGui::Text("Test ui.BeginWindow(1)");
 					static int _value = 0;
 					ImGui::InputInt("InputInt", &_value);
 					ImGui::SliderInt("SliderInt", &_value, 0, 10);
 					ImGui::DragInt("DragInt", &_value);
 				}
-				guiManager.endWindow();
+				ui.EndWindow();
 			}
 		}
 
 		//-
 
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-		guiManager.beginWindow("Window 1", &bOpen1, window_flags);
+		ui.BeginWindow("Window 1", &bOpen1, window_flags);
 		{
 			drawWidgets();
 		}
-		guiManager.endWindow();
+		ui.EndWindow();
 	}
-	guiManager.end();
+	ui.End();
 }
 
 //--------------------------------------------------------------
@@ -179,17 +179,17 @@ void ofApp::drawMainWindow()
 {
 	ImGuiWindowFlags window_flags;
 	window_flags = ImGuiWindowFlags_None;
-	if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+	if (ui.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 	{
 		ImGui::Begin("Show Windows", &bOpen0, window_flags);
 		{
 			ofxImGuiSurfing::ToggleRoundedButton("Show Window 1", &bOpen1);
 
-			//ofxImGuiSurfing::ToggleRoundedButton(6&guiManager.getVisible(0).get());
-			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.getVisible(0));
-			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.getVisible(1));
+			//ofxImGuiSurfing::ToggleRoundedButton(6&ui.getVisible(0).get());
+			ofxImGuiSurfing::AddToggleRoundedButton(ui.getVisible(0));
+			ofxImGuiSurfing::AddToggleRoundedButton(ui.getVisible(1));
 
-			guiManager.drawAdvanced();
+			ui.drawAdvanced();
 		}
 		ImGui::End();
 	}
@@ -198,5 +198,5 @@ void ofApp::drawMainWindow()
 //--------------------------------------------------------------
 void ofApp::drawWidgets()
 {
-	guiManager.AddGroup(params1);
+	ui.AddGroup(params1);
 }

@@ -27,24 +27,24 @@ void ofApp::setup()
 	params2.add(params3);
 	params.add(params2);
 
-	guiManager.setup(IM_GUI_MODE_INSTANTIATED);
+	ui.setup(IM_GUI_MODE_INSTANTIATED);
 }
 
 //--------------------------------------------------------------
 void ofApp::draw() 
 {
-	guiManager.begin();
+	ui.Begin();
 	{
-		if (guiManager.beginWindow(bGui))
+		if (ui.BeginWindow(bGui))
 		{
-			guiManager.AddGroup(params);
+			ui.AddGroup(params);
 
-			guiManager.endWindow();
+			ui.EndWindow();
 		}
 
 		seq.draw();
 	}
-	guiManager.end();
+	ui.End();
 }
 
 //--------------------------------------------------------------

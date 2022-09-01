@@ -111,7 +111,7 @@ void ofApp::draw()
 {
 	if (!bGui) return;
 
-	ui.begin();
+	ui.Begin();
 	{
 		draw_MainWindow();
 
@@ -120,7 +120,7 @@ void ofApp::draw()
 		draw_SurfingWidgets_3();
 		draw_SurfingWidgets_4();
 	}
-	ui.end();
+	ui.End();
 }
 
 //--------------------------------------------------------------
@@ -135,7 +135,7 @@ void ofApp::draw_MainWindow()
 		ImGui::SetNextWindowPos(ImVec2(x, y), flag);
 	}
 
-	if (ui.beginWindow(bGui))
+	if (ui.BeginWindow(bGui))
 	{
 		// Extra Panels
 		// Useful for your own GUI's:
@@ -174,7 +174,7 @@ void ofApp::draw_MainWindow()
 		ui.Add(ui.bDebug, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
 		if (ui.bDebug) ui.drawAdvanced();
 
-		ui.endWindow();
+		ui.EndWindow();
 	}
 }
 
@@ -185,7 +185,7 @@ void ofApp::draw_SurfingWidgets_1()
 	// passing which special window index is as argument.
 	// This is the only attention  we must pay by our selfs.
 
-	if (ui.beginWindowSpecial(0))
+	if (ui.BeginWindowSpecial(0))
 	{
 		ui.AddLabelBig("> Special\nWindow 1", false);
 		ui.Add(bPrevious0, OFX_IM_TOGGLE_BIG, 2, true);//next on same line
@@ -193,14 +193,14 @@ void ofApp::draw_SurfingWidgets_1()
 		ui.AddGroup(params_0);
 		ui.Add(speed0, OFX_IM_VSLIDER_NO_LABELS);// hide labels
 
-		ui.endWindowSpecial();
+		ui.EndWindowSpecial();
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::draw_SurfingWidgets_2()
 {
-	if (ui.beginWindowSpecial(1))
+	if (ui.BeginWindowSpecial(1))
 	{
 		ui.AddLabelBig("> Special\nWindow 2", false);
 		ui.AddGroup(params_1);
@@ -209,14 +209,14 @@ void ofApp::draw_SurfingWidgets_2()
 		ui.Add(shapeType1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
 		ui.Add(size1, OFX_IM_VSLIDER_NO_LABELS, 4);
 
-		ui.endWindowSpecial();
+		ui.EndWindowSpecial();
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::draw_SurfingWidgets_3()
 {
-	if (ui.beginWindowSpecial(2))
+	if (ui.BeginWindowSpecial(2))
 	{
 		ui.AddLabelBig("> Special\nWindow 3", false);
 		ui.Add(shapeType2, OFX_IM_KNOB, 2, true);
@@ -225,14 +225,14 @@ void ofApp::draw_SurfingWidgets_3()
 		ui.AddSpacingBigSeparated();
 		ui.AddGroup(params_2);
 
-		ui.endWindowSpecial();
+		ui.EndWindowSpecial();
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::draw_SurfingWidgets_4()
 {
-	if (ui.beginWindowSpecial(3))
+	if (ui.BeginWindowSpecial(3))
 	{
 		ui.AddLabelBig("> Special\nWindow 4", false);
 		ui.AddGroup(params_3);
@@ -242,7 +242,7 @@ void ofApp::draw_SurfingWidgets_4()
 		ui.Add(speed3, OFX_IM_HSLIDER_SMALL);
 		ui.Add(separation3, OFX_IM_HSLIDER_MINI);
 
-		ui.endWindowSpecial();
+		ui.EndWindowSpecial();
 	}
 }
 

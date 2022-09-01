@@ -32,7 +32,7 @@ public:
 	void exit();
 	void keyPressed(int key);
 
-	ofxSurfing_ImGui_Manager guiManager;
+	ofxSurfingGui ui;
 	
 	Example example;
 

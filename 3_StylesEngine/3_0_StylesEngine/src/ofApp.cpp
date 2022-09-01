@@ -50,8 +50,8 @@ void ofApp::setup() {
 	//--
 
 	// Instantiate
-	guiManager.setSettingsFilename("3_0_StylesEngine"); // -> Optional customize filename for the settings file for multiple instances.
-	guiManager.setup(IM_GUI_MODE_INSTANTIATED);
+	ui.setSettingsFilename("3_0_StylesEngine"); // -> Optional customize filename for the settings file for multiple instances.
+	ui.setup(IM_GUI_MODE_INSTANTIATED);
 
 	//--
 
@@ -77,11 +77,11 @@ void ofApp::setup() {
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	guiManager.begin();
+	ui.Begin();
 	{
 		drawImGui();
 	}
-	guiManager.end();
+	ui.End();
 }
 
 //--------------------------------------------------------------
@@ -90,14 +90,14 @@ void ofApp::drawImGui()
 	// Window ofApp
 	{
 		ImGuiWindowFlags flags = ImGuiWindowFlags_None;
-		if (guiManager.bAutoResize) flags |= ImGuiWindowFlags_AlwaysAutoResize;
+		if (ui.bAutoResize) flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
-		guiManager.beginWindow("ofApp", NULL, flags);
+		ui.BeginWindow("ofApp", NULL, flags);
 		{
 			// Modes
 
 			// Autoresize
-			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAutoResize, ImVec2(1.55f * 30, 30));
+			ofxImGuiSurfing::AddToggleRoundedButton(ui.bAutoResize, ImVec2(1.55f * 30, 30));
 
 			// Custom
 			if (ofxImGuiSurfing::ToggleRoundedButton("bCustom", &bCustom, ImVec2(1.55f * 30, 30)))
@@ -201,9 +201,9 @@ void ofApp::drawImGui()
 				ofxImGuiSurfing::AddSpacingBig();
 			}
 
-			guiManager.drawAdvanced();
+			ui.drawAdvanced();
 		}
-		guiManager.endWindow();
+		ui.EndWindow();
 	}
 
 	//-
@@ -216,19 +216,19 @@ void ofApp::drawImGui()
 void ofApp::drawImGuiGroup()
 {
 	ImGuiWindowFlags flags = ImGuiWindowFlags_None;
-	if (guiManager.bAutoResize) flags |= ImGuiWindowFlags_AlwaysAutoResize;
+	if (ui.bAutoResize) flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
-	guiManager.beginWindow("ofParameterGroup", NULL, flags);
+	ui.BeginWindow("ofParameterGroup", NULL, flags);
 	{
 		// Render a Group
 
 		// A. Direct Styled
-		//guiManager.AddGroup(params1, flags_typeFlags, SurfingImGuiTypesGroups(typeGroup1.get()));
+		//ui.AddGroup(params1, flags_typeFlags, SurfingImGuiTypesGroups(typeGroup1.get()));
 
 		// B. Styled Previously on Setup Styles
-		guiManager.AddGroup(params1);
+		ui.AddGroup(params1);
 	}
-	guiManager.endWindow();
+	ui.EndWindow();
 }
 
 //--------------------------------------------------------------
@@ -254,7 +254,7 @@ void ofApp::setupCustomizators() {
 	paramsSettings.add(typeGroup1);
 	paramsSettings.add(typeGroup2);
 	paramsSettings.add(typeGroup3);
-	paramsSettings.add(guiManager.bAutoResize);
+	paramsSettings.add(ui.bAutoResize);
 
 	ofAddListener(paramsSettings.parameterChangedE(), this, &ofApp::Changed_Params);
 
@@ -265,37 +265,37 @@ void ofApp::setupCustomizators() {
 void ofApp::setupImGuiStyles() {
 
 	// Clear queued Styles first.
-	guiManager.clearStyles();
+	ui.clearStyles();
 
-	guiManager.AddStyle(bMode1, OFX_IM_TOGGLE_BIG, 2, true);
+	ui.AddStyle(bMode1, OFX_IM_TOGGLE_BIG, 2, true);
 	// Two widgets per row. Sameline for the next.
-	guiManager.AddStyle(bMode2, OFX_IM_TOGGLE_BIG, 2);
+	ui.AddStyle(bMode2, OFX_IM_TOGGLE_BIG, 2);
 	// Two widgets per row. Not Sameline for the next
 
-	guiManager.AddStyle(bMode3, OFX_IM_TOGGLE_BIG, 2, true);
+	ui.AddStyle(bMode3, OFX_IM_TOGGLE_BIG, 2, true);
 	// Two widgets same line
-	guiManager.AddStyle(bMode4, OFX_IM_TOGGLE_BIG, 2, false, 10);
+	ui.AddStyle(bMode4, OFX_IM_TOGGLE_BIG, 2, false, 10);
 	// Two widgets per row. Not Sameline for the next. 10 y pix ending spacing
 
-	guiManager.AddStyle(bEnable, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
+	ui.AddStyle(bEnable, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
 
 	// One line per widget
-	guiManager.AddStyle(bModeA, OFX_IM_TOGGLE_SMALL);
-	guiManager.AddStyle(bModeB, OFX_IM_TOGGLE_SMALL);
-	guiManager.AddStyle(bModeC, OFX_IM_TOGGLE_SMALL);
-	guiManager.AddStyle(bModeD, OFX_IM_TOGGLE_SMALL, 1, false, 10); // 10 y pix ending spacing
+	ui.AddStyle(bModeA, OFX_IM_TOGGLE_SMALL);
+	ui.AddStyle(bModeB, OFX_IM_TOGGLE_SMALL);
+	ui.AddStyle(bModeC, OFX_IM_TOGGLE_SMALL);
+	ui.AddStyle(bModeD, OFX_IM_TOGGLE_SMALL, 1, false, 10); // 10 y pix ending spacing
 
 	// Two Big toggle widgets same line
-	guiManager.AddStyle(bPrevious, OFX_IM_BUTTON_BIG, 2, true);
-	guiManager.AddStyle(bNext, OFX_IM_BUTTON_BIG, 2, false, 10);
+	ui.AddStyle(bPrevious, OFX_IM_BUTTON_BIG, 2, true);
+	ui.AddStyle(bNext, OFX_IM_BUTTON_BIG, 2, false, 10);
 
-	guiManager.AddStyle(shape3, OFX_IM_STEPPER);
-	guiManager.AddStyle(size3, OFX_IM_VSLIDER, 2);//half width
-	guiManager.AddStyle(amount3, OFX_IM_HSLIDER, 4, false, 10);//quater width
+	ui.AddStyle(shape3, OFX_IM_STEPPER);
+	ui.AddStyle(size3, OFX_IM_VSLIDER, 2);//half width
+	ui.AddStyle(amount3, OFX_IM_HSLIDER, 4, false, 10);//quater width
 
 	// More widgets
-	guiManager.AddStyle(line2, OFX_IM_STEPPER);
-	guiManager.AddStyle(speed2, OFX_IM_DRAG);
+	ui.AddStyle(line2, OFX_IM_STEPPER);
+	ui.AddStyle(speed2, OFX_IM_DRAG);
 
 	//--
 
@@ -303,14 +303,14 @@ void ofApp::setupImGuiStyles() {
 	// What we will use in our projects:
 
 	// Customize each Group Style
-	guiManager.AddStyleGroup(params1, SurfingImGuiTypesGroups(typeGroup1.get()), flags_typeFlags1);
-	guiManager.AddStyleGroup(params2, SurfingImGuiTypesGroups(typeGroup2.get()), flags_typeFlags2);
-	guiManager.AddStyleGroup(params3, SurfingImGuiTypesGroups(typeGroup3.get()), flags_typeFlags3);
+	ui.AddStyleGroup(params1, SurfingImGuiTypesGroups(typeGroup1.get()), flags_typeFlags1);
+	ui.AddStyleGroup(params2, SurfingImGuiTypesGroups(typeGroup2.get()), flags_typeFlags2);
+	ui.AddStyleGroup(params3, SurfingImGuiTypesGroups(typeGroup3.get()), flags_typeFlags3);
 }
 
 //--------------------------------------------------------------
 void ofApp::clearStyles() {
-	guiManager.clearStyles(); // TODO: -> Call from beginWindow/group
+	ui.clearStyles(); // TODO: -> Call from beginWindow/group
 }
 
 //--------------------------------------------------------------

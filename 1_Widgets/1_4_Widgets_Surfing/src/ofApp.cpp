@@ -36,7 +36,7 @@ void ofApp::setup() {
 //--------------------------------------------------------------
 void ofApp::setup_ImGui()
 {
-	guiManager.setup();
+	ui.setup();
 }
 
 //--------------------------------------------------------------
@@ -46,7 +46,7 @@ void ofApp::draw() {
 
 	//-
 
-	guiManager.begin();
+	ui.Begin();
 	{
 		{
 			// Surfing Widgets 1
@@ -54,14 +54,14 @@ void ofApp::draw() {
 			ImGuiColorEditFlags _flagw;
 			string name;
 
-			_flagw = guiManager.bAutoResize ? ImGuiWindowFlags_AlwaysAutoResize : ImGuiWindowFlags_None;
+			_flagw = ui.bAutoResize ? ImGuiWindowFlags_AlwaysAutoResize : ImGuiWindowFlags_None;
 
 			name = "SurfingWidgets 1";
-			guiManager.beginWindow(name.c_str(), NULL, _flagw);
+			ui.BeginWindow(name.c_str(), NULL, _flagw);
 			{
 				// Customize font
 				ofxImGuiSurfing::AddParameter(bEnable1);
-				ofxImGuiSurfing::AddTooltip("Enable to customize Font.", guiManager.bHelp);
+				ofxImGuiSurfing::AddTooltip("Enable to customize Font.", ui.bHelp);
 
 				// Range
 				static float f1 = -0.5f;
@@ -70,28 +70,28 @@ void ofApp::draw() {
 
 				// Sliders
 				ofxImGuiSurfing::AddBigSlider(valueKnob1);
-				guiManager.Add(valueKnob2, OFX_IM_HSLIDER);
+				ui.Add(valueKnob2, OFX_IM_HSLIDER);
 
 				// Knobs
-				guiManager.Add(valueKnob1, OFX_IM_KNOB, 4); // width size of a quarter of panel width
+				ui.Add(valueKnob1, OFX_IM_KNOB, 4); // width size of a quarter of panel width
 				ImGui::SameLine();
 				ofxImGuiSurfing::AddKnob(valueKnob2);
 
 				// More Wdigets
 				draw_SurfingWidgets_1();
 			}
-			guiManager.endWindow();
+			ui.EndWindow();
 
 			//--
 
 			// Surfing Widgets 2
 
 			name = "SurfingWidgets 2";
-			guiManager.beginWindow(name.c_str(), NULL, _flagw);
+			ui.BeginWindow(name.c_str(), NULL, _flagw);
 			{
 				draw_SurfingWidgets_2();
 			}
-			guiManager.endWindow();
+			ui.EndWindow();
 
 			//--
 
@@ -100,7 +100,7 @@ void ofApp::draw() {
 			surfingGradient.drawImGui();
 		}
 	}
-	guiManager.end();
+	ui.End();
 }
 
 //--------------------------------------------------------------
@@ -132,7 +132,7 @@ void ofApp::draw_SurfingWidgets_1() {
 			// Not required when using the Api helpers/tools.
 			// Btw, some standard widgets do not requires to do it.
 			{
-				guiManager.refreshLayout();
+				ui.refreshLayout();
 				_w1 = ofxImGuiSurfing::getWidgetsWidth(1); // 1 widget full width
 				_w2 = ofxImGuiSurfing::getWidgetsWidth(2); // 2 widgets half width
 				_w3 = ofxImGuiSurfing::getWidgetsWidth(3); // 3 widgets third width
@@ -154,7 +154,7 @@ void ofApp::draw_SurfingWidgets_1() {
 				indexPreset--;
 				indexPreset = ofClamp(indexPreset, indexPreset.getMin(), indexPreset.getMax()); // clamp parameter
 			}
-			ofxImGuiSurfing::AddTooltip("Click to Previous", guiManager.bHelp);
+			ofxImGuiSurfing::AddTooltip("Click to Previous", ui.bHelp);
 			ImGui::SameLine();
 
 			if (ImGui::Button(">", ImVec2(_w2, _h)))
@@ -162,11 +162,11 @@ void ofApp::draw_SurfingWidgets_1() {
 				indexPreset++;
 				indexPreset = ofClamp(indexPreset, indexPreset.getMin(), indexPreset.getMax()); // clamp parameter
 			}
-			ofxImGuiSurfing::AddTooltip("Click to Next", guiManager.bHelp);
+			ofxImGuiSurfing::AddTooltip("Click to Next", ui.bHelp);
 
 			// 1.2 Slider: the master int ofParam!
 			ofxImGuiSurfing::AddParameter(indexPreset);
-			ofxImGuiSurfing::AddTooltip("Move the slider index to pick a preset.", guiManager.bHelp);
+			ofxImGuiSurfing::AddTooltip("Move the slider index to pick a preset.", ui.bHelp);
 
 			// 1.3 Matrix button clicker
 			AddMatrixClicker(indexPreset, true, 3); // Responsive layout with 3 widgets per row
@@ -184,7 +184,7 @@ void ofApp::draw_SurfingWidgets_1() {
 				"This is not an ofParameter. "
 				"It's Just an int type, so here we are using RAW ImGui widgets! "
 				"But remember that we can use ofParameter Helpers instead."
-				, guiManager.bHelp);
+				, ui.bHelp);
 
 			// 1.6 An external url link
 			ofxImGuiSurfing::AddLinkURL("ofxSurfingImGui@github.com", "https://github.com/moebiussurfing/ofxSurfingImGui");
@@ -206,15 +206,15 @@ void ofApp::draw_SurfingWidgets_1() {
 
 	// 3. Extra Stuff that we can use in our windows.
 
-	// There's common toggles on guiManager to use in our apps: 
+	// There's common toggles on ui to use in our apps: 
 	// advanced, extra, help, keys, debug, lock move, etc...
 
-	ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bHelp); // -> Here is used to enable tooltips
-	ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bExtra);
-	if (guiManager.bExtra)
+	ofxImGuiSurfing::AddToggleRoundedButton(ui.bHelp); // -> Here is used to enable tooltips
+	ofxImGuiSurfing::AddToggleRoundedButton(ui.bExtra);
+	if (ui.bExtra)
 	{
-		ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAutoResize);
-		guiManager.drawAdvanced();
+		ofxImGuiSurfing::AddToggleRoundedButton(ui.bAutoResize);
+		ui.drawAdvanced();
 	}
 }
 
@@ -233,7 +233,7 @@ void ofApp::draw_SurfingWidgets_2()
 			//// Required when creating a raw ImGui tree and/or indenting manually.
 			//// Not required when using the Api helpers/tools.
 			//// Btw, some standard widgets do not requires to do it.
-			//guiManager.refreshLayout(); // Calculates sizes related to window shape/size now.
+			//ui.refreshLayout(); // Calculates sizes related to window shape/size now.
 
 			ofxImGuiSurfing::AddParameter(size2);
 			ofxImGuiSurfing::AddParameter(amount2);

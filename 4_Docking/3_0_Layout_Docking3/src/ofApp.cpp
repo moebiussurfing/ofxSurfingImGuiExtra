@@ -15,7 +15,7 @@ void ofApp::setup() {
 	//--
 
 	// B.
-	setupImGuiManager();
+	setupImui();
 
 	//--
 
@@ -37,17 +37,17 @@ void ofApp::setup() {
 }
 
 //--------------------------------------------------------------
-void ofApp::setupImGuiManager() {
+void ofApp::setupImui() {
 
 #ifdef TEST__LOCAL_IM_GUI
-	guiManager.setup(IM_GUI_MODE_NOT_INSTANTIATED); // -> must be inside a gui.begin()/end()
+	ui.setup(IM_GUI_MODE_NOT_INSTANTIATED); // -> must be inside a gui.Begin()/end()
 #endif
 
 	//-
 
 #ifdef TEST__MULTIINSTANCE_IM_GUI
-	//guiManager.setup(); // -> requires guiManager.begin()/end()
-	guiManager.setup(IM_GUI_MODE_INSTANTIATED); // -> requires guiManager.begin()/end()
+	//ui.setup(); // -> requires ui.Begin()/end()
+	ui.setup(IM_GUI_MODE_INSTANTIATED); // -> requires ui.Begin()/end()
 #endif
 }
 
@@ -56,7 +56,7 @@ void ofApp::draw()
 {
 	//// log
 	//if (ofGetFrameNum() % 120 == 0) {
-	//	guiManager.log_RectWindows();
+	//	ui.log_RectWindows();
 	//}
 
 	// We manipulate vector out of the drawing context Begin/NewFrame...
@@ -68,15 +68,15 @@ void ofApp::draw()
 	//--
 
 	// Docking stuff: draws a rectangle to see the free space viewport on central dockspace
-	gui.begin();
+	gui.Begin();
 	setupDocking();
-	gui.end();
+	gui.End();
 
 	//--
 
 	// A.
 #ifdef TEST__LOCAL_IM_GUI
-	gui.begin();
+	gui.Begin();
 	{
 		ImGui::Text("ofApp-ofxImGui");
 		// one window
@@ -88,9 +88,9 @@ void ofApp::draw()
 		// other windows
 		drawImGui();
 		// using the raw ImGui widgets without instantiate ImGui begin/end
-		//guiManager.begin/end(); // if used begin/end it's bypassed internally when using .setup(IM_GUI_MODE_NOT_INSTANTIATED). can be uncommented
+		//ui.Begin/end(); // if used begin/end it's bypassed internally when using .setup(IM_GUI_MODE_NOT_INSTANTIATED). can be uncommented
 	}
-	gui.end();
+	gui.End();
 #endif
 
 	//-
@@ -98,7 +98,7 @@ void ofApp::draw()
 #ifdef TEST__MULTIINSTANCE_IM_GUI
 	// one window
 	// A.
-	gui.begin();
+	gui.Begin();
 	{
 		ImGui::Begin("ofApp-ofxImGui");
 		ImGui::Text("ofApp-ofxImGui");
@@ -106,15 +106,15 @@ void ofApp::draw()
 		ImGui::SliderFloat("value", &value, 0, 1);
 		ImGui::End();
 	}
-	gui.end();
+	gui.End();
 
 	// B.
 	// other windows
-	guiManager.begin(); // bypassed when using IM_GUI_MODE_NOT_INSTANTIATED
+	ui.Begin(); // bypassed when using IM_GUI_MODE_NOT_INSTANTIATED
 	{
 		drawImGui();
 	}
-	guiManager.end();
+	ui.End();
 #endif
 
 	//-
@@ -125,7 +125,7 @@ void ofApp::draw()
 	//-
 
 	// D.
-	// add-on vector of guiManager windows (ofxSurfing_ImGui_Manager)
+	// add-on vector of ui windows (ofxSurfingGui)
 	for (auto &g : guiInstances) {
 		g->draw();
 	}
@@ -133,7 +133,7 @@ void ofApp::draw()
 	//-
 
 	// Some isolated windows
-	gui.begin(); // -> Why it works without begin/end ??
+	gui.Begin(); // -> Why it works without begin/end ??
 	{
 		// Draw a few windows
 		static int val0 = 0, val1 = 0, val2 = 0, val3 = 0, val4 = 0, val5 = 0;
@@ -145,7 +145,7 @@ void ofApp::draw()
 		ImGui::SetNextWindowViewport(ImGui::GetMainViewport()->ID); // Attach a window to a viewport = prevent popping it out
 		drawWindow("ofxImGui-Stuck in main window", val5, 550, 350, ImGuiWindowFlags_None);
 	}
-	gui.end();
+	gui.End();
 }
 
 //--------------------------------------------------------------
@@ -155,12 +155,12 @@ void ofApp::drawImGui()
 
 	// B.
 	ImGuiWindowFlags flags = ImGuiWindowFlags_None;
-	if (guiManager.bAutoResize) flags |= ImGuiWindowFlags_AlwaysAutoResize;
+	if (ui.bAutoResize) flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
-	guiManager.beginWindow("ofApp-guiManager", NULL, flags);
+	ui.BeginWindow("ofApp-ui", NULL, flags);
 	{
-		ImGui::Text("guiManager");
-		AddToggleRoundedButton(guiManager.bAutoResize);
+		ImGui::Text("ui");
+		AddToggleRoundedButton(ui.bAutoResize);
 		static ofParameter<bool> bCustom{ "bCustom", false };
 		AddToggleRoundedButton(bCustom);
 		if (bCustom) ImGui::TextWrapped("Customized Style for the Group.");
@@ -168,7 +168,7 @@ void ofApp::drawImGui()
 		static float value;
 		ImGui::SliderFloat("value", &value, 0, 1);
 	}
-	guiManager.endWindow();
+	ui.EndWindow();
 
 	//-
 
@@ -185,10 +185,10 @@ void ofApp::drawImGui()
 //--------------------------------------------------------------
 void ofApp::setupImGuiSpecialWindows()
 {
-	guiManager.addWindowSpecial("mySpecialWin0");//index 0
-	guiManager.addWindowSpecial("mySpecialWin1");//index 1
-	guiManager.addWindowSpecial("mySpecialWin2");//index 2
-	guiManager.addWindowSpecial("mySpecialWin3", true);//index 3 // -> powered toggle allows advanced controls
+	ui.addWindowSpecial("mySpecialWin0");//index 0
+	ui.addWindowSpecial("mySpecialWin1");//index 1
+	ui.addWindowSpecial("mySpecialWin2");//index 2
+	ui.addWindowSpecial("mySpecialWin3", true);//index 3 // -> powered toggle allows advanced controls
 }
 
 //--------------------------------------------------------------
@@ -196,48 +196,48 @@ void ofApp::drawImGuiSpecialWindows()
 {
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, IM_COL32(0, 0, 255, 128)); // This styles the special windows
 
-	if (guiManager.beginWindowSpecial())
+	if (ui.BeginWindowSpecial())
 	{
 		static int _value = 0.5;
-		ImGui::Text("guiManager-SpecialWin");
+		ImGui::Text("ui-SpecialWin");
 		ImGui::InputInt("InputInt", &_value);
 		ImGui::SliderInt("SliderInt", &_value, 0, 10);
 		ImGui::DragInt("DragInt", &_value);
 
-		guiManager.endWindowSpecial();
+		ui.EndWindowSpecial();
 	}
 
-	if (guiManager.beginWindowSpecial())
+	if (ui.BeginWindowSpecial())
 	{
 		static int _value = 0.5;
-		ImGui::Text("guiManager-SpecialWin");
+		ImGui::Text("ui-SpecialWin");
 		ImGui::InputInt("InputInt", &_value);
 		ImGui::SliderInt("SliderInt", &_value, 0, 10);
 		ImGui::DragInt("DragInt", &_value);
 
-		guiManager.endWindowSpecial();
+		ui.EndWindowSpecial();
 	}
 
-	if (guiManager.beginWindowSpecial())
+	if (ui.BeginWindowSpecial())
 	{
 		static int _value = 0.5;
-		ImGui::Text("guiManager-SpecialWin");
+		ImGui::Text("ui-SpecialWin");
 		ImGui::InputInt("InputInt", &_value);
 		ImGui::SliderInt("SliderInt", &_value, 0, 10);
 		ImGui::DragInt("DragInt", &_value);
 
-		guiManager.endWindowSpecial();
+		ui.EndWindowSpecial();
 	}
 
-	if (guiManager.beginWindowSpecial())
+	if (ui.BeginWindowSpecial())
 	{
 		static int _value = 0.5;
-		ImGui::Text("guiManager-SpecialWin");
+		ImGui::Text("ui-SpecialWin");
 		ImGui::InputInt("InputInt", &_value);
 		ImGui::SliderInt("SliderInt", &_value, 0, 10);
 		ImGui::DragInt("DragInt", &_value);
 
-		guiManager.endWindowSpecial();
+		ui.EndWindowSpecial();
 	}
 
 	ImGui::PopStyleColor(1);
@@ -247,19 +247,19 @@ void ofApp::drawImGuiSpecialWindows()
 void ofApp::drawImGuiGroup()
 {
 	ImGuiWindowFlags flags = ImGuiWindowFlags_None;
-	if (guiManager.bAutoResize) flags |= ImGuiWindowFlags_AlwaysAutoResize;
+	if (ui.bAutoResize) flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
-	guiManager.beginWindow("ofApp-guiManager-ofParameterGroup", NULL, flags);
+	ui.BeginWindow("ofApp-ui-ofParameterGroup", NULL, flags);
 	{
-		ImGui::Text("guiManager");
-		AddToggleRoundedButton(guiManager.bAutoResize);
-		ImGui::TextWrapped("guiManager-ofParameterGroupguiManager-ofParameterGroupguiManager-ofParameterGroupguiManager-ofParameterGroupguiManager-ofParameterGroupguiManager-ofParameterGroup");
+		ImGui::Text("ui");
+		AddToggleRoundedButton(ui.bAutoResize);
+		ImGui::TextWrapped("ui-ofParameterGroupui-ofParameterGroupui-ofParameterGroupui-ofParameterGroupui-ofParameterGroupui-ofParameterGroup");
 		ImGui::TextWrapped("ofParameterGroup render ->");
 
 		ofxImGuiSurfing::AddGroup(params1);
-		//guiManager.AddGroup(params1); // -> fails! must fix
+		//ui.AddGroup(params1); // -> fails! must fix
 	}
-	guiManager.endWindow();
+	ui.EndWindow();
 }
 
 //--------------------------------------------------------------
@@ -306,7 +306,7 @@ void ofApp::addImGuiWindow() {
 
 	myAddon *_guiInstance = new myAddon();
 
-	string n = "myAddon-guiManager-VECTOR-" + ofToString(i);
+	string n = "myAddon-ui-VECTOR-" + ofToString(i);
 	_guiInstance->setup(ofToString(n), i, i * 200, i * 100);
 	guiInstances.emplace_back(_guiInstance);
 }
@@ -335,7 +335,7 @@ void ofApp::setupDocking()
 
 	ImGuiDockNodeFlags dockingFlags = ImGuiDockNodeFlags_PassthruCentralNode; // Make the docking space transparent
 	// Fixes imgui to expected behaviour, having a transparent central node in passthru mode.
-	// Alternative: Otherwise add in ImGui::DockSpace() [±line 14505] : if (flags & ImGuiDockNodeFlags_PassthruCentralNode) window_flags |= ImGuiWindowFlags_NoBackground;
+	// Alternative: Otherwise add in ImGui::DockSpace() [ï¿½line 14505] : if (flags & ImGuiDockNodeFlags_PassthruCentralNode) window_flags |= ImGuiWindowFlags_NoBackground;
 	ImGui::PushStyleColor(ImGuiCol_ChildBg, IM_COL32(0, 0, 0, 0));
 
 	//dockingFlags |= ImGuiDockNodeFlags_NoDockingInCentralNode; // Uncomment to always keep an empty "central node" (a visible oF space)
