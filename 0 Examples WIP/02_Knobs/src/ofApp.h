@@ -2,16 +2,16 @@
 
 #include "ofMain.h"
 
-#include "ofxSurfingImGui.h" // -> This header includes ALL the add-on classes. 
+#include "ofxSurfingImGui.h" 
 
-class ofApp : public ofBaseApp {
-
+class ofApp : public ofBaseApp 
+{
 public:
+
 	void setup();
-	void update();
 	void draw();
 
-	ofxSurfing_ImGui_Manager guiManager;
+	ofxSurfingGui ui;
 
 	ofParameter<float> valueKnob1{ "Value1", 0.f, -10.f, 10.0f };
 	ofParameter<float> valueKnob2{ "Value2", 5.f, 0.f, 10.0f };

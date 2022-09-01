@@ -1,125 +1,104 @@
 #include "ofApp.h"
 
-/*
-
-TODO:
-
-	fix names colliding
-	add style tags to full integrate into layout engine
-
-*/
-
 //--------------------------------------------------------------
 void ofApp::setup() {
 
-	guiManager.setup();
-
-}
-
-//--------------------------------------------------------------
-void ofApp::update() {
-
+	ui.setMouseWheelFlip(false);//flip for natural direction
+	ui.setup();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw() {
-	guiManager.begin();
+
+	ui.Begin();
 	{
+		ui.DrawWindowAdvanced();
+
 		{
-			ImGuiColorEditFlags _flagw;
-			string name;
+			string name = "Knobs";
+			ImGuiColorEditFlags _flagw = ui.bAutoResize ?
+				ImGuiWindowFlags_AlwaysAutoResize : ImGuiWindowFlags_None;
 
-			_flagw = guiManager.bAutoResize ? ImGuiWindowFlags_AlwaysAutoResize : ImGuiWindowFlags_None;
-
-			name = "Knobs";
-			guiManager.beginWindow(name.c_str(), NULL, _flagw);
+			ui.BeginWindow(name.c_str(), NULL, _flagw);
 			{
-				float size1 = 60;
-				float size2 = 90;
+				if (ui.BeginTree("Settings", false))
+				{
+					ui.Add(ui.bAutoResize, OFX_IM_TOGGLE_ROUNDED_SMALL);
+					ui.Add(ui.bAdvanced, OFX_IM_TOGGLE_ROUNDED_SMALL);
+					ui.AddSpacing();
 
-				ImGuiKnobFlags flags;
-				flags |= ImGuiKnobFlags_ValueTooltip;
-				flags |= ImGuiKnobFlags_NoTitle;
-				flags |= ImGuiKnobFlags_NoInput;
-				flags |= ImGuiKnobFlags_DragHorizontal;
-
+					ui.Add(ui.bMouseWheel, OFX_IM_TOGGLE_ROUNDED_MINI);
+					ui.Add(ui.bMouseWheelFlip, OFX_IM_TOGGLE_ROUNDED_MINI);
+					ui.EndTree();
+				}
 				
-				guiManager.Add(guiManager.bAutoResize);
+				ui.AddSpacingBigSeparated();
 
-				//-
+				//----
 
-				// Legacy Non Styled Knobs ofParams
+				if (0)
+				{
+					// 1. Legacy Non Styled Knobs ofParams
+					{
+						ui.AddLabelHuge("LEGACY NON STYLED KNOBS");
+						ui.AddSpacing();
 
-				ImGui::Text("LEGACY NON STYLED KNOBS OF PARAMS");
-				ofxImGuiSurfing::AddSpacingDouble();
+						ui.Add(valueKnob1, OFX_IM_KNOB, 4, true);
+						ui.Add(valueKnob2, OFX_IM_KNOB, 4, true);
+						ui.Add(valueKnob3, OFX_IM_KNOB, 4, true);
+						ui.Add(valueKnob4, OFX_IM_KNOB, 4, false);
 
-				guiManager.Add(valueKnob1, OFX_IM_KNOB, 4, true);
-				guiManager.Add(valueKnob2, OFX_IM_KNOB, 4, true);
-				guiManager.Add(valueKnob3, OFX_IM_KNOB, 4, true);
-				guiManager.Add(valueKnob4, OFX_IM_KNOB, 4, false);
-
-				ofxImGuiSurfing::AddKnob(valueKnob2);
-
-				ofxImGuiSurfing::AddSpacingSeparated();
-
-				//-
-
-				// Styled Knobs ofParams
-
-				ImGui::Text("STYLED KNOBS OF PARAMS");
-				ofxImGuiSurfing::AddSpacingDouble();
-
-				ImGui::Text("FLOAT OF PARAMS");
-				ofxImGuiSurfing::AddSpacingDouble();
-				
-				ofxImGuiSurfing::AddKnobStyled(valueKnob1, OFX_IMGUI_KNOB_TICKKNOB, size1, "%.1f");
-				ImGui::SameLine();
-				ofxImGuiSurfing::AddKnobStyled(valueKnob2, OFX_IMGUI_KNOB_DOTKNOB, size1, "%.1f dB");
-				ImGui::SameLine();
-				ofxImGuiSurfing::AddKnobStyled(valueKnob3, OFX_IMGUI_KNOB_WIPERKNOB, size1, "%.3f");
-				ImGui::SameLine();
-				ofxImGuiSurfing::AddKnobStyled(valueKnob4, OFX_IMGUI_KNOB_WIPERONLYKNOB, size1, "%.1f");
-
-				ofxImGuiSurfing::AddSpacingBig();
-
-				ImGui::Text("INT OF PARAMS");
-				ofxImGuiSurfing::AddSpacingDouble();
-				
-				ofxImGuiSurfing::AddKnobStyled(valueKnob5, OFX_IMGUI_KNOB_TICKKNOB, size2, "-1", flags);
-
-				ImGui::SameLine();
-				ofxImGuiSurfing::AddKnobStyled(valueKnob6, OFX_IMGUI_KNOB_WIPERDOTKNOB, size2);
-
-				ofxImGuiSurfing::AddKnobStyled(valueKnob7, OFX_IMGUI_KNOB_STEPPEDKNOB, size2);
-				ImGui::SameLine();
-				ofxImGuiSurfing::AddKnobStyled(valueKnob8, OFX_IMGUI_KNOB_SPACEKNOB, size2);
+						ui.AddSpacingHugeSeparated();
+					}
+				}
 
 				//--
 
-				ofxImGuiSurfing::AddSpacingHugeSeparated();
-
-				// Raw ImGui Knobs
-
-				static float value1 = 0;
-				static float value2 = 0;
-
-				ImGui::Text("IMGUI RAW KNOBS FLOAT TYPES");
-				ofxImGuiSurfing::AddSpacingDouble();
-
-				float size = 80;
-
-				if (ImGuiKnobs::Knob("Value 1", &value1, -6.0f, 6.0f, 0, "%.1f", ImGuiKnobVariant_Tick, size, ImGuiKnobFlags_DragHorizontal))
+				// 2. NEW Styled Knobs ofParams
 				{
-				}
-				ImGui::SameLine();
+					ui.AddLabelHuge("NEW STYLED KNOBS");
+					ui.AddLabelBig("from Simon Altschuler");
+					ui.AddLinkURL("https://github.com/altschuler/imgui-knobs", "https://github.com/altschuler/imgui-knobs");
+					ui.AddSpacingBig();
 
-				if (ImGuiKnobs::Knob("Value 2", &value2, -6.0f, 6.0f, 0, "%.1fdB", ImGuiKnobVariant_WiperDot, size, flags))
-				{
+					ui.AddLabel("Style Selector");
+					ui.AddSpacing();
+
+					SurfingGuiTypes style;
+					{
+						// Style selector
+						vector<string> knobStyles;
+						knobStyles.push_back("TICKKNOB");
+						knobStyles.push_back("DOTKNOB");
+						knobStyles.push_back("WIPERKNOB");
+						knobStyles.push_back("WIPERONLYKNOB");
+						knobStyles.push_back("WIPERDOTKNOB");
+						knobStyles.push_back("STEPPEDKNOB");
+						knobStyles.push_back("SPACEKNOB");
+						const int sz = (int)(knobStyles.size()) - 1;
+						static ofParameter<int> index{ "Style", 0, 0, sz };
+						ui.AddComboButtonDualLefted(index, knobStyles);
+						switch (index)
+						{
+						case 0: style = OFX_IM_KNOB_TICKKNOB; break;
+						case 1: style = OFX_IM_KNOB_DOTKNOB; break;
+						case 2: style = OFX_IM_KNOB_WIPERKNOB; break;
+						case 3: style = OFX_IM_KNOB_WIPERONLYKNOB; break;
+						case 4: style = OFX_IM_KNOB_WIPERDOTKNOB; break;
+						case 5: style = OFX_IM_KNOB_STEPPEDKNOB; break;
+						case 6: style = OFX_IM_KNOB_SPACEKNOB; break;
+						}
+					}
+
+					// Draw
+					ui.Add(valueKnob1, style, 4, true);
+					ui.Add(valueKnob2, style, 4, true);
+					ui.Add(valueKnob3, style, 4, true);
+					ui.Add(valueKnob4, style, 4, false);
 				}
-				ImGui::SameLine();
 			}
-			guiManager.endWindow();
+			ui.EndWindow();
 		}
 	}
-	guiManager.end();
+	ui.End();
 }
