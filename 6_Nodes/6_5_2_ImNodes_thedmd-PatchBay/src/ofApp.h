@@ -9,7 +9,6 @@
 
 #include "ofxPatchbay.h"
 #include "ofxGui.h"
-#include "ofxMyUtilImGui.h"
 
 /*
 
@@ -21,8 +20,6 @@
 
 class ofApp : public ofBaseApp {
 
-public:
-	ofxMyUtil::Im::ImGuiLogWindow ImLog;
 
 public:
 	void setup();

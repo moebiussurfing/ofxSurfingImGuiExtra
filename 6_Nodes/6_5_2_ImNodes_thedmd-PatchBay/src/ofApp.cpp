@@ -7,7 +7,6 @@ void ofApp::setup() {
 
 	ofxSurfingHelpers::setThemeDark_ofxGui();
 
-	ui.setImGuiAutodraw(true);
 	ui.setup();
 
 	setupPatches();
@@ -35,7 +34,7 @@ void ofApp::setup() {
 
 				patchbay.link(iController, iTarget);
 
-				ImLog.AddText(msg);
+				////ImLog.AddText(msg);
 				ofLogNotice(__FUNCTION__) << msg;
 			}
 			else {
@@ -67,7 +66,7 @@ void ofApp::setup() {
 
 				patchbay.unlink(iController, iTarget);
 
-				ImLog.AddText(msg);
+				//ImLog.AddText(msg);
 				ofLogNotice(__FUNCTION__) << msg;
 			}
 			else {
@@ -76,7 +75,7 @@ void ofApp::setup() {
 		}
 	});
 
-	ImLog.SetLogSize(50);
+	//ImLog.SetLogSize(50);
 
 	ofAddListener(params.parameterChangedE(), this, &ofApp::Changed_Params); // setup()
 
@@ -140,7 +139,7 @@ void ofApp::draw()
 		if (bLog) {
 			ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_FirstUseEver);
 			ImGui::SetNextWindowSize(ImVec2(200, 200), ImGuiCond_FirstUseEver);
-			ImLog.ImGui("LOG", ImGuiWindowFlags_None, &bLog);
+			//ImLog.ImGui("LOG", ImGuiWindowFlags_None, &bLog);
 		}
 	}
 	ui.End();
@@ -206,7 +205,7 @@ void ofApp::Changed_Params(ofAbstractParameter &e)
 	ofLogNotice() << "Changed parameter named: " << name << " : with value " << e;
 
 	string msg = ofToString(name) + " : " + ofToString(e);
-	ImLog.AddText(msg);
+	//ImLog.AddText(msg);
 
 	//if (name == SHOW_gui.getName())
 	//{

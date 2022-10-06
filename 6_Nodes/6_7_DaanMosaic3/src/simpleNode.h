@@ -8,9 +8,12 @@
 #include "imgui_node_canvas.h"
 
 // This is a very basic node engine
-// It's not recommended to use it, it's only here to demonstrate how to implement the imgui_node_canvas GUI with your own node engine.
+// It's not recommended to use it, 
+// it's only here to demonstrate how to implement 
+// the imgui_node_canvas GUI with your own node engine.
 
-struct NodeVarReference {
+struct NodeVarReference 
+{
     NodeVarReference() : nodeID(-1), varID(-1) {};
     NodeVarReference(int _nodeID, int _varID) : nodeID(_nodeID), varID(_varID) {};
     int                     nodeID = -1;

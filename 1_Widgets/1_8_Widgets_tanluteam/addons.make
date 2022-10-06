@@ -1,5 +1,3 @@
 ofxImGui
-ofxInfiniteCanvas
 ofxSurfingHelpers
 ofxSurfingImGui
-ofxXmlSettings

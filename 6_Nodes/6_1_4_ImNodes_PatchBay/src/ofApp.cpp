@@ -7,7 +7,6 @@ void ofApp::setup() {
 	
 	setupParams();
 
-	ui.setImGuiAutodraw(true);
 	ui.setup();
 
 	ImNodes::CreateContext();

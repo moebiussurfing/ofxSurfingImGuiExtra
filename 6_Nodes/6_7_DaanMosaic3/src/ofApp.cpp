@@ -3,14 +3,15 @@
 //--------------------------------------------------------------
 void ofApp::setup() {
 
+	ofSetWindowTitle("Mosaic Engine Tester");
 	ofSetLogLevel(OF_LOG_NOTICE);
+	
 	ofSetFrameRate(60);
 	//ofSetWindowPosition(1920, 25);
-	ofSetWindowTitle("Mosaic Engine Tester");
 
-	ui.setup(IM_GUI_MODE_INSTANTIATED);
+	ui.setup();
 
-	//-
+	//--
 
 	// Set pan-zoom canvas
 	canvas.disableMouseInput();
@@ -49,9 +50,14 @@ void ofApp::update() {
 	updateCanvasViewport();
 
 	// update nodes
-	for (map<int, shared_ptr<simpleNode>>::iterator it = nodesMap.begin(); it != nodesMap.end(); it++) {
+	for (map<int, shared_ptr<simpleNode>>::iterator it = nodesMap.begin(); it != nodesMap.end(); it++)
+	{
 		it->second->update();
 	}
+
+	//auto v = nodesMap[0]->_outValue;
+	//auto v = nodesMap[0]->_inValue;
+	//cout << v << endl;
 }
 
 //--------------------------------------------------------------
@@ -62,7 +68,8 @@ void ofApp::draw()
 	ofPushMatrix();
 
 	// Init canvas
-	nodeCanvas.SetTransform(canvas.getTranslation(), canvas.getScale());//canvas.getScrollPosition(), canvas.getScale(true) );
+	nodeCanvas.SetTransform(canvas.getTranslation(), canvas.getScale());
+	//canvas.getScrollPosition(), canvas.getScale(true) );
 
 	canvas.begin(canvasViewport);
 	{
@@ -79,19 +86,20 @@ void ofApp::draw()
 			ImGui::SetNextWindowSize(ImVec2(canvasViewport.width, canvasViewport.height), ImGuiCond_Always);
 
 			bool isCanvasVisible = nodeCanvas.Begin("ofxVPNodeCanvas");
+			{
+				// END VP DRAW
 
-			// END VP DRAW
+				if (isCanvasVisible) 
+				{
+					// draw nodes (will be in PatchObject)
+					for (map<int, shared_ptr<simpleNode>>::iterator it = nodesMap.begin(); it != nodesMap.end(); it++) {
+						shared_ptr<simpleNode> node = it->second;
 
-			if (isCanvasVisible) {
-				// draw nodes (will be in PatchObject)
-				for (map<int, shared_ptr<simpleNode>>::iterator it = nodesMap.begin(); it != nodesMap.end(); it++) {
-					shared_ptr<simpleNode> node = it->second;
-
-					// Let objects draw their own Gui
-					node->drawObjectNodeGui(nodeCanvas);
+						// Let objects draw their own Gui
+						node->drawObjectNodeGui(nodeCanvas);
+					}
 				}
 			}
-
 			// Close canvas
 			if (isCanvasVisible) nodeCanvas.End();
 
@@ -119,6 +127,12 @@ void ofApp::draw()
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key) {
+
+	// ADD NODE
+	if (key == ' ') {
+		int i = nodesMap.size();
+		nodesMap[i] = std::shared_ptr<simpleNode>(new simpleNode(i));
+	}
 
 }
 

@@ -2,4 +2,6 @@ ofxGui
 ofxImGui
 ofxMidi
 ofxPatchbay
+ofxSurfingBox
+ofxSurfingHelpers
 ofxSurfingImGui

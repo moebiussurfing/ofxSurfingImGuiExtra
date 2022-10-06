@@ -87,7 +87,11 @@ void simpleNode::drawObjectNodeGui(ImGuiEx::NodeCanvas& _nodeCanvas) {
 	if (_nodeCanvas.BeginNode(this->_nodeName.c_str(), this->_nodeName.c_str(), imPos, imSize, 2, 1, true, false)) {
 
 		ofxImGuiSurfing::AddToggleRoundedButton(bEdit);
-		if (bEdit) {
+
+		//--
+
+		if (bEdit) 
+		{
 			// Draw GUI
 			ImGui::TextUnformatted("Arithmetic operations !");
 
@@ -143,6 +147,8 @@ void simpleNode::drawObjectNodeGui(ImGuiEx::NodeCanvas& _nodeCanvas) {
 			}
 		}
 
+		//--
+
 		// Show modifier value
 		if (this->_inConnection2) {
 			simpleNode* other = getNode(this->_inConnection2.nodeID);
@@ -154,6 +160,8 @@ void simpleNode::drawObjectNodeGui(ImGuiEx::NodeCanvas& _nodeCanvas) {
 		ImGui::TextUnformatted("     = ");
 		//ImGui::Text("Output number : %f ", this->_outValue );
 		ImGui::DragFloat("Output number", &this->_outValue);
+
+		//--
 
 		// Check menu state
 		if (_nodeCanvas.doNodeMenuAction(ImGuiExNodeMenuActionFlags_DeleteNode)) {
@@ -168,7 +176,10 @@ void simpleNode::drawObjectNodeGui(ImGuiEx::NodeCanvas& _nodeCanvas) {
 			std::cout << "Duplicating nodes is unimplemented in this example !" << std::endl;
 		}
 
+		//--
+
 		// PINS
+
 		std::string inVarAddr1 = std::string(to_string(this->_id)).append("_").append(to_string(1));
 		if (ImGuiExNodePinResponse pinAction = _nodeCanvas.AddNodePin(inVarAddr1.c_str(), "Input Number", _inPinPos1, "float", 0, IM_COL32(255, 255, 0, 255), (bool)_inConnection1, ImGuiExNodePinsFlags_Left)) {
 			// Perform Connect ?
@@ -182,6 +193,7 @@ void simpleNode::drawObjectNodeGui(ImGuiEx::NodeCanvas& _nodeCanvas) {
 //                this->disconnectVar( 1 );
 //            }
 		}
+
 		std::string inVarAddr2 = std::string(to_string(this->_id)).append("_").append(to_string(2));
 		if (ImGuiExNodePinResponse pinAction = _nodeCanvas.AddNodePin(inVarAddr2.c_str(), "Modifier Number", _inPinPos2, "float", 0, IM_COL32(255, 255, 0, 255), (bool)_inConnection2, ImGuiExNodePinsFlags_Left)) {
 			// Perform Connect ?
@@ -195,6 +207,9 @@ void simpleNode::drawObjectNodeGui(ImGuiEx::NodeCanvas& _nodeCanvas) {
 //                this->disconnectVar( 2 );
 //            }
 		}
+
+		//--
+
 		// Outlets
 		std::string outVarAddr = std::string(to_string(this->_id)).append("_").append(to_string(3));
 		if (ImGuiExNodePinResponse pinAction = _nodeCanvas.AddNodePin(outVarAddr.c_str(), "Result", _outPinPos1, "float (Result)", 0, IM_COL32(255, 255, 0, 255), (bool)_outConnection1, ImGuiExNodePinsFlags_Right)) {
@@ -212,8 +227,12 @@ void simpleNode::drawObjectNodeGui(ImGuiEx::NodeCanvas& _nodeCanvas) {
 		}
 	}
 
+	//--
+
 	// Close Node
 	_nodeCanvas.EndNode();
+
+	//--
 
 	// Draw pin links (from inlets only (single links), they automatically connect to outlets (can have multiple links))
 	if (this->_inConnection1) {
@@ -225,6 +244,9 @@ void simpleNode::drawObjectNodeGui(ImGuiEx::NodeCanvas& _nodeCanvas) {
 			}
 		}
 	}
+
+	//--
+
 	if (this->_inConnection2) {
 		if (simpleNode* other = getNode(this->_inConnection2.nodeID)) {
 			auto linkAction = _nodeCanvas.AddLink(other->_outPinPos1, _inPinPos2, IM_COL32(255, 255, 0, 255), "float");
@@ -234,6 +256,8 @@ void simpleNode::drawObjectNodeGui(ImGuiEx::NodeCanvas& _nodeCanvas) {
 			}
 		}
 	}
+
+	//--
 
 	// Update pos & size (_nodeCanvas.beginNode() can change it)
 	if (imPos.x != this->x)
@@ -293,10 +317,14 @@ bool simpleNode::connectFrom(NodeVarReference fromRef, NodeVarReference toRef) {
 }
 
 //--------------------------------------------------------------
-bool simpleNode::disconnectVar(int varID) {
+bool simpleNode::disconnectVar(int varID)
+{
 	std::cout << "Diconnect Command on " << this->_nodeName << ", variable slot " << varID << std::endl;
+
 	NodeVarReference linkBackup;
+
 	switch (varID) {
+
 	case 1:
 		linkBackup = this->_inConnection1;
 		this->_inConnection1 = NodeVarReference(-1, -1);
@@ -307,6 +335,7 @@ bool simpleNode::disconnectVar(int varID) {
 		}
 
 		break;
+
 	case 2:
 		linkBackup = this->_inConnection2;
 		this->_inConnection2 = NodeVarReference(-1, -1);
@@ -316,6 +345,7 @@ bool simpleNode::disconnectVar(int varID) {
 			if (other != nullptr) other->disconnectVar(linkBackup.varID);
 		}
 		break;
+
 	case 3:
 		linkBackup = this->_outConnection1;
 		this->_outConnection1 = NodeVarReference(-1, -1);
@@ -325,6 +355,7 @@ bool simpleNode::disconnectVar(int varID) {
 			if (other != nullptr) other->disconnectVar(linkBackup.varID);
 		}
 		break;
+
 	default:
 		break;
 	}
