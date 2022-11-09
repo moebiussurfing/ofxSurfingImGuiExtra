@@ -129,19 +129,32 @@ public:
 
 		ImGui::Text("Controllers");
 		//ImGui::BeginGroup();
-		ImGuiEx_BeginColumn();
-		ImGuiEx_NextColumn();
+		//ImGuiEx_BeginColumn();
+		//ImGuiEx_NextColumn();
+
+		float w = 35;
+		//ImGui::SameLine();
+		//  magic number - Crude & simple way to nudge over the output pin. Consider using layout and springs
+		ImGui::Dummy(ImVec2(w, 0)); 
+		ImGui::SameLine();
+
 
 		ed::BeginPin(nodeI_OutputPinId1, ed::PinKind::Output);
-		ImGui::Text("Out0");
+		ImGui::Text("Out0 ->");
 		ed::EndPin();
+
+		ImGui::Dummy(ImVec2(w, 0)); 
+		ImGui::SameLine();
 
 		ed::BeginPin(nodeI_OutputPinId2, ed::PinKind::Output);
-		ImGui::Text("Out1");
+		ImGui::Text("Out1 ->");
 		ed::EndPin();
 
+		ImGui::Dummy(ImVec2(w, 0));
+		ImGui::SameLine();
+		
 		ed::BeginPin(nodeI_OutputPinId3, ed::PinKind::Output);
-		ImGui::Text("Out2");
+		ImGui::Text("Out2 ->");
 		ed::EndPin();
 
 		//TEST
@@ -154,14 +167,19 @@ public:
 		//ed::EndPin();
 		//ed::PopStyleVar();
 
+		ImGui::Dummy(ImVec2(w, 0));
+		ImGui::SameLine();
+		
 		ed::BeginPin(nodeI_OutputPinId4, ed::PinKind::Output);
-		ImGui::Text("Out3");
+		ImGui::Text("Out3 ->");
 		ed::EndPin();
 
-		ImGuiEx_EndColumn();
+		//ImGuiEx_EndColumn();
 		ed::EndNode();
 
-		//-
+
+		//----
+
 
 		// Input
 		// Submit Node PatchBay

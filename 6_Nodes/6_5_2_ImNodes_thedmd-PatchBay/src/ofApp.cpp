@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup() {
 	ofSetFrameRate(60);
-	//ofSetWindowPosition(-1920, 25);
+	ofSetWindowPosition(-1920, 25);
 
 	ofxSurfingHelpers::setThemeDark_ofxGui();
 
