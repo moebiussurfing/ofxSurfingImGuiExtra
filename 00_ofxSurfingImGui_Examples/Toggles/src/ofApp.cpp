@@ -12,18 +12,22 @@ void ofApp::draw() {
 		ui.DrawWindowAdvanced();
 
 		{
-			string name = "Knobs";
+			string name = "TOGGLES";
 			ui.BeginWindow(name.c_str());
 			{
-				ui.AddLabelHuge("LEGACY NON STYLED KNOBS");
+				ui.AddLabelBig("LEGACY ROUNDED TOGGLES");
 				ui.AddSpacing();
 
-				ui.Add(b1, OFX_IM_TOGGLE, 4, true);
-				ui.Add(b2, OFX_IM_TOGGLE, 4, true);
-				ui.Add(b3, OFX_IM_TOGGLE, 4, true);
-				ui.Add(b4, OFX_IM_TOGGLE, 4, false);
+				ui.Add(b1, OFX_IM_TOGGLE_ROUNDED_BIG);
+				ui.Add(b2, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+				ui.Add(b3, OFX_IM_TOGGLE_ROUNDED_SMALL);
+				ui.Add(b4, OFX_IM_TOGGLE_ROUNDED_MINI);
 
 				ui.AddSpacingBigSeparated();
+
+				ui.AddLabelBig("NEW TOGGLE BY @cmdwtf FROM");
+				ui.AddLinkURL("imgui_toggle", "https://github.com/cmdwtf/imgui_toggle", true);
+				ui.AddSpacing();
 
 				static bool toggle_a = true;
 				static bool toggle_b = true;
@@ -36,7 +40,36 @@ void ofApp::draw() {
 				static float knob_rounding = 0.2f;
 
 				// a default and default animated toggle
-				ImGui::Toggle("Default Toggle", &toggle_a);
+				{
+					bool is_active = ImGui::IsItemActive();
+					bool is_hovered = ImGui::IsItemHovered();
+
+					ImU32 col_frame;
+					ImU32 col_fill;
+
+					// State true
+					if (toggle_a)
+					{
+						col_frame = ImGui::GetColorU32(is_active ? ImGuiCol_FrameBgActive : is_hovered ? ImGuiCol_FrameBg : ImGuiCol_FrameBgHovered);
+						col_fill = col_frame;
+					}
+					// State false
+					else
+					{
+						col_frame = ImGui::GetColorU32(is_active ? ImGuiCol_FrameBgActive : is_hovered ? ImGuiCol_FrameBgHovered : ImGuiCol_FrameBg);
+						col_fill = col_frame;
+					}
+
+					ImGui::PushStyleColor(ImGuiCol_Button, col_frame);
+					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, col_fill);
+					//col_frame = ImGui::GetColorU32(is_active ? ImGuiCol_FrameBgActive : is_hovered ? ImGuiCol_FrameBg : ImGuiCol_FrameBgHovered);
+
+					ImGui::Toggle("Default Toggle", &toggle_a);
+					ImGui::PopStyleColor(2);
+				}
+
+				//--
+
 				ImGui::Toggle("Animated Toggle", &toggle_b, ImGuiToggleFlags_Animated);
 
 				// sliders for adjusting the rounding for the next two toggles.
