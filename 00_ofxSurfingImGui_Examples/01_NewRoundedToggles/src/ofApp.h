@@ -5,7 +5,8 @@
 #include "ofxSurfingImGui.h" 
 #include "DefaultTheme.h"
 
-// new toggle by @cmdwtf from https://github.com/cmdwtf/imgui_toggle
+// New toggle by @cmdwtf 
+// from https://github.com/cmdwtf/imgui_toggle
 #include "imgui_toggle.h" 
 
 class ofApp : public ofBaseApp 
@@ -24,4 +25,8 @@ public:
 	ofParameter<bool> b4{ "b4", false};
 
 	ofxImGui::DefaultTheme theme;
+
+	void drawNewToggles();
+
+	int iTheme = 0;
 };
