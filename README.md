@@ -61,7 +61,7 @@ Includes Bezier Curves and usable timed Tween/Easing functions.
   <p>
 
 Includes waiting and progress spinners.  
-![gif](/readme_media/image/1_3_Widgets_Spinner.gif?raw=true "gif")  
+![gif](/readme_media/gif/1_3_Widgets_Spinner.gif?raw=true "gif")  
   </p>
 </details>
 
