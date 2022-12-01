@@ -5,9 +5,9 @@ ofxSurfingImGuiExtra
 
 This is a _complementary repository_ with extra files, complementary docs and a kind of sandbox for testing **openFrameworks** projects using [ofxSurfingImGui](https://github.com/moebiussurfing/ofxSurfingImGui).  
 
-![GIFS](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/tree/master/readme_media/gif/README.md)  
+![GIFS](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/blob/279ee0fc0614100a8393e751b6e6c955669a0dcb/readme_media/gif/README.md)  
 
-![SCREENSHOTS](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/tree/master/readme_media/image/README.md)  
+![SCREENSHOTS](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/blob/279ee0fc0614100a8393e751b6e6c955669a0dcb/readme_media/image/README.md)  
 
 More Info [README_DEV](/README_DEV.md).  
 
@@ -43,7 +43,7 @@ Shows **ofParameter** helpers with full/half/third/quarter width Buttons, Toggle
   <p>
 
 Includes Range Sliders with **ofParameters**, responsive Button/Toggles and the AWESOME [DearWidgets](https://github.com/soufianekhiat/DearWidgets) from **@soufianekhiat**.  
-![image](/docs/readme_media/image/1_Widgets/1_1_Widgets_DearWidgets.PNG?raw=true "image")  
+![image](/readme_media/image/1_Widgets/1_1_Widgets_DearWidgets.PNG?raw=true "image")  
   </p>
 </details>
 
@@ -52,7 +52,7 @@ Includes Range Sliders with **ofParameters**, responsive Button/Toggles and the 
   <p>
 
 Includes Bezier Curves and usable timed Tween/Easing functions.  
-![image](/docs/readme_media/image/1_Widgets/1_2_Widgets_Curve.PNG?raw=true "image")  
+![image](/readme_media/image/1_Widgets/1_2_Widgets_Curve.PNG?raw=true "image")  
   </p>
 </details>
 
@@ -61,7 +61,7 @@ Includes Bezier Curves and usable timed Tween/Easing functions.
   <p>
 
 Includes waiting and progress spinners.  
-![gif](/docs/readme_media/image/1_Widgets/1_3_Widgets_Spinner.gif?raw=true "gif")  
+![gif](/readme_media/image/1_Widgets/1_3_Widgets_Spinner.gif?raw=true "gif")  
   </p>
 </details>
 
@@ -70,7 +70,7 @@ Includes waiting and progress spinners.
   <p>
 
 Includes a **matrix button clicker selector** linked to an **ofParameter<int>** (aka preset index), small tooltips, spin clicker, and the awesome gradient engine from [@galloscript](https://twitter.com/galloscript) from his [Github Gist](https://gist.github.com/galloscript/8a5d179e432e062550972afcd1ecf112).  
-![image](/docs/readme_media/image/1_Widgets/1_4_Widgets_Surfing.PNG?raw=true "image")  
+![image](/readme_media/image/1_Widgets/1_4_Widgets_Surfing.PNG?raw=true "image")  
   </p>
 </details>
 
@@ -78,7 +78,7 @@ Includes a **matrix button clicker selector** linked to an **ofParameter<int>** 
   <summary>1_5_FileBrowser</summary>
   <p>
 
-![image](/docs/readme_media/image/1_Widgets/1_5_FileBrowser.PNG?raw=true "image")  
+![image](/readme_media/image/1_Widgets/1_5_FileBrowser.PNG?raw=true "image")  
   </p>
 </details>
 
@@ -86,7 +86,7 @@ Includes a **matrix button clicker selector** linked to an **ofParameter<int>** 
   <summary>1_8_Knobs</summary>
   <p>
 
-![image](/docs/readme_media/image/1_Widgets/1_8_Knobs.PNG?raw=true "image")  
+![image](/readme_media/image/1_Widgets/1_8_Knobs.PNG?raw=true "image")  
   </p>
 </details>
 
@@ -102,7 +102,7 @@ _Notice that below at point **3. TYPES ENGINE**, there's a better NEW API!_
   <summary>Example Code</summary>
   <p>
 
-  ![image](/docs/readme_media/image/2_Layout/2_1_2_Layout_Basic.PNG?raw=true "image")  
+  ![image](/readme_media/image/2_Layout/2_1_2_Layout_Basic.PNG?raw=true "image")  
 
 ofApp.h
 
@@ -186,7 +186,7 @@ void ofApp::draw()
   <summary>2_1_Layout_Basic</summary>
   <p>
 
-![image](/docs/readme_media/image/2_Layout/2_1_Layout_Basic.PNG?raw=true "image")  
+![image](/readme_media/image/2_Layout/2_1_Layout_Basic.PNG?raw=true "image")  
   </p>
 </details>
 
@@ -196,7 +196,7 @@ void ofApp::draw()
 
 Includes **ofParameter** and **ofParameterGroup** helpers and customize how groups are presented: collapsed/expanded, hidden header, **ImGui::Tree/ImGui::TreeEx** ...etc.  
 [BROKEN]  
-![gif](/docs/readme_media/gif/2_Layout/2_0_Layout_ofParamaters.gif?raw=true "gif")  
+![gif](/readme_media/gif/2_Layout/2_0_Layout_ofParamaters.gif?raw=true "gif")  
   </p>
 </details>
 
@@ -208,7 +208,7 @@ This is a helper for tweaking your Themes: testings sizes, layout, and colors, a
 
 Notice that you need to export the newly modified theme code through the clipboard and paste it to a new function/theme manually.  
 There's not an automatic-fully-functional, save preset/load theme designer!  
-![image](/docs/readme_media/image/2_Layout/2_4_Layout_ThemeEditor.PNG?raw=true "image")  
+![image](/readme_media/image/2_Layout/2_4_Layout_ThemeEditor.PNG?raw=true "image")  
   </p>
 </details>
 
@@ -226,7 +226,7 @@ One step forward for **ofHelpers**:
   <summary>Vertical and Horizontal Sliders</summary>
   <p>
 
-![image](/docs/readme_media/image/1_Widgets/1_Widgets_Sliders.PNG?raw=true "image")  
+![image](/readme_media/image/1_Widgets/1_Widgets_Sliders.PNG?raw=true "image")  
   </p>
 </details>
 
@@ -234,7 +234,7 @@ One step forward for **ofHelpers**:
   <summary>Grouped Vertical and Horizontal Sliders</summary>
   <p>
 
-![image](/docs/readme_media/image/1_Widgets/1_Widgets_Sliders2.PNG?raw=true "image")  
+![image](/readme_media/image/1_Widgets/1_Widgets_Sliders2.PNG?raw=true "image")  
   </p>
 </details>
 
@@ -242,7 +242,7 @@ One step forward for **ofHelpers**:
   <summary>Nested Styled Groups</summary>
   <p>
 
-![image](/docs/readme_media/image/4_Docking/4_0_0_Layout_TypesEngine.PNG?raw=true "image")  
+![image](/readme_media/image/4_Docking/4_0_0_Layout_TypesEngine.PNG?raw=true "image")  
   </p>
 </details>
 
@@ -250,7 +250,7 @@ One step forward for **ofHelpers**:
   <summary>Layout Engine</summary>
   <p>
 
-![image](/docs/readme_media/image/4_Docking/4_0_1_Layout_TypesEngine.PNG?raw=true "image")  
+![image](/readme_media/image/4_Docking/4_0_1_Layout_TypesEngine.PNG?raw=true "image")  
   </p>
 </details>
 
@@ -273,7 +273,7 @@ Examples to improve the layout of Docking Spaces.
 * Cute workflow for Management.
 * You can add extra parameters to the presets too. 
 
-![gif](/docs/readme_media/gif/3_StylesEngine/3_0_Layout_Docking2.gif?raw=true "gif")  
+![gif](/readme_media/gif/3_StylesEngine/3_0_Layout_Docking2.gif?raw=true "gif")  
   </p>
 </details>
 
@@ -285,7 +285,7 @@ This example shows how to populate many ImGui windows from different scopes on t
 Uses different approaches: from ofApp, from an add-on/class, or with Surfing Layout tools as ui.  
 Also useful to check viewport modes, docking merging windows or auto draw modes.  
 
-![image](/docs/readme_media/image/3_StylesEngine/3_0_Layout_Docking3.PNG?raw=true "png")  
+![image](/readme_media/image/3_StylesEngine/3_0_Layout_Docking3.PNG?raw=true "png")  
   </p>
 </details>
 
@@ -314,7 +314,7 @@ Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**: "_ It's a 
 An alternative to my Docking Layout Engine but without presets and with more development required.  
 Nice to learn about ImGui Docking.  
 
-![image](/docs/readme_media/image/3_1_Layout_ImTools1.PNG?raw=true "image")  
+![image](/readme_media/image/3_1_Layout_ImTools1.PNG?raw=true "image")  
   </p>
 </details>
 
@@ -333,7 +333,7 @@ These are TESTING projects trying to build an operative but very basic timeline,
 
 Using [ImGuizmo](https://github.com/CedricGuillemet/ImGuizmo)  
 Still very raw yet, not functional: I need to [finish](https://github.com/CedricGuillemet/ImGuizmo/issues/185) the engine to read the values when frames are playing.  
-![image](/docs/readme_media/image/4_1_ImSequencer.PNG?raw=true "image")  
+![image](/readme_media/image/4_1_ImSequencer.PNG?raw=true "image")  
   </p>
 </details>
 
@@ -358,7 +358,7 @@ My target is to build a simple engine to patch between **ofParameters**.
   <p>
 
 Using [Nelarius/imnodes](https://github.com/Nelarius/imnodes)  
-![image](/docs/readme_media/image/5_1_ImNodes_Nelarius.PNG?raw=true "image")  
+![image](/readme_media/image/5_1_ImNodes_Nelarius.PNG?raw=true "image")  
   </p>
 </details>
 
@@ -367,7 +367,7 @@ Using [Nelarius/imnodes](https://github.com/Nelarius/imnodes)
   <p>
 
 Using [rokups/ImNodes](https://github.com/rokups/ImNodes)  
-![image](/docs/readme_media/image/5_4_ImNodes_rokups.PNG?raw=true "image")  
+![image](/readme_media/image/5_4_ImNodes_rokups.PNG?raw=true "image")  
   </p>
 </details>
 
@@ -376,7 +376,7 @@ Using [rokups/ImNodes](https://github.com/rokups/ImNodes)
   <p>
 
 Using [thedmd/imgui-node-editor](https://github.com/thedmd/imgui-node-editor)  
-![image](/docs/readme_media/image/5_5_ImNodes_thedmd.PNG?raw=true "image")  
+![image](/readme_media/image/5_5_ImNodes_thedmd.PNG?raw=true "image")  
   </p>
 </details>
 
@@ -385,7 +385,7 @@ Using [thedmd/imgui-node-editor](https://github.com/thedmd/imgui-node-editor)
   <p>
 
 [**WIP**] Using [ofxPatchbayParams](https://github.com/moebiussurfing/ofxPatchbayParams)  
-![image](/docs/readme_media/image/5_5_2_ImNodes_thedmd-PatchBay.PNG?raw=true "image")  
+![image](/readme_media/image/5_5_2_ImNodes_thedmd-PatchBay.PNG?raw=true "image")  
   </p>
 </details>
 
@@ -394,7 +394,7 @@ Using [thedmd/imgui-node-editor](https://github.com/thedmd/imgui-node-editor)
   <p>
 
 Example code by [@Daandelange](https://github.com/Daandelange). Using [ofxVisualProgramming stuff](https://github.com/d3cod3/ofxVisualProgramming)  
-![image](/docs/readme_media/image/6_7_DaanMosaic3.PNG?raw=true "image")  
+![image](/readme_media/image/6_7_DaanMosaic3.PNG?raw=true "image")  
   </p>
 </details>
 

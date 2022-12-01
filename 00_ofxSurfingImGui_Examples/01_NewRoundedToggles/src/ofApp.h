@@ -26,7 +26,7 @@ public:
 
 	ofxImGui::DefaultTheme theme;
 
-	void drawNewToggles();
+	void drawWindowNewToggles();
 
 	int iTheme = 0;
 };
