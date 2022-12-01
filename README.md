@@ -273,7 +273,7 @@ Examples to improve the layout of Docking Spaces.
 * Cute workflow for Management.
 * You can add extra parameters to the presets too. 
 
-![gif](/readme_media/gif/3_StylesEngine/3_0_Layout_Docking2.gif?raw=true "gif")  
+![gif](/readme_media/gif/3_0_Layout_Docking2.gif?raw=true "gif")  
   </p>
 </details>
 
@@ -285,7 +285,7 @@ This example shows how to populate many ImGui windows from different scopes on t
 Uses different approaches: from ofApp, from an add-on/class, or with Surfing Layout tools as ui.  
 Also useful to check viewport modes, docking merging windows or auto draw modes.  
 
-![image](/readme_media/image/3_StylesEngine/3_0_Layout_Docking3.PNG?raw=true "png")  
+![image](/readme_media/image/3_0_Layout_Docking3.PNG?raw=true "png")  
   </p>
 </details>
 
