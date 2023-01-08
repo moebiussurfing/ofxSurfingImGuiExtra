@@ -4,6 +4,10 @@
 
 // WIP
 // NOT WORKING
+// 
+// https://github.com/alanjfs/sequentity
+// https://github.com/alanjfs/entt/wiki
+// https://github.com/alanjfs/sequentity/releases
 
 #include "ofxSurfingImGui.h"	
 #include "Sequentity.h"
