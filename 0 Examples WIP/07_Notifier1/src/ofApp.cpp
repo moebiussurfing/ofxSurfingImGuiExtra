@@ -19,11 +19,19 @@ void ofApp::draw()
 		if (ui.BeginWindow(bGui))
 		{
 			ui.Add(ui.bAutoResize);
+			ui.AddSpacingBigSeparated();
 
-			notification_manager.Draw();
+			string s = "";
+			s += "HELP KEY COMMANDS\n\n";
+			s += "Press 1, 2, 3 to select theme\n\n";
+			s += "Press Space or BackSpace to notify A\n\n";
+			s += "Press Return to notify B\n\n";
+			ui.AddLabel(s);
 
 			ui.EndWindow();
 		}
+
+		notification_manager.Draw();
 	}
 	ui.End();
 
@@ -36,7 +44,7 @@ void ofApp::keyPressed(int key)
 	if (key == 'g') {
 		bGui = !bGui;
 	}
-	
+
 	// Theme
 	if (key == '1') {
 		ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
@@ -48,8 +56,8 @@ void ofApp::keyPressed(int key)
 		ofxImGuiSurfing::ImGui_ThemeYave();
 	}
 
-	// Queue a notitification
-	if (key == ' ') 
+	// Queue a notification
+	if (key == ' ')
 	{
 		stringstream ss;
 		ss << textAtribute[rand() % 5] << textObject[rand() % 4] << textVerb[rand() % 6] << textSubject[rand() % 5];
@@ -58,7 +66,7 @@ void ofApp::keyPressed(int key)
 	}
 
 	// Queue an error
-	if (key == OF_KEY_BACKSPACE) 
+	if (key == OF_KEY_BACKSPACE)
 	{
 		stringstream ss2;
 		ss2 << "We wanted to have " << 2 << " more pints, but it was past " << 11 << " o'clock." << endl;
@@ -67,7 +75,7 @@ void ofApp::keyPressed(int key)
 	}
 
 	// Queue a notitification
-	if (key == OF_KEY_RETURN) 
+	if (key == OF_KEY_RETURN)
 	{
 		stringstream ss;
 		ss << textAtribute[rand() % 5] << textObject[rand() % 4] << textVerb[rand() % 6] << textSubject[rand() % 5];
@@ -75,5 +83,5 @@ void ofApp::keyPressed(int key)
 		notifier.addNotification(str);
 	}
 
-	
+
 }
