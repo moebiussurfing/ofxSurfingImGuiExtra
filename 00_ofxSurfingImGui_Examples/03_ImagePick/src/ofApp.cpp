@@ -37,6 +37,8 @@ void ofApp::initTexture()
 	bool b = ofGetUsingArbTex();
 	ofDisableArbTex();
 
+	//ofImageLoadSettings s = ;
+
 	ofLoadImage(texture, path);
 
 	float w = texture.getWidth();
@@ -89,7 +91,7 @@ void ofApp::draw()
 			ui.AddLabelBig(path);
 			ui.AddSpacing();
 
-			static bool bEnable = false;
+			static bool bEnable = 1;
 
 			//--
 
@@ -113,6 +115,7 @@ void ofApp::draw()
 			{
 			}
 
+			// mode
 			//pixels.allocate(image.getWidth(), image.getHeight(), OF_IMAGE_COLOR_ALPHA);
 			//pixels.setImageType(OF_IMAGE_COLOR_ALPHA);
 
@@ -120,12 +123,13 @@ void ofApp::draw()
 			// raw data
 
 			texture.readToPixels(pixels);
-
-			auto nBits = pixels.getBitsPerPixel();//24 for RGB, 32 for RGBA
-
 			const unsigned char* data = pixels.getData();
 
-			if (ui.isDebug()) {
+			auto nBits = pixels.getBitsPerPixel(); // 24 for RGB, 32 for RGBA
+
+
+			if (ui.isDebug()) 
+			{
 				//size_t dsz = sizeof(((uint32_t*)data)) / sizeof(((uint32_t*)data)[0]);
 				size_t dsz = sizeof(((unsigned char*)data)) / sizeof(((unsigned char*)data)[0]);
 				ui.AddLabel("Data size: " + ofToString(dsz));
@@ -167,6 +171,7 @@ void ofApp::draw()
 
 			if (io.KeyShift && io.MouseDown[1])
 			{
+				// swap
 				static bool bEnable_ = !bEnable;
 				if (bEnable != bEnable_) {
 					bEnable_ = bEnable;
@@ -179,21 +184,22 @@ void ofApp::draw()
 				//ui.AddTooltip("Hello");
 
 				ImageInspect::inspect(w, h, data, mouseUVCoord, displayedTextureSize);
+				//ImageInspect::inspect(ww, hh, data, mouseUVCoord, displayedTextureSize);
+			}
 
-				//--
+			//--
 
-				if (ui.isMaximized())
-				{
-					ui.AddSpacingBigSeparated();
+			if (ui.isMaximized())
+			{
+				ui.AddSpacingBigSeparated();
 
-					ImVec2 sz = ImVec2(image.getWidth(), image.getHeight());
+				ImVec2 sz = ImVec2(image.getWidth(), image.getHeight());
 
-					// 2. Texture
-					ImGui::Image((ImTextureID)(uintptr_t)textureID, sz);
+				// 2. Texture
+				ImGui::Image((ImTextureID)(uintptr_t)textureID, sz);
 
-					// 3. Pixels
-					//ImGui::Image(GetImTextureID(pixelsButtonID), sz);
-				}
+				// 3. Pixels
+				//ImGui::Image(GetImTextureID(pixelsButtonID), sz);
 			}
 
 			ui.EndWindow();
