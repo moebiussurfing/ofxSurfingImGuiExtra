@@ -2,15 +2,12 @@
 
 #include "ofMain.h"
 
+#define IMGUI_DEFINE_MATH_OPERATORS
 #include "ofxSurfingImGui.h"
 
 //--
 
 #include "imgInspect.h"
-
-//https://github.com/nothings/stb/blob/master/stb_image.h
-//#define STB_IMAGE_IMPLEMENTATION
-//#include "stb_image.h"
 
 class ofApp : public ofBaseApp
 {
@@ -23,28 +20,18 @@ public:
 
 	ofxSurfingGui ui;
 	ofParameter<bool> bGui{ "Show", true };
+	
+	ofParameter<int> index{ "Index", 0, 0, 2 };
+	ofEventListener event;
 
-	ofParameter<bool> bEnable{ "Enable", true };
-	ofParameter<float> speed{ "Speed", .5f, 0.f, 1.f };
-	ofParameterGroup params{ "Params", bEnable, speed };
-
-	// Magnifying glass 
-	unsigned char* data = nullptr;
-	int width, height, channels;
-
-	ofTexture tex;
 	ofFbo fbo;
+	ofPixels pixels;
 	ofImage image;
+	ofTexture texture;
+	GLuint textureID;
+
+	std::string path = "";
 	std::string path1 = "image1.jpg";
 	std::string path2 = "image2.jpg";
 	std::string path3 = "image3.jpg";
-
-	ofImage   imageButtonSource;
-	GLuint    imageButtonID;
-
-	ofPixels  pixelsButtonSource;
-	GLuint    pixelsButtonID;
-
-	ofTexture textureSource;
-	GLuint    textureSourceID;
 };

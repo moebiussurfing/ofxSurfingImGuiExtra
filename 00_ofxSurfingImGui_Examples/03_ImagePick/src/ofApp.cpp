@@ -3,10 +3,25 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	//ui.setup();
-	//ui.startup();
+	ofSetWindowPosition(1920, 25);
+
+	path = path1;
+	initTexture();
+
+	event = index.newListener([&](int& value)
+		{
+			switch (value)
+			{
+			case 0: path = path1; break;
+			case 1: path = path2; break;
+			case 2: path = path3; break;
+			}
+
+	ofLogNotice() << "path: " << path;
 
 	initTexture();
+
+		});
 }
 
 //--------------------------------------------------------------
@@ -14,20 +29,21 @@ void ofApp::initTexture()
 {
 	ofLogNotice() << "initTexture()";
 
-	image.load(path1);
+	bool bLoaded = image.load(path);
+	if (bLoaded) ofLogNotice() << "Loaded image on path: " << path;
+	else ofLogError() << "Not found image on path: " << path;
 
-	ofLogNotice() << "image path: " << path1;
-
-	bool b = ofGetUsingArbTex(); // push
-
+	// push
+	bool b = ofGetUsingArbTex();
 	ofDisableArbTex();
 
-	//if (image.isAllocated()) tex = image.getTexture();
-	//else ofLoadImage(tex, path);
-	ofLoadImage(tex, path1);
+	ofLoadImage(texture, path);
 
-	fbo.allocate(tex.getWidth(), tex.getHeight());
-	fbo.createAndAttachTexture(GL_RGB, 0); //Position
+	float w = texture.getWidth();
+	float h = texture.getHeight();
+	fbo.allocate(w, h);
+
+	fbo.createAndAttachTexture(GL_RGB, 0); //position
 	fbo.createAndAttachTexture(GL_RGBA32F, 1); //velocity
 	fbo.createAndAttachRenderbuffer(GL_DEPTH_COMPONENT, GL_DEPTH_ATTACHMENT);
 	fbo.checkStatus();
@@ -36,26 +52,19 @@ void ofApp::initTexture()
 	ofClear(0);
 	fbo.end();
 
-	if (b) ofEnableArbTex(); // pop/restore
+	// pop/restore
+	if (b) ofEnableArbTex();
 
-	fbo.begin(); // draw textureéonce only
+	// draw texture once
+	fbo.begin();
 	ofClear(0, 0, 0, 0);
-	tex.draw(0, 0);
+	texture.draw(0, 0);
 	fbo.end();
 
 	//--
 
-	textureSourceID = ui.getGuiPtr()->loadTexture(textureSource, path1);
-
-	////TODO:
-	////Fails
-	////requires ui.setup() done ?
-	//ofLoadImage(pixelsButtonSource, path2);
-	//pixelsButtonID = ui.getGuiPtr()->loadPixels(pixelsButtonSource);
-
-	//// Load your own ofImage
-	//imageButtonSource.load(path3);
-	//imageButtonID = ui.getGuiPtr()->loadImage(imageButtonSource);
+	// "preload" on ui
+	textureID = ui.getGuiPtr()->loadTexture(texture, path);
 
 }
 
@@ -68,32 +77,71 @@ void ofApp::draw()
 		{
 			float _w100 = ui.getWidgetsWidth(1);
 			float _spcx = ui.getWidgetsSpacingX();
-			float hb = ui.getWidgetsHeightUnit();
+			float _hb = ui.getWidgetsHeightUnit();
 
 			ui.AddAutoResizeToggle();
 			ui.AddMinimizerToggle();
+			ui.AddDebugToggle();
 			ui.AddLabelBig("Shift click to imgInspect");
 			ui.AddSpacingBigSeparated();
 
-			
-			//ui.AddLabelBig("HELLO WORLD");
-			//ui.Add(bEnable, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
-			//ui.Add(speed, OFX_IM_HSLIDER);
-			//ui.AddSpacingSeparated();
-			//ui.AddGroup(params, SurfingGuiGroupStyle_Collapsed);
+			ui.Add(index);
+			ui.AddLabelBig(path);
+			ui.AddSpacing();
+
+			static bool bEnable = false;
 
 			//--
 
-			float w = tex.getWidth();
-			float h = tex.getHeight();
+			float w = texture.getWidth();
+			float h = texture.getHeight();
 			float ratio = h / w;
 
 			float ww;
 			float hh;
-			float offset = 0;
 
-			ww = _w100 - (2 * _spcx) - offset;
+			ww = _w100;
 			hh = ww * ratio;
+
+			if (ui.AddButton("Reset"))
+			{
+				ww = image.getWidth();
+				hh = image.getHeight();
+			}
+
+			if (ui.AddToggle("Show", bEnable))
+			{
+			}
+
+			//pixels.allocate(image.getWidth(), image.getHeight(), OF_IMAGE_COLOR_ALPHA);
+			//pixels.setImageType(OF_IMAGE_COLOR_ALPHA);
+
+			//TODO:
+			// raw data
+
+			texture.readToPixels(pixels);
+
+			auto nBits = pixels.getBitsPerPixel();//24 for RGB, 32 for RGBA
+
+			const unsigned char* data = pixels.getData();
+
+			if (ui.isDebug()) {
+				//size_t dsz = sizeof(((uint32_t*)data)) / sizeof(((uint32_t*)data)[0]);
+				size_t dsz = sizeof(((unsigned char*)data)) / sizeof(((unsigned char*)data)[0]);
+				ui.AddLabel("Data size: " + ofToString(dsz));
+				ui.AddLabel("nBits: " + ofToString(nBits) + " bits");
+				ui.AddSpacing();
+
+				ui.BeginColumns(2, "##cols", true);
+				ui.AddLabelBig("FILE:");
+				ui.AddLabel(ofToString(w) + "," + ofToString(h));
+				ui.NextColumn();
+				ui.AddLabelBig("DRAWN:");
+				ui.AddLabel(ofToString(ww, 0) + "," + ofToString(hh, 0));
+				ui.EndColumns();
+			}
+
+			ui.AddSpacingBigSeparated();
 
 			//--
 
@@ -105,10 +153,8 @@ void ofApp::draw()
 			//	ofLogNotice() << "Image clicked";
 			//}
 
-
 			// 2. Texture
-			ImGui::Image((ImTextureID)(uintptr_t)textureSourceID, ImVec2(ww, hh));
-
+			ImGui::Image((ImTextureID)(uintptr_t)textureID, ImVec2(ww, hh));
 
 			//--
 
@@ -119,108 +165,41 @@ void ofApp::draw()
 
 			ImVec2 displayedTextureSize = ImVec2(ww, hh);
 
-			if (io.KeyShift && io.MouseDown[0] && mouseUVCoord.x >= 0.f && mouseUVCoord.y >= 0.f)
+			if (io.KeyShift && io.MouseDown[1])
+			{
+				static bool bEnable_ = !bEnable;
+				if (bEnable != bEnable_) {
+					bEnable_ = bEnable;
+					bEnable = !bEnable;
+				}
+			}
+
+			if (bEnable && mouseUVCoord.x >= 0.f && mouseUVCoord.y >= 0.f)
 			{
 				//ui.AddTooltip("Hello");
 
-				//int width = ww;
-				//int height = hh;
-
-				float w = tex.getWidth();
-				float h = tex.getHeight();
-
-				//float w = textureSource.getWidth();
-				//float h = textureSource.getHeight();
-
-
-
-				/*
-				// Assume you have an ofTexture object named tex
-				// Bind the texture so that we can access its pixel data
-				tex.bind();
-
-				// Create an ofPixels object and read the texture data into it
-				ofPixels pixels;
-				tex.readToPixels(pixels);
-
-				// Get a pointer to the pixel data
-				const unsigned char* texPixels = pixels.getData();
-
-				// Create an ofBuffer object and copy the pixel data into it
-				ofBuffer buffer;
-				auto sz = tex.getWidth() * tex.getHeight() * 8;
-				//auto sz = tex.getWidth() * tex.getHeight() * ofGetBytesPerPixel(tex.getTextureData().glInternalFormat);
-				buffer.set(texPixels, sz);
-
-				// Get a pointer to the buffer's data as a const unsigned char*
-				const unsigned char* data = buffer.getData();
-
-
-				// Unbind the texture when we're done
-				tex.unbind();
-
-				const unsigned char* data = (const unsigned char*)tex.getTextureData();
-				*/
-
-
-				//textureSource.bind();
-				//const unsigned char* data = tex.readToPixels();
-				//textureSource.unbind();
-
-				// Get a pointer to the texture pixel data
-				//const unsigned char* data = (const unsigned char*)textureSource.getTextureData();
-				//const unsigned char* data = (const unsigned char*)ImGui::GetIO().Fonts->TexPixelsAlpha8;
-				//const unsigned char* data = (const unsigned char*)(uintptr_t)textureSourceID;
-				//const unsigned char* data = (const unsigned char*)textureSourceID;
-
-
-				//ImageInspect::inspect(w, h, data, mouseUVCoord, displayedTextureSize);
-				//ImageInspect::inspect(w, h, (const unsigned char*)(ImTextureID)textureSourceID, mouseUVCoord, displayedTextureSize);
-				//ImageInspect::inspect(w, h, (const unsigned char*)(ImTextureID)(uintptr_t)textureSourceID, mouseUVCoord, displayedTextureSize);
-
-
-				//ImageInspect::inspect(width, height, data, mouseUVCoord, displayedTextureSize);
-				//ImageInspect::inspect(width, height, (void*)data, mouseUVCoord, displayedTextureSize);
-				//ImageInspect::inspect(width, height, pickerImage.GetBits(), mouseUVCoord, displayedTextureSize);
-				//ImageInspect::inspect(width, height, bits, mouseUVCoord, displayedTextureSize);
-			}
-
-			if (ui.isMaximized())
-			{
-				ui.AddSpacingBigSeparated();
+				ImageInspect::inspect(w, h, data, mouseUVCoord, displayedTextureSize);
 
 				//--
 
-				// 2. Texture
+				if (ui.isMaximized())
+				{
+					ui.AddSpacingBigSeparated();
 
-				ImGui::Image((ImTextureID)(uintptr_t)textureSourceID, ImVec2(200, 200));
+					ImVec2 sz = ImVec2(image.getWidth(), image.getHeight());
 
-				//--
+					// 2. Texture
+					ImGui::Image((ImTextureID)(uintptr_t)textureID, sz);
 
-				// 3. Pixels
-				
-				//ImGui::Image(GetImTextureID(pixelsButtonID), ImVec2(200, 200));
-
-				//--
-
-				ui.AddSpacingBigSeparated();
-
-				////GetImTextureID is a static function define in Helpers.h that accepts ofTexture, ofImage, or GLuint
-				//ImGui::Dummy(ImVec2(10, 10));
-				//if (ImGui::ImageButton(GetImTextureID(imageButtonID), ImVec2(200, 200))) {
-				//	ofLog() << "PRESSED";
-				//}
-				////or do it manually
-				////ImGui::SameLine();
-				//ImGui::Image(GetImTextureID(pixelsButtonID), ImVec2(200, 200));
-
-				//ImGui::Image((ImTextureID)(uintptr_t)textureSourceID, ImVec2(200, 200));
+					// 3. Pixels
+					//ImGui::Image(GetImTextureID(pixelsButtonID), sz);
+				}
 			}
 
 			ui.EndWindow();
 		}
+		ui.End();
 	}
-	ui.End();
 }
 
 //--------------------------------------------------------------
