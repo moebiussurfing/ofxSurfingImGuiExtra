@@ -41,6 +41,7 @@ void ofApp::draw()
 			static int slider = 0, combo = 0;
 			static char text[64];
 			static float col[4];
+			static float sliderf = 0.5;;
 
 			float w = ui.getWidgetsWidth(1);
 			float h = ui.getWidgetsHeightUnit();
@@ -69,7 +70,10 @@ void ofApp::draw()
 				static bool enable_animation = true;
 				ImGui::Checkbox("Enable Animation", &enable_animation);
 
-				//ImVec2 p = ImGui::GetCursorPos();
+				IMGUI_SUGAR__DEBUG_POINT(ofColor::blue);
+				//ofxImGuiSurfing::IMGUI_SUGAR__DEBUG_POINT;
+
+				ImVec2 pc = ImGui::GetCursorPos();
 				ImVec2 p = ImGui::GetCursorScreenPos();
 
 				float trickFloat = ImTricks::Animations::FastLerpFloat("trickFloat", enable_animation, 0.f, 1.f, 0.05f);
@@ -78,7 +82,23 @@ void ofApp::draw()
 				ImColor colorLerped = ImTricks::Animations::FastColorLerp(ImColor(255, 0, 0), ImColor(0, 255, 0), trickFloat);
 				
 				ImGui::GetWindowDrawList()->AddRectFilled(p, p + ImVec2(w, 2 * h), colorLerped);
+
+				IMGUI_SUGAR__DEBUG_POINT(ofColor::blue);
+
+				ImGui::SetCursorPos(pc + ImVec2(0, 2 * h));
 				//ImGui::SetCursorPos(p + ImVec2(0, 2 * h));
+
+				ImGui::Dummy(ImVec2(0, 5));
+
+				IMGUI_SUGAR__DEBUG_POINT(ofColor::blue);
+
+				//ui.AddSpacingHuge();
+
+				float _sliderf = ImTricks::Animations::FastLerpFloat("sliderf", enable_animation, 0.f, 1.f, 0.05f);
+
+
+				ImGui::SliderFloat("move", &sliderf, 0, 1);
+				ImGui::SliderFloat("_sliderf", &_sliderf, 0, 1);
 
 				ui.AddSpacingHuge();
 				static ImColor col = ImColor(23, 23, 23);
