@@ -1,12 +1,23 @@
 #pragma once
 
+/*
+
+	//TODO:
+	broken. should be fix.
+	these are more alternative to main notifier engine:
+	surfingNotifier.h
+	they're different/ one is OF native based.
+	and with some alpha fading.
+
+*/
+
 #include "ofMain.h"
 
 #include "ofxSurfingImGui.h"
 
 #include "notifications.hh"
 
-#include "ofxNotify.h"
+#include "surfingNotify.h"
 
 class ofApp : public ofBaseApp {
 
@@ -21,7 +32,7 @@ public:
 	ofxSurfingGui ui;
 
 	NotificationManager notification_manager;
-	ofxNotify notifier;
+	surfingNotify notifier;
 
 
 	string textAtribute[5] = {
