@@ -1,4 +1,5 @@
 #include "ofApp.h"
+#include "SlidersWidgets.h"
 
 //--------------------------------------------------------------
 void ofApp::setup()
@@ -46,6 +47,15 @@ void ofApp::draw()
 			float w = ui.getWidgetsWidth(1);
 			float h = ui.getWidgetsHeightUnit();
 
+
+			//ImGui::DiscordSliderF("lab", &sliderf, 0, 1, "%3", ImGuiSliderFlags_None);
+
+
+			ImGui::WindowsSliderF("lab", &sliderf, 0, 1, "%3", ImGuiSliderFlags_None);
+
+
+
+
 			//{
 			//	ui.AddSpacingHuge();
 			//	IMGUI_SUGAR__DEBUG_POINT(ofColor::blue);
@@ -55,22 +65,22 @@ void ofApp::draw()
 			//	IMGUI_SUGAR__DEBUG_POINT(ofColor::blue);
 			//}
 
-			ui.AddSpacingHuge();
+			//ui.AddSpacingHuge();
 
-			// imgui_tweaker
-			{
-				//{
-				//	if (myFunction)
-				//		myFunction();
-				//}
+			//// imgui_tweaker
+			//{
+			//	//{
+			//	//	if (myFunction)
+			//	//		myFunction();
+			//	//}
 
-				std::function<void()> myFunction2 = std::bind(&ofApp::myWidgets, this);
-				//ImSugar::Group(myFunction2);
+			//	std::function<void()> myFunction2 = std::bind(&ofApp::myWidgets, this);
+			//	//ImSugar::Group(myFunction2);
 
-				//myWidgets();
-				//std::function<void()> myFunction2 = std::bind(&ofApp::myWidgets, this);
-				//if (myFunction2) myFunction2();
-			}
+			//	//myWidgets();
+			//	//std::function<void()> myFunction2 = std::bind(&ofApp::myWidgets, this);
+			//	//if (myFunction2) myFunction2();
+			//}
 
 			ui.EndWindow();
 		}
