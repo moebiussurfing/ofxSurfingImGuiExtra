@@ -3,19 +3,18 @@
 #include "ofMain.h"
 
 #include "ofxSurfingImGui.h"
-#include "ofxImGui.h"
 
 #include "SurfingTextEditor.h"
 
-class ofApp : public ofBaseApp{
+class ofApp : public ofBaseApp {
 public:
-    void setup();
-    void draw();
-    void keyPressed(int key);
-    
-    ofxImGui::Gui gui;
+	void setup();
+	void draw();
+	void keyPressed(int key);
 
-	bool bMouseOverGui = false;
+	ofxSurfingGui ui;
+
+	bool bIsOverGui = false;
 
 	SurfingTextEditor textEditor;
 };

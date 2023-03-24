@@ -3,14 +3,10 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	ofSetLogLevel(OF_LOG_VERBOSE);
 	ofSetFrameRate(60);
+	ofSetLogLevel(OF_LOG_VERBOSE);
 
-	gui.setup();
-
-	// style
-	ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
-	ofxImGuiSurfing::setDefaultFont(gui, "assets/fonts/telegrama_render.otf", 16);
+	ui.setup();
 
 	textEditor.setup();
 	textEditor.loadText(ofToDataPath("text1.txt", true));
@@ -19,20 +15,22 @@ void ofApp::setup()
 //--------------------------------------------------------------
 void ofApp::draw() {
 
-	bMouseOverGui = ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow);
+	bIsOverGui = ui.isOverInputText();
 
-	gui.Begin();
+	ui.Begin();
 	{
 		textEditor.draw();
 	}
-	gui.End();
+	ui.End();
 }
 
 //--------------------------------------------------------------
-void ofApp::keyPressed(int key) {
-	if (bMouseOverGui) return; // skip when editing
+void ofApp::keyPressed(int key)
+{
+	if (bIsOverGui) return; // skip when editing
 
-	ofLogVerbose(__FUNCTION__) << key;
+	ofLogNotice(__FUNCTION__) << key;
+
 	switch (key)
 	{
 	case '1': {
