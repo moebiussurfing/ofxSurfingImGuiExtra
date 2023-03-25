@@ -75,25 +75,17 @@ void ofApp::draw()
 {
 	ui.Begin();
 	{
+		if (bGui) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
+
 		if (ui.BeginWindow(bGui))
 		{
 			float _w100 = ui.getWidgetsWidth(1);
 			float _spcx = ui.getWidgetsSpacingX();
 			float _hb = ui.getWidgetsHeightUnit();
 
-			ui.AddAutoResizeToggle();
-			ui.AddMinimizerToggle();
-			ui.AddDebugToggle();
-			ui.AddLabelBig("Shift click to imgInspect");
-			ui.AddSpacingBigSeparated();
-
-			ui.Add(index);
-			ui.AddLabelBig(path);
-			ui.AddSpacing();
+			//--
 
 			static bool bEnable = 1;
-
-			//--
 
 			float w = texture.getWidth();
 			float h = texture.getHeight();
@@ -105,14 +97,27 @@ void ofApp::draw()
 			ww = _w100;
 			hh = ww * ratio;
 
-			if (ui.AddButton("Reset"))
-			{
-				ww = image.getWidth();
-				hh = image.getHeight();
-			}
+			ui.AddMinimizerToggle();
 
-			if (ui.AddToggle("Show", bEnable))
-			{
+			if (ui.isMaximized()) {
+				ui.AddAutoResizeToggle();
+				ui.AddDebugToggle();
+				ui.AddLabelBig("Shift click to imgInspect");
+				ui.AddSpacingBigSeparated();
+
+				ui.Add(index);
+				ui.AddLabelBig(path);
+				ui.AddSpacing();
+
+				if (ui.AddButton("Reset"))
+				{
+					ww = image.getWidth();
+					hh = image.getHeight();
+				}
+
+				if (ui.AddToggle("Show", bEnable))
+				{
+				}
 			}
 
 			// mode
@@ -128,7 +133,7 @@ void ofApp::draw()
 			auto nBits = pixels.getBitsPerPixel(); // 24 for RGB, 32 for RGBA
 
 
-			if (ui.isDebug()) 
+			if (ui.isDebug())
 			{
 				//size_t dsz = sizeof(((uint32_t*)data)) / sizeof(((uint32_t*)data)[0]);
 				size_t dsz = sizeof(((unsigned char*)data)) / sizeof(((unsigned char*)data)[0]);

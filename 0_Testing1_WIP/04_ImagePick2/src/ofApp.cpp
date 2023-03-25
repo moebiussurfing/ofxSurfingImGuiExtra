@@ -60,9 +60,9 @@ void ofApp::initTexture()
 	buffer.allocate(textureSource.getWidth() * textureSource.getHeight() * 3, GL_DYNAMIC_READ);
 
 
-	ImGuiTexInspect::ImplOpenGL3_Init(); // Or DirectX 11 equivalent (check your chosen backend header file)
-	ImGuiTexInspect::Init();
-	ImGuiTexInspect::CreateContext();
+	//ImGuiTexInspect::ImplOpenGL3_Init(); // Or DirectX 11 equivalent (check your chosen backend header file)
+	//ImGuiTexInspect::Init();
+	//ImGuiTexInspect::CreateContext();
 
 }
 
@@ -130,8 +130,8 @@ void ofApp::draw()
 			ImVec2 textureSize = ImVec2(ww, hh);
 
 			ImGui::Begin("Simple Texture Inspector");
-			ImGuiTexInspect::BeginInspectorPanel("Inspector", textureHandle, textureSize);
-			ImGuiTexInspect::EndInspectorPanel();
+			//ImGuiTexInspect::BeginInspectorPanel("Inspector", textureHandle, textureSize);
+			//ImGuiTexInspect::EndInspectorPanel();
 			ImGui::End();
 
 

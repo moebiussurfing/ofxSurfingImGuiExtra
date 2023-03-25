@@ -2,13 +2,14 @@
 
 #include "ofMain.h"
 
-#define IMGUI_DEFINE_MATH_OPERATORS
 #include "ofxSurfingImGui.h"
 
-//https://github.com/andyborrell/imgui_tex_inspect
-//https://github.com/andyborrell/imgui_tex_inspect/blob/main/examples/example_win32_directx11/main.cpp
-#include "imgui_tex_inspect.cpp"
-#include "tex_inspect_opengl.h"
+////https://github.com/andyborrell/imgui_tex_inspect
+////https://github.com/andyborrell/imgui_tex_inspect/blob/main/examples/example_win32_directx11/main.cpp
+//#include "imgui_tex_inspect.cpp"
+//#include "tex_inspect_opengl.h"
+
+#include "imgInspect.h"
 
 
 //--
