@@ -5,8 +5,11 @@ void ofApp::setup()
 {
 	ofSetWindowPosition(1920, 25);
 
-	path = path1;
-	initTexture();
+	ui.setup();
+	ui.bNotifier = false;
+
+	//path = path1;
+	//loadTexture();
 
 	event = index.newListener([&](int& value)
 		{
@@ -19,19 +22,25 @@ void ofApp::setup()
 
 	ofLogNotice() << "path: " << path;
 
-	initTexture();
+	loadTexture();
 
 		});
+
+	//startup
+	index = 0;
 }
 
 //--------------------------------------------------------------
-void ofApp::initTexture()
+void ofApp::loadTexture()
 {
-	ofLogNotice() << "initTexture()";
+	ofLogNotice() << "loadTexture()";
 
 	bool bLoaded = image.load(path);
 	if (bLoaded) ofLogNotice() << "Loaded image on path: " << path;
 	else ofLogError() << "Not found image on path: " << path;
+
+	imageFloat.load(path);
+
 
 	// push
 	bool b = ofGetUsingArbTex();
@@ -73,9 +82,26 @@ void ofApp::initTexture()
 //--------------------------------------------------------------
 void ofApp::draw()
 {
+	ofClear(cBg);
+
+	ofRectangle rr(0, 0, imageFloat.getWidth(), imageFloat.getHeight());
+	rr.scaleTo(ofGetCurrentViewport(), OF_SCALEMODE_FIT);
+	imageFloat.draw(rr.x, rr.y, rr.width, rr.height);
+	
+	//int p = 50;
+	//imageFloat.draw(p, p, ofGetWidth() - p * 2, ofGetHeight() - p * 2);
+
+	drawImGui();
+}
+
+//--------------------------------------------------------------
+void ofApp::drawImGui()
+{
+
 	ui.Begin();
+
 	{
-		if (bGui) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
+		//if (bGui) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
 
 		if (ui.BeginWindow(bGui))
 		{
@@ -87,9 +113,9 @@ void ofApp::draw()
 
 			static bool bEnable = 1;
 
-			float w = texture.getWidth();
-			float h = texture.getHeight();
-			float ratio = h / w;
+			float wsrc = texture.getWidth();
+			float hsrc = texture.getHeight();
+			float ratio = hsrc / wsrc;
 
 			float ww;
 			float hh;
@@ -100,24 +126,13 @@ void ofApp::draw()
 			ui.AddMinimizerToggle();
 
 			if (ui.isMaximized()) {
+				ui.AddNotifierToggle();
+				ui.AddLogToggle();
 				ui.AddAutoResizeToggle();
 				ui.AddDebugToggle();
+
 				ui.AddLabelBig("Shift click to imgInspect");
 				ui.AddSpacingBigSeparated();
-
-				ui.Add(index);
-				ui.AddLabelBig(path);
-				ui.AddSpacing();
-
-				if (ui.AddButton("Reset"))
-				{
-					ww = image.getWidth();
-					hh = image.getHeight();
-				}
-
-				if (ui.AddToggle("Show", bEnable))
-				{
-				}
 			}
 
 			// mode
@@ -137,20 +152,22 @@ void ofApp::draw()
 			{
 				//size_t dsz = sizeof(((uint32_t*)data)) / sizeof(((uint32_t*)data)[0]);
 				size_t dsz = sizeof(((unsigned char*)data)) / sizeof(((unsigned char*)data)[0]);
-				ui.AddLabel("Data size: " + ofToString(dsz));
+				ui.AddLabel("nData: " + ofToString(dsz));
 				ui.AddLabel("nBits: " + ofToString(nBits) + " bits");
 				ui.AddSpacing();
 
 				ui.BeginColumns(2, "##cols", true);
 				ui.AddLabelBig("FILE:");
-				ui.AddLabel(ofToString(w) + "," + ofToString(h));
+				ui.AddLabel(ofToString(wsrc) + "," + ofToString(hsrc));
+				ui.AddLabel("nPixels: " + ofToString(wsrc * hsrc));
 				ui.NextColumn();
 				ui.AddLabelBig("DRAWN:");
 				ui.AddLabel(ofToString(ww, 0) + "," + ofToString(hh, 0));
+				ui.AddLabel("nPixels: " + ofToString(ww * hh));
 				ui.EndColumns();
-			}
 
-			ui.AddSpacingBigSeparated();
+				ui.AddSpacingBigSeparated();
+			}
 
 			//--
 
@@ -165,52 +182,115 @@ void ofApp::draw()
 			// 2. Texture
 			ImGui::Image((ImTextureID)(uintptr_t)textureID, ImVec2(ww, hh));
 
+			// over
+			bool bOver = 0;
+			bOver = ImGui::IsItemHovered();
+
 			//--
 
 			ImGuiIO& io = ImGui::GetIO();
 			ImRect rc = ImRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax());
-			ImVec2 mouseUVCoord = (io.MousePos - rc.Min) / rc.GetSize();
-			mouseUVCoord.y = 1.f - mouseUVCoord.y;
+			ImVec2 mouseUVCoord_ = (io.MousePos - rc.Min) / rc.GetSize();
+			//mouseUVCoord_.y = 1.f - mouseUVCoord_.y;//flip
 
-			ImVec2 displayedTextureSize = ImVec2(ww, hh);
+			// clamp
+			ImVec2 mouseUVCoord = ImVec2(
+				ofClamp(mouseUVCoord_.x, 0, 1),
+				ofClamp(mouseUVCoord_.y, 0, 1));
+			//cout << "mouseUVCoord:" << mouseUVCoord << endl;
 
-			if (io.KeyShift && io.MouseDown[1])
+			ImVec2 displayedTextureSize_ = ImVec2(ww, hh);
+			ImVec2 displayedTextureSize = ImVec2(
+				ofClamp(displayedTextureSize_.x, 0, wsrc),
+				ofClamp(displayedTextureSize_.y, 0, hsrc));
+			//cout << "displayedTextureSize:" << displayedTextureSize << endl;
+
+			//cout << "wsrc,hsrc:" << wsrc << "," << hsrc << endl;
+
+			//TODO: expose
+			static int zoomSize = 3;
+			static int zoomRectangleWidth = 200;
+			ImGui::SliderInt("zoomSize", &zoomSize, 1, 10);
+			ImGui::SliderInt("zoomRect", &zoomRectangleWidth, 50, 300);
+			bool bdebug = ui.bDebug;
+
+			if (ImGui::Button("Reset")) {
+				zoomSize = 3;
+				zoomRectangleWidth = 200;
+			}
+
+			if (bOver && bEnable)
 			{
+				ImageInspect::inspect(wsrc, hsrc, data, mouseUVCoord, displayedTextureSize, bdebug,
+					&zoomSize, &zoomRectangleWidth, &c);
+			}
+
+			//if (io.KeyShift && io.MouseDown[0])
+			if (bOver && io.MouseDown[0])
+			{
+				ofLog() << "CLICK color:" << c;
+				cBg.set(c);
+			}
+
+			if (bOver && io.KeyShift && io.MouseDown[1])
+			{
+				ofLog() << "CLICK enable" << bEnable;
+
 				// swap
 				static bool bEnable_ = !bEnable;
+
 				if (bEnable != bEnable_) {
 					bEnable_ = bEnable;
+
 					bEnable = !bEnable;
 				}
 			}
 
-			if (bEnable && mouseUVCoord.x >= 0.f && mouseUVCoord.y >= 0.f)
-			{
-				//ui.AddTooltip("Hello");
+			ui.AddToggle("OverImg", bOver);
 
-				ImageInspect::inspect(w, h, data, mouseUVCoord, displayedTextureSize);
-				//ImageInspect::inspect(ww, hh, data, mouseUVCoord, displayedTextureSize);
+			//----
+
+			//if (ui.isMaximized())
+			{
+				//if (ui.AddButton("Reset Original"))
+				//{
+				//	ww = image.getWidth();
+				//	hh = image.getHeight();
+				//}
+
+				ui.AddToggle("Enable", bEnable);
+				//if (ui.AddToggle("Enable", bEnable))
+				//{
+				//}
 			}
 
-			//--
-
-			if (ui.isMaximized())
-			{
-				ui.AddSpacingBigSeparated();
-
-				ImVec2 sz = ImVec2(image.getWidth(), image.getHeight());
-
-				// 2. Texture
-				ImGui::Image((ImTextureID)(uintptr_t)textureID, sz);
-
-				// 3. Pixels
-				//ImGui::Image(GetImTextureID(pixelsButtonID), sz);
-			}
+			ui.Add(bImg2);
 
 			ui.EndWindow();
 		}
-		ui.End();
+
+		//--
+
+		if (ui.BeginWindow(bImg2, ImGuiWindowFlags_AlwaysAutoResize))
+		{
+			ui.Add(index);
+			ui.AddLabelBig(path);
+			ui.AddSpacing();
+
+			ImVec2 sz = ImVec2(image.getWidth(), image.getHeight());
+
+			// 2. Texture
+			ImGui::Image((ImTextureID)(uintptr_t)textureID, sz);
+
+			// 3. Pixels
+			//ImGui::Image(GetImTextureID(pixelsButtonID), sz);
+
+			ui.EndWindow();
+		}
+
 	}
+
+	ui.End();
 }
 
 //--------------------------------------------------------------
