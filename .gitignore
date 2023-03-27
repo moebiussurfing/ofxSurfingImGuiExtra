@@ -22,6 +22,8 @@ icon.rc
 *.JSON
 *.json
 
+*/enc_temp_folder/*
+
 #*/bin/*
 #!*/bin/data/
 #[Bb]in/
