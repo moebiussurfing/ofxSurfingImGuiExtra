@@ -406,6 +406,7 @@ Example code by [@Daandelange](https://github.com/Daandelange). Using [ofxVisual
 <BR>
 
 ## Dependencies
+[ofxSurfingImGui](https://github.com/moebiussurfing/ofxSurfingImGui)  
 [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop) / AWESOME FORK from @**Daandelange**  
 [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers) / For examples only  
 [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) / For examples only  
