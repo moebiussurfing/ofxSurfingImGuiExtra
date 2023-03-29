@@ -5,16 +5,17 @@ ofxSurfingImGuiExtra
 
 This is a _complementary repository_ with extra files, complementary docs and a kind of sandbox for testing **openFrameworks** projects using [ofxSurfingImGui](https://github.com/moebiussurfing/ofxSurfingImGui).  
 
-![GIFS](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/blob/279ee0fc0614100a8393e751b6e6c955669a0dcb/readme_media/gif/README.md)  
+**ofxSurfingImGui** is an **ImGui** toolkit for **openFrameworks** projects. 
 
-![SCREENSHOTS](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/blob/279ee0fc0614100a8393e751b6e6c955669a0dcb/readme_media/image/README.md)  
+Most stuff stills in **WIP** / **alpha state**. For example _Timeline/Sequencer_ or _Node Patching_ **testing Projects**.  
 
 More Info [README_DEV](/README_DEV.md).  
 
+Usefull 3rd party Imgui widgets: [imgui/wiki/Useful-Extensions](https://github.com/ocornut/imgui/wiki/Useful-Extensions#image-manipulation)  
 
-**ofxSurfingImGui** is an **ImGui** toolkit for **openFrameworks** projects. 
 
-Some stuff stills in **WIP** like a _Timeline/Sequencer_ or _Node Patching_ TESTING PROJECTS.   
+![GIFS](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/blob/279ee0fc0614100a8393e751b6e6c955669a0dcb/readme_media/gif/README.md)  
+[SCREENSHOTS](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/blob/279ee0fc0614100a8393e751b6e6c955669a0dcb/readme_media/image/README.md)  
 
 <BR>
 
@@ -404,9 +405,10 @@ Example code by [@Daandelange](https://github.com/Daandelange). Using [ofxVisual
 <BR>
 
 ## Dependencies
-[ofxImGui](https://github.com/Daandelange/ofxImGui/) / AWESOME FORK from @**Daandelange**  
-[ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)  
-[ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) / For examples only  
+[ofxSurfingImGui](https://github.com/moebiussurfing/ofxSurfingImGui)  
+[ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop) / AWESOME FORK from @**Daandelange**  
+[ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers) / for some examples only  
+[ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) / for some examples only  
 
 ## Tested Systems
 - **Windows10** / **VS2017** / **OF ~0.11**
@@ -419,4 +421,4 @@ _All source snippets from other authors are linked into header files. Thanks!_
 
 ## Author
 An addon by **@moebiusSurfing**  
-*( ManuMolina ) 2021-2022*  
+*( ManuMolina ) 2021-2023*  
