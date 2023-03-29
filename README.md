@@ -5,17 +5,17 @@ ofxSurfingImGuiExtra
 
 This is a _complementary repository_ with extra files, complementary docs and a kind of sandbox for testing **openFrameworks** projects using [ofxSurfingImGui](https://github.com/moebiussurfing/ofxSurfingImGui).  
 
+**ofxSurfingImGui** is an **ImGui** toolkit for **openFrameworks** projects. 
+
+Some stuff stills in **WIP** like a _Timeline/Sequencer_ or _Node Patching_ TESTING PROJECTS.  
+
+More Info [README_DEV](/README_DEV.md).  
+
 ![GIFS](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/blob/279ee0fc0614100a8393e751b6e6c955669a0dcb/readme_media/gif/README.md)  
 
 ![SCREENSHOTS](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/blob/279ee0fc0614100a8393e751b6e6c955669a0dcb/readme_media/image/README.md)  
 
-More Info [README_DEV](/README_DEV.md).  
-
-
-**ofxSurfingImGui** is an **ImGui** toolkit for **openFrameworks** projects. 
-
-Some stuff stills in **WIP** like a _Timeline/Sequencer_ or _Node Patching_ TESTING PROJECTS.   
-
+Usefull 3rd party Imgui widgets:  
 [imgui/wiki/Useful-Extensions](https://github.com/ocornut/imgui/wiki/Useful-Extensions#image-manipulation)  
 
 <BR>
