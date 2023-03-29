@@ -7,12 +7,12 @@ This is a _complementary repository_ with extra files, complementary docs and a 
 
 **ofxSurfingImGui** is an **ImGui** toolkit for **openFrameworks** projects. 
 
-Most stuff stills in **WIP** / **alpha state**. For example _Timeline/Sequencer_ or _Node Patching_ **TESTING PROJECTS**.  
+Most stuff stills in **WIP** / **alpha state**. For example _Timeline/Sequencer_ or _Node Patching_ **testing Projects**.  
 
 More Info [README_DEV](/README_DEV.md).  
 
-Usefull 3rd party Imgui widgets:  
-[imgui/wiki/Useful-Extensions](https://github.com/ocornut/imgui/wiki/Useful-Extensions#image-manipulation)  
+Usefull 3rd party Imgui widgets: [imgui/wiki/Useful-Extensions](https://github.com/ocornut/imgui/wiki/Useful-Extensions#image-manipulation)  
+
 
 ![GIFS](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/blob/279ee0fc0614100a8393e751b6e6c955669a0dcb/readme_media/gif/README.md)  
 [SCREENSHOTS](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/blob/279ee0fc0614100a8393e751b6e6c955669a0dcb/readme_media/image/README.md)  
@@ -407,8 +407,8 @@ Example code by [@Daandelange](https://github.com/Daandelange). Using [ofxVisual
 ## Dependencies
 [ofxSurfingImGui](https://github.com/moebiussurfing/ofxSurfingImGui)  
 [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop) / AWESOME FORK from @**Daandelange**  
-[ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers) / For examples only  
-[ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) / For examples only  
+[ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers) / for some examples only  
+[ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) / for some examples only  
 
 ## Tested Systems
 - **Windows10** / **VS2017** / **OF ~0.11**
