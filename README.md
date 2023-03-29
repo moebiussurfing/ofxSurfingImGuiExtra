@@ -16,6 +16,8 @@ More Info [README_DEV](/README_DEV.md).
 
 Some stuff stills in **WIP** like a _Timeline/Sequencer_ or _Node Patching_ TESTING PROJECTS.   
 
+[imgui/wiki/Useful-Extensions](https://github.com/ocornut/imgui/wiki/Useful-Extensions#image-manipulation)  
+
 <BR>
 
 ## WORK IN PROGRESS!
@@ -404,8 +406,8 @@ Example code by [@Daandelange](https://github.com/Daandelange). Using [ofxVisual
 <BR>
 
 ## Dependencies
-[ofxImGui](https://github.com/Daandelange/ofxImGui/) / AWESOME FORK from @**Daandelange**  
-[ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)  
+[ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop) / AWESOME FORK from @**Daandelange**  
+[ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers) / For examples only  
 [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) / For examples only  
 
 ## Tested Systems
@@ -419,4 +421,4 @@ _All source snippets from other authors are linked into header files. Thanks!_
 
 ## Author
 An addon by **@moebiusSurfing**  
-*( ManuMolina ) 2021-2022*  
+*( ManuMolina ) 2021-2023*  
