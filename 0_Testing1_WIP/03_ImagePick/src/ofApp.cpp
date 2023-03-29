@@ -87,7 +87,7 @@ void ofApp::draw()
 	ofRectangle rr(0, 0, imageFloat.getWidth(), imageFloat.getHeight());
 	rr.scaleTo(ofGetCurrentViewport(), OF_SCALEMODE_FIT);
 	imageFloat.draw(rr.x, rr.y, rr.width, rr.height);
-	
+
 	//int p = 50;
 	//imageFloat.draw(p, p, ofGetWidth() - p * 2, ofGetHeight() - p * 2);
 
@@ -97,7 +97,6 @@ void ofApp::draw()
 //--------------------------------------------------------------
 void ofApp::drawImGui()
 {
-
 	ui.Begin();
 
 	{
@@ -105,6 +104,13 @@ void ofApp::drawImGui()
 
 		if (ui.BeginWindow(bGui))
 		{
+			//TODO: expose
+			static int zoomSize = 3;
+			static int zoomRectangleWidth = 200;
+			bool bdebug = ui.bDebug;
+
+			//--
+
 			float _w100 = ui.getWidgetsWidth(1);
 			float _spcx = ui.getWidgetsSpacingX();
 			float _hb = ui.getWidgetsHeightUnit();
@@ -129,10 +135,13 @@ void ofApp::drawImGui()
 				ui.AddNotifierToggle();
 				ui.AddLogToggle();
 				ui.AddAutoResizeToggle();
-				ui.AddDebugToggle();
-
-				ui.AddLabelBig("Shift click to imgInspect");
 				ui.AddSpacingBigSeparated();
+
+				ui.AddSpacing();
+				ui.Add(bImg2, OFX_IM_TOGGLE_ROUNDED);
+
+				ui.AddDebugToggle();
+				ui.AddSpacing();
 			}
 
 			// mode
@@ -167,9 +176,29 @@ void ofApp::drawImGui()
 				ui.EndColumns();
 
 				ui.AddSpacingBigSeparated();
+
+				ui.AddLabelBig("MOUSE App:");
+				ui.AddLabel("x,y: " + ofToString(ofGetMouseX()) + "," + ofToString(ofGetMouseY()));
+
+				auto pm = ImGui::GetMousePos();
+				auto pw = ImGui::GetWindowPos();
+				ImVec2 p = pm - pw;
+				ui.AddLabelBig("MOUSE Window:");
+				ofRectangle r(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
+				bool bInside = r.inside(ofGetMouseX(), ofGetMouseY());
+				string s = " ";
+				if (bInside)
+				{
+					s = "x,y: " + ofToString(p.x) + "," + ofToString(p.y);
+				}
+				ui.AddLabel(s);
+				ui.AddSpacingBigSeparated();
 			}
 
 			//--
+
+			ui.AddToggle("Enable", bEnable, OFX_IM_TOGGLE_BIG);
+			ui.AddSpacing();
 
 			//// 1. Fbo
 			//if (ImGui::ImageButton(
@@ -191,44 +220,41 @@ void ofApp::drawImGui()
 			ImGuiIO& io = ImGui::GetIO();
 			ImRect rc = ImRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax());
 			ImVec2 mouseUVCoord_ = (io.MousePos - rc.Min) / rc.GetSize();
-			//mouseUVCoord_.y = 1.f - mouseUVCoord_.y;//flip
+			//mouseUVCoord_.y = 1.f - mouseUVCoord_.y; // flip y
 
 			// clamp
 			ImVec2 mouseUVCoord = ImVec2(
 				ofClamp(mouseUVCoord_.x, 0, 1),
 				ofClamp(mouseUVCoord_.y, 0, 1));
-			//cout << "mouseUVCoord:" << mouseUVCoord << endl;
 
 			ImVec2 displayedTextureSize_ = ImVec2(ww, hh);
 			ImVec2 displayedTextureSize = ImVec2(
 				ofClamp(displayedTextureSize_.x, 0, wsrc),
 				ofClamp(displayedTextureSize_.y, 0, hsrc));
-			//cout << "displayedTextureSize:" << displayedTextureSize << endl;
 
-			//cout << "wsrc,hsrc:" << wsrc << "," << hsrc << endl;
+			ui.AddSpacing();
 
-			//TODO: expose
-			static int zoomSize = 3;
-			static int zoomRectangleWidth = 200;
-			ImGui::SliderInt("zoomSize", &zoomSize, 1, 10);
-			ImGui::SliderInt("zoomRect", &zoomRectangleWidth, 50, 300);
-			bool bdebug = ui.bDebug;
+			//TODO: make ofParams
+			ImGui::SliderInt("zoomSize", &zoomSize, 1, 50);
+			ImGui::SliderInt("zoomRect", &zoomRectangleWidth, 50, 1000);
 
 			if (ImGui::Button("Reset")) {
 				zoomSize = 3;
 				zoomRectangleWidth = 200;
 			}
 
+			bool b24bits = (nBits == 24);
+
 			if (bOver && bEnable)
 			{
-				ImageInspect::inspect(wsrc, hsrc, data, mouseUVCoord, displayedTextureSize, bdebug,
-					&zoomSize, &zoomRectangleWidth, &c);
+				ImageInspect::inspect(wsrc, hsrc, data, mouseUVCoord, displayedTextureSize,
+					b24bits, bdebug, &zoomSize, &zoomRectangleWidth, &c);
 			}
 
 			//if (io.KeyShift && io.MouseDown[0])
 			if (bOver && bEnable && io.MouseDown[0])
 			{
-				ofLog() << "CLICK color:" << c;
+				ofLog() << "CLICK color: " << c;
 				cBg.set(c);
 			}
 
@@ -236,37 +262,30 @@ void ofApp::drawImGui()
 			{
 				bEnable = !bEnable;
 
-				ofLog() << "CLICK enable" << bEnable;
+				ofLog() << "CLICK enable: " << bEnable;
 
 				//// swap
 				//static bool bEnable_ = !bEnable;
 
 				//if (bEnable != bEnable_) {
 				//	bEnable_ = bEnable;
-
 				//	bEnable = !bEnable;
 				//}
 			}
 
-			ui.AddToggle("OverImg", bOver);
+			if (ui.isDebug())
+			{
+				ui.AddSpacingBigSeparated();
+				ui.AddToggle("OverImg", bOver);
+			}
 
 			//----
 
-			//if (ui.isMaximized())
-			{
-				//if (ui.AddButton("Reset Original"))
-				//{
-				//	ww = image.getWidth();
-				//	hh = image.getHeight();
-				//}
-
-				ui.AddToggle("Enable", bEnable);
-				//if (ui.AddToggle("Enable", bEnable))
-				//{
-				//}
-			}
-
-			ui.Add(bImg2);
+			//if (ui.AddButton("Reset Original"))
+			//{
+			//	ww = image.getWidth();
+			//	hh = image.getHeight();
+			//}
 
 			ui.EndWindow();
 		}
