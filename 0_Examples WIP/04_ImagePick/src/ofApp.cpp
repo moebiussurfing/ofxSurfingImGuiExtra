@@ -7,6 +7,7 @@ void ofApp::setup()
 
 	ofxSurfingHelpers::SurfSetMyMonitor(1);
 
+	ui.setName("ofApp");
 	ui.setup();
 
 	eventIndex = index.newListener([&](int& value)
@@ -31,6 +32,7 @@ void ofApp::setup()
 
 	imageInspect.setUiPtr(&ui);
 	imageInspect.setup();
+	imageInspect.colorPtr.makeReferenceTo(colorPtr);//link color to be auto updated!
 
 	//--
 
@@ -56,7 +58,7 @@ void ofApp::loadImage(string _path)
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	ofClear(cBg);
+	ofClear(colorPtr.get());
 
 	if (bDrawImg && imageFloat.isAllocated())
 	{
@@ -97,6 +99,7 @@ void ofApp::drawImGui()
 				ui.AddSpacingBigSeparated();
 
 				ui.Add(imageInspect.bGui, OFX_IM_TOGGLE_ROUNDED);
+				ui.Add(colorPtr, OFX_IM_COLOR_BOX_FULL_WIDTH_BIG);
 			}
 
 			ui.EndWindow();
