@@ -22,7 +22,7 @@ public:
 	ofxSurfingGui ui;
 	ofParameter<bool> bGui{ "Show", true };
 
-	customType* t = NULL;
+	customType* data = NULL;
 
 	myCustomConsole c = { 1 };
 

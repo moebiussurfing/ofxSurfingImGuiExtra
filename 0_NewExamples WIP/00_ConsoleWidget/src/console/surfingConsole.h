@@ -74,7 +74,6 @@ using namespace std::placeholders;
 class myCustomConsole : public console<customType*>
 {
 public:
-
 	myCustomConsole(bool redir = false) : console(redir)
 	{
 		std::cout << "> myCustomConsole()" << " redir:" << redir << endl;
@@ -151,6 +150,7 @@ private:
 	void help(std::stringstream args, customType* data)
 	{
 		std::cout << "--------------------------------------------------------------" << endl;
+		std::cout << "> help" << endl;
 		std::cout << "> data" << endl;
 		std::cout << "data->someVar:" << data->someVar << endl;
 		std::cout << "data->someString:" << data->someString << endl;
@@ -202,7 +202,8 @@ private:
 public:
 	void help_()
 	{
-		std::cout << "> added commands:" << endl;
+		std::cout << "> help_" << endl;
+		std::cout << "> Commands:" << endl;
 		std::cout << "myCommand (reset or default)" << std::endl;
 		std::cout << "help (list commands)" << std::endl;
 		std::cout << "colorToggle (random color)" << std::endl;

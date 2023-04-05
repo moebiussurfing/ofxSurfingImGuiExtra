@@ -3,26 +3,26 @@
 //--------------------------------------------------------------
 void ofApp::exit()
 {
-	delete t;
-	t = NULL;
+	delete data;
+	data = NULL;
 }
 
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	t = new customType();
-	t->color = ofColor::fuchsia;
-	t->someString = "hello";
-	t->someVar = -1;
+	data = new customType();
+	data->color = ofColor::fuchsia;
+	data->someString = "hello";
+	data->someVar = -1;
 }
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	ofClear(t->color);
+	ofClear(data->color);
 
-	t->someVar = ofGetFrameNum();//update data
-	string title = ofToString(t->someVar);
+	data->someVar = ofGetFrameNum();//update data
+	string title = ofToString(data->someVar);
 	ofSetWindowTitle(title);
 
 	string s;
@@ -50,12 +50,22 @@ void ofApp::draw()
 				c.clear_();
 			}
 
+			ui.AddLabel("setColor");
+			if (ui.AddButton("red", OFX_IM_BUTTON, 2, true)) {
+				s = "setColor red";
+				c.addLineCommnand(s, data);
+			}
+			if (ui.AddButton("blue", OFX_IM_BUTTON, 2)) {
+				s = "setColor blue";
+				c.addLineCommnand(s, data);
+			}
+
 			ui.EndWindow();
 		}
 
 		//--
 
-		c.show(t);
+		c.show(data);
 
 	}
 	ui.End();

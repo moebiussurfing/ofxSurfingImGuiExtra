@@ -53,7 +53,7 @@ public:
 
 		//bool pressedEnter = ImGui::InputText("", &_textEntryBuffer.front(), _textEntryBuffer.size()-1, ImGuiInputTextFlags_EnterReturnsTrue);
 
-		bool pressedEnter = ImGui::InputText("input", &_textEntryBuffer.front(), _textEntryBuffer.size()-1, ImGuiInputTextFlags_EnterReturnsTrue);
+		bool pressedEnter = ImGui::InputText("Input", &_textEntryBuffer.front(), _textEntryBuffer.size()-1, ImGuiInputTextFlags_EnterReturnsTrue);
 
 		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
 		//bool pressedEnter = ImGui::InputText("##input", &_textEntryBuffer.front(), _textEntryBuffer.size() - 1, ImGuiInputTextFlags_EnterReturnsTrue);
@@ -90,15 +90,16 @@ private:
 
 
 	void processCommand(T data) {
-		//cout << "processCommand(T data)" << endl;
-
 		std::string command(_textEntryBuffer.data());
 		std::fill(_textEntryBuffer.begin(), _textEntryBuffer.end(), '\0');
+
 		_commandHistory.emplace_back(command);
 		while (_commandHistory.size() > _maxHistoryLines) {
 			_commandHistory.pop_front();
 		}
+
 		std::cout << command << std::endl;
+
 		auto cmdName = command.substr(0, command.find(' '));
 		auto cmd = _commandList.find(cmdName);
 		if (cmd != _commandList.end()) {
@@ -107,7 +108,7 @@ private:
 
 
 		//TODO:?
-		addLine((string)(command));
+		//addLine((string)(command));
 	};
 
 
@@ -119,6 +120,24 @@ public:
 	};
 	void clearLines(T data) {
 		_terminalBuffer = "";
+	};
+
+	void addLineCommnand(string s, T data) {
+
+		std::string command = s;
+
+		_commandHistory.emplace_back(command);
+		while (_commandHistory.size() > _maxHistoryLines) {
+			_commandHistory.pop_front();
+		}
+
+		std::cout << command << std::endl;
+
+		auto cmdName = command.substr(0, command.find(' '));
+		auto cmd = _commandList.find(cmdName);
+		if (cmd != _commandList.end()) {
+			cmd->second(std::stringstream(command.substr(command.find(' ') + 1, command.size() - command.find(' ') - 1)), data);
+		}
 	};
 };
 
