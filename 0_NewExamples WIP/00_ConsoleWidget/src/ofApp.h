@@ -1,7 +1,7 @@
 
 /*
 
-    WIP
+	WIP
 
 */
 
@@ -14,16 +14,16 @@
 class ofApp : public ofBaseApp
 {
 public:
-    
-    void setup();
-    void draw();
-    void keyPressed(int key);
+	void setup();
+	void draw();
+	void keyPressed(int key);
 
-    ofxSurfingGui ui;
-    ofParameter<bool> bGui{ "Show", true };
+	ofxSurfingGui ui;
+	ofParameter<bool> bGui{ "Show", true };
 
-    customType t;
+	customType t;
 
-    myCustomConsole c = { true };
-    //myCustomConsole c;
+	myCustomConsole c = { 1 };
+
+	void addToLog(string s);
 };

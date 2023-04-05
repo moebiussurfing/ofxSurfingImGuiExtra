@@ -58,10 +58,8 @@ public:
 		if (scrollToBottom) {
 			ImGui::SetKeyboardFocusHere(-1);
 
-			//ImGui::SetScrollHere();
-			//ImGui::SetScrollHereX();//?
+			//ImGui::SetScrollHere();//error
 			//ImGui::SetScrollHereY();//?
-			//ImGui::SetScrollHereY(1.);
 
 			scrollToBottom = false;
 		}
@@ -87,7 +85,7 @@ private:
 
 
 	void processCommand(T data) {
-		cout << "processCommand(T data)" << endl;
+		//cout << "processCommand(T data)" << endl;
 
 		std::string command(_textEntryBuffer.data());
 		std::fill(_textEntryBuffer.begin(), _textEntryBuffer.end(), '\0');
@@ -103,10 +101,17 @@ private:
 		}
 
 
-
 		//TODO:?
-		_terminalBuffer += (string)(command);
+		addLine((string)(command));
+	};
+
+public:
+	void addLine(string s) {
+		_terminalBuffer += s;
 		_terminalBuffer += "\n";
+	};
+	void clearLines(T data) {
+		_terminalBuffer = "";
 	};
 };
 

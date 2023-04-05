@@ -3,45 +3,60 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	//myCustomConsole c = new myCustomConsole(true);
 }
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
+	ofClear(t.color);
+
+	t.someVar = ofGetFrameNum();//update data
+	string title = ofToString(t.someVar);
+	ofSetWindowTitle(title);
+	
+	string s;
+
 	ui.Begin();
 	{
 		if (ui.BeginWindow(bGui))
 		{
 			ui.AddLabelBig("ConsoleWidget");
-
 			ui.EndWindow();
 		}
 
-		//customType t;
-		//t.someVar = 0;
-		//t.someString = string("Hello");
-
-		//TODO:
-		//ui.PushFont(SurfingFontTypes(2));
 		c.show(t);
-		//ui.PopFont();
 
 		if (ui.AddButton("DO")) {
-			stringstream ss;
-			ss << "DO #" << ofGetFrameNum();
-			cout << ss << endl;
-			ofLog() << ss.str();
+			s = "DO #" +ofToString(ofGetFrameNum());
+			addToLog(s);
+		}
+
+		if (ui.AddButton("HELP")) {
+			c.clearLines(t);
+			s = "HELP";
+			addToLog(s);
+		}
+		if (ui.AddButton("CLEAR")) {
+			s = "CLEAR";
+			addToLog(s);
+			c.clearLines(t);
 		}
 	}
 	ui.End();
-
-	//ofLog() << "t:" << t.someVar;
-	//ofLog() << "t:" << t.someString << " : " << t.someVar;
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key)
 {
 	//if (key == ' ') bGui = !bGui;
+}
+
+//--------------------------------------------------------------
+void ofApp::addToLog(string s)
+{
+	stringstream ss;
+	ss << s;
+	
+	std::cout << ss << endl;
+	ofLog() << ss.str();
 }
