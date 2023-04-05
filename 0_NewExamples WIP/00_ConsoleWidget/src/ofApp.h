@@ -17,11 +17,12 @@ public:
 	void setup();
 	void draw();
 	void keyPressed(int key);
+	void exit();
 
 	ofxSurfingGui ui;
 	ofParameter<bool> bGui{ "Show", true };
 
-	customType t;
+	customType* t = NULL;
 
 	myCustomConsole c = { 1 };
 

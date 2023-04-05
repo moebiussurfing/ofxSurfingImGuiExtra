@@ -21,12 +21,14 @@ public:
 		}
 		std::fill(_textEntryBuffer.begin(), _textEntryBuffer.end(), '\0');
 	};
+
 	~console() {
 		if (_oldStdout) {
 			std::cout.rdbuf(_oldStdout);
 			_oldStdout = nullptr;
 		}
 	};
+
 	void show(T data) {
 		if (_oldStdout) {
 			std::string text("");
@@ -51,15 +53,17 @@ public:
 
 		//bool pressedEnter = ImGui::InputText("", &_textEntryBuffer.front(), _textEntryBuffer.size()-1, ImGuiInputTextFlags_EnterReturnsTrue);
 
-		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
-		bool pressedEnter = ImGui::InputText("##input", &_textEntryBuffer.front(), _textEntryBuffer.size() - 1, ImGuiInputTextFlags_EnterReturnsTrue);
-		ImGui::PopItemWidth();
+		bool pressedEnter = ImGui::InputText("input", &_textEntryBuffer.front(), _textEntryBuffer.size()-1, ImGuiInputTextFlags_EnterReturnsTrue);
+
+		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
+		//bool pressedEnter = ImGui::InputText("##input", &_textEntryBuffer.front(), _textEntryBuffer.size() - 1, ImGuiInputTextFlags_EnterReturnsTrue);
+		//ImGui::PopItemWidth();
 
 		if (scrollToBottom) {
 			ImGui::SetKeyboardFocusHere(-1);
 
 			//ImGui::SetScrollHere();//error
-			//ImGui::SetScrollHereY();//?
+			ImGui::SetScrollHereY();//?
 
 			scrollToBottom = false;
 		}
@@ -70,6 +74,7 @@ public:
 
 		ImGui::End();
 	};
+
 protected:
 	std::unordered_map<std::string, std::function<void(std::stringstream args, T data)>> _commandList;
 private:
@@ -105,6 +110,8 @@ private:
 		addLine((string)(command));
 	};
 
+
+	//TODO:?
 public:
 	void addLine(string s) {
 		_terminalBuffer += s;

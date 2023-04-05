@@ -23,11 +23,11 @@
 	class myCustomConsole : public console<customType>{
 		public:
 			myCustomConsole(bool redir = false): console(redir){
-				BIND(customCommand1);
+				BIND(myCommand);
 			}
 		private:
-			void customCommand1(std::stringstream args, customType data){
-				doWhatev(data.someVar);
+			void myCommand(std::stringstream args, customType data){
+				doWhatev(data->someVar);
 			}
 	};
 */
@@ -57,18 +57,18 @@
 
 struct customType
 {
-	ofColor color{ 0,0,0,255 };
+	ofColor color{ 0,0,0,0 };
 	int someVar = 0;
-	string someString = "hello";
+	string someString = "";
 };
 
 using namespace std::placeholders;
 
-#define BIND(name) _commandList.emplace(std::make_pair<std::string, std::function<void(std::stringstream args, customType data)>>(#name, std::bind(&myCustomConsole::name, this, _1, _2)))
+#define BIND(name) _commandList.emplace(std::make_pair<std::string, std::function<void(std::stringstream args, customType* data)>>(#name, std::bind(&myCustomConsole::name, this, _1, _2)))
 
 //--
 
-class myCustomConsole : public console<customType>
+class myCustomConsole : public console<customType*>
 {
 public:
 
@@ -77,89 +77,120 @@ public:
 		std::cout << "> myCustomConsole()" << " redir:" << redir << endl;
 
 		addCommands();
-	}
+	};
 
 	void addCommands()
 	{
-		BIND(customCommand1);
+		BIND(myCommand);
 		BIND(help);
-		BIND(reload);
-		BIND(stop);
+		BIND(colorToggle);
+		BIND(setColor);
 		BIND(clear);
 		BIND(printArgs);
-		BIND(colorToggle);
 
-		std::cout << "-----------------------------" << endl;
 		std::cout << "> addCommands:" << endl;
-		std::cout << "customCommand1" << std::endl;
-		std::cout << "help" << std::endl;
-		std::cout << "reload" << std::endl;
-		std::cout << "stop" << std::endl;
-		std::cout << "clear" << std::endl;
-		std::cout << "printArgs" << std::endl;
-		std::cout << "colorToggle" << std::endl;
-	}
+		help_();
+	};
 
 private:
-
-	void customCommand1(std::stringstream args, customType data)
+	void myCommand(std::stringstream args, customType* data)
 	{
-		std::cout << "-----------------------------" << endl;
-		std::cout << "> customCommand1" << endl;
+		std::cout << "--------------------------------------------------------------" << endl;
+		std::cout << "> myCommand" << endl;
+		std::cout << endl;
 
-		//doWhatev(data.someVar);
-	}
+		//doWhatev(data);
 
-	void help(std::stringstream args, customType data)
+		if (args.tellg() != -1) {
+			std::string argument;
+			args >> argument;
+			unsigned id = std::strtol(argument.c_str(), nullptr, 10);
+
+			if (argument == "reset") {
+				data->someVar = 12345;
+				data->someString = "just reseted";
+				data->color = ofColor::yellow;
+			}
+			else if (argument == "default") {
+				data->someVar = -1;
+				data->someString = "just defaulted";
+				data->color = ofColor::black;
+			}
+
+			std::cout << "> data" << endl;
+			std::cout << "data->someVar:" << data->someVar << endl;
+			std::cout << "data->someString:" << data->someString << endl;
+			std::cout << "data->color:" << data->color << endl;
+		}
+	};
+
+private:
+	void help(std::stringstream args, customType* data)
 	{
-		std::cout << "-----------------------------" << endl;
-		std::cout << "> help" << endl;
+		std::cout << "--------------------------------------------------------------" << endl;
 		std::cout << "> data" << endl;
-		std::cout << "data.someVar:" << data.someVar << endl;
-		std::cout << "data.someString:" << data.someString << endl;
-		std::cout << "data.color:" << data.color << endl;
-		std::cout << "> Added commands:" << endl;
-		std::cout << "customCommand1" << std::endl;
-		std::cout << "help" << std::endl;
-		std::cout << "reload" << std::endl;
-		std::cout << "stop" << std::endl;
-		std::cout << "clear" << std::endl;
-		std::cout << "printArgs" << std::endl;
-		std::cout << "colorToggle" << std::endl;
-	}
+		std::cout << "data->someVar:" << data->someVar << endl;
+		std::cout << "data->someString:" << data->someString << endl;
+		std::cout << "data->color:" << data->color << endl;
+		std::cout << endl;
+		help_();
+	};
 
-	void reload(std::stringstream args, customType data)
+	void clear(std::stringstream args, customType* data)
 	{
-		std::cout << "-----------------------------" << endl;
-		std::cout << "> reload" << endl;
-		std::cout << "data.someVar:" << data.someVar << endl;
-	}
-
-	void stop(std::stringstream args, customType data) {
-		std::cout << "-----------------------------" << endl;
-		std::cout << "> stop" << endl;
-		std::cout << "data.someVar:" << data.someVar << endl;
-	}
-
-	void clear(std::stringstream args, customType data) {
-		std::cout << "-----------------------------" << endl;
-		std::cout << "> clear" << endl;
-		std::cout << "data.someVar:" << data.someVar << endl;
+		std::cout << "--------------------------------------------------------------" << endl;
 
 		clearLines(data);
-	}
+	};
 
-	void printArgs(std::stringstream args, customType data) {
-		std::cout << "-----------------------------" << endl;
-		std::cout << "> printArgs" << endl;
+	void printArgs(std::stringstream args, customType* data)
+	{
+		std::cout << "--------------------------------------------------------------" << endl;
 		std::cout << "args:" << args << endl;
-		std::cout << "data.someVar:" << data.someVar << endl;
-	}
+		std::cout << endl;
+	};
 
-	void colorToggle(std::stringstream args, customType data) {
-		std::cout << "-----------------------------" << endl;
-		std::cout << "> colorToggle" << endl;
-		data.color = ofColor(ofRandom(255), ofRandom(255), ofRandom(255), 255);
-		std::cout << "data.color:" << data.color << endl;
-	}
+	void colorToggle(std::stringstream args, customType* data)
+	{
+		std::cout << "--------------------------------------------------------------" << endl;
+
+		data->color = ofColor(ofRandom(255), ofRandom(255), ofRandom(255), 255);
+		std::cout << "data->color:" << data->color << endl;
+		std::cout << endl;
+	};
+
+	void setColor(std::stringstream args, customType* data)
+	{
+		std::cout << "--------------------------------------------------------------" << endl;
+
+		//TODO: catch/filter args
+		string s = args.str();
+
+		ofColor c;
+		if (s == "red") c = ofColor(ofColor::red);
+		else if (s == "green") c = ofColor(ofColor::green);
+		else if (s == "blue") c = ofColor(ofColor::blue);
+		data->color = c;
+
+		std::cout << "data->color:" << data->color << endl;
+		std::cout << endl;
+	};
+
+public:
+	void help_()
+	{
+		std::cout << "> added commands:" << endl;
+		std::cout << "myCommand (reset or default)" << std::endl;
+		std::cout << "help (list commands)" << std::endl;
+		std::cout << "colorToggle (random color)" << std::endl;
+		std::cout << "setColor (blue, green or red)" << std::endl;
+		std::cout << "printArgs (print passed args)" << std::endl;
+		std::cout << "clear (clear console)" << std::endl;
+		std::cout << endl;
+	};
+
+	void clear_()
+	{
+		clearLines(NULL);
+	};
 };
