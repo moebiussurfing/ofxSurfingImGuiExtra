@@ -138,6 +138,8 @@ public:
 		if (cmd != _commandList.end()) {
 			cmd->second(std::stringstream(command.substr(command.find(' ') + 1, command.size() - command.find(' ') - 1)), data);
 		}
+
+		data->someString = "addLineCommnand";
 	};
 };
 

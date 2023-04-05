@@ -129,12 +129,12 @@ private:
 
 			if (argument == "reset") {
 				data->someVar = 12345;
-				data->someString = "just reseted";
+				data->someString = "just reseted by myCommand";
 				data->color = ofColor::yellow;
 			}
 			else if (argument == "default") {
 				data->someVar = -1;
-				data->someString = "just defaulted";
+				data->someString = "just defaulted by myCommand";
 				data->color = ofColor::black;
 			}
 
@@ -154,12 +154,15 @@ private:
 		std::cout << "data->someString:" << data->someString << endl;
 		std::cout << "data->color:" << data->color << endl;
 		std::cout << endl;
+
 		help_();
 	};
 
 	void clear(std::stringstream args, dataCustom* data)
 	{
 		clearLines(data);
+
+		data->someString = "just clear";
 	};
 
 	void printArgs(std::stringstream args, dataCustom* data)
@@ -173,6 +176,8 @@ private:
 		data->color = ofColor(ofRandom(255), ofRandom(255), ofRandom(255), 255);
 		std::cout << "data->color:" << data->color << endl;
 		std::cout << endl;
+
+		data->someString = "randomized color";
 	};
 
 	void setColor(std::stringstream args, dataCustom* data)
@@ -185,6 +190,8 @@ private:
 		else if (s == "green") c = ofColor(ofColor::green);
 		else if (s == "blue") c = ofColor(ofColor::blue);
 		data->color = c;
+
+		data->someString = "color settled";
 
 		std::cout << "data->color:" << data->color << endl;
 		std::cout << endl;

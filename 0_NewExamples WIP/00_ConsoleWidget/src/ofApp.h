@@ -20,7 +20,7 @@ public:
 	void exit();
 
 	ofxSurfingGui ui;
-	ofParameter<bool> bGui{ "Show", true };
+	ofParameter<bool> bGui{ "surfingConsole", true };
 
 	dataCustom* data = NULL;
 

@@ -33,13 +33,10 @@ void ofApp::draw()
 	{
 		if (ui.BeginWindow(bGui))
 		{
-			ui.AddLabelBig("surfingConsole");
-			ui.AddSpacingSeparated();
-
 			ui.AddLabelBig("dataCustom");
-			ui.AddLabel("someVar:" + ofToString(data->someVar));
-			ui.AddLabel("someString:" + ofToString(data->someString));
-			ui.AddLabel("color:" + ofToString(data->color));
+			ui.AddLabel("someVar:\n" + ofToString(data->someVar));
+			ui.AddLabel("someString:\n" + ofToString(data->someString));
+			ui.AddLabel("color:\n" + ofToString(data->color));
 			ui.AddSpacingSeparated();
 
 			if (ui.AddButton("HELP")) {
@@ -47,12 +44,14 @@ void ofApp::draw()
 				addToLog(s);
 
 				c.help_();
+				data->someString = "added help";
 			}
 			if (ui.AddButton("CLEAR")) {
 				s = "CLEAR";
 				addToLog(s);
 				
 				c.clear_();
+				data->someString = "added clear";
 			}
 			ui.AddSpacingSeparated();
 
@@ -66,11 +65,9 @@ void ofApp::draw()
 				s = "setColor blue";
 				c.addLineCommnand(s, data);
 			}
-
-			if (ui.AddButton("DO")) {
-				s = "DO #" + ofToString(ofGetFrameNum());
-				addToLog(s);
-				c.addLine(s);
+			if (ui.AddButton("colorToggle")) {
+				s = "colorToggle";
+				c.addLineCommnand(s, data);
 			}
 
 			ui.EndWindow();
