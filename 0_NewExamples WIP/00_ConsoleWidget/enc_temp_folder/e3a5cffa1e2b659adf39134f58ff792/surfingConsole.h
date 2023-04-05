@@ -1,9 +1,6 @@
 
 // Original code from @theKlanc:
 // https://github.com/theKlanc/YAIC
-// 
-// https://gitea.ledgedash.com/klanc/Spaceworks/src/branch/master/source/gameConsole.cpp
-// https://gitea.ledgedash.com/klanc/Spaceworks/src/branch/master
 
 /*
 *
@@ -107,27 +104,7 @@ private:
 		if (args.tellg() != -1) {
 			std::string argument;
 			args >> argument;
-
-			// Example some catchers
-			//unsigned id = std::strtol(argument.c_str(), nullptr, 10);
-			//config::zoom = std::stoi(argument);
-			//unsigned childID = std::stoi(argument);
-			/*
-			if (args.tellg() != -1) {
-					args >> argument;
-					if(argument == "_")
-					{}
-					else if(argument[0] == '-'){
-						pos.pos.z -= std::strtol(&argument.c_str()[1], nullptr, 10);
-					}
-					else if(argument[0] == '+'){
-						pos.pos.z += std::strtol(&argument.c_str()[1], nullptr, 10);
-					}
-					else{
-						pos.pos.z = std::strtol(&argument.c_str()[1], nullptr, 10);
-					}
-				}
-			*/
+			unsigned id = std::strtol(argument.c_str(), nullptr, 10);
 
 			if (argument == "reset") {
 				data->someVar = 12345;
