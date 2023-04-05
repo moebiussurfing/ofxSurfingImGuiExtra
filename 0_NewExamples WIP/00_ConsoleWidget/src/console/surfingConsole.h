@@ -58,7 +58,7 @@
 
 //--
 
-struct customType
+struct dataCustom
 {
 	ofColor color{ 0,0,0,0 };
 	int someVar = 0;
@@ -67,16 +67,16 @@ struct customType
 
 using namespace std::placeholders;
 
-#define BIND(name) _commandList.emplace(std::make_pair<std::string, std::function<void(std::stringstream args, customType* data)>>(#name, std::bind(&myCustomConsole::name, this, _1, _2)))
+#define BIND(name) _commandList.emplace(std::make_pair<std::string, std::function<void(std::stringstream args, dataCustom* data)>>(#name, std::bind(&surfingConsole::name, this, _1, _2)))
 
 //--
 
-class myCustomConsole : public console<customType*>
+class surfingConsole : public console<dataCustom*>
 {
 public:
-	myCustomConsole(bool redir = false) : console(redir)
+	surfingConsole(bool redir = false) : console(redir)
 	{
-		std::cout << "> myCustomConsole()" << " redir:" << redir << endl;
+		std::cout << "> surfingConsole()" << " redir:" << redir << endl;
 
 		addCommands();
 	};
@@ -95,9 +95,8 @@ public:
 	};
 
 private:
-	void myCommand(std::stringstream args, customType* data)
+	void myCommand(std::stringstream args, dataCustom* data)
 	{
-		std::cout << "--------------------------------------------------------------" << endl;
 		std::cout << "> myCommand" << endl;
 		std::cout << endl;
 
@@ -147,9 +146,8 @@ private:
 	};
 
 private:
-	void help(std::stringstream args, customType* data)
+	void help(std::stringstream args, dataCustom* data)
 	{
-		std::cout << "--------------------------------------------------------------" << endl;
 		std::cout << "> help" << endl;
 		std::cout << "> data" << endl;
 		std::cout << "data->someVar:" << data->someVar << endl;
@@ -159,33 +157,26 @@ private:
 		help_();
 	};
 
-	void clear(std::stringstream args, customType* data)
+	void clear(std::stringstream args, dataCustom* data)
 	{
-		std::cout << "--------------------------------------------------------------" << endl;
-
 		clearLines(data);
 	};
 
-	void printArgs(std::stringstream args, customType* data)
+	void printArgs(std::stringstream args, dataCustom* data)
 	{
-		std::cout << "--------------------------------------------------------------" << endl;
 		std::cout << "args:" << args << endl;
 		std::cout << endl;
 	};
 
-	void colorToggle(std::stringstream args, customType* data)
+	void colorToggle(std::stringstream args, dataCustom* data)
 	{
-		std::cout << "--------------------------------------------------------------" << endl;
-
 		data->color = ofColor(ofRandom(255), ofRandom(255), ofRandom(255), 255);
 		std::cout << "data->color:" << data->color << endl;
 		std::cout << endl;
 	};
 
-	void setColor(std::stringstream args, customType* data)
+	void setColor(std::stringstream args, dataCustom* data)
 	{
-		std::cout << "--------------------------------------------------------------" << endl;
-
 		//TODO: catch/filter args
 		string s = args.str();
 
@@ -202,14 +193,14 @@ private:
 public:
 	void help_()
 	{
-		std::cout << "> help_" << endl;
-		std::cout << "> Commands:" << endl;
-		std::cout << "myCommand (reset or default)" << std::endl;
-		std::cout << "help (list commands)" << std::endl;
-		std::cout << "colorToggle (random color)" << std::endl;
-		std::cout << "setColor (blue, green or red)" << std::endl;
-		std::cout << "printArgs (print passed args)" << std::endl;
-		std::cout << "clear (clear console)" << std::endl;
+		std::cout << "> help" << endl;
+		std::cout << endl;
+		std::cout << "myCommand   \t (reset or default)" << std::endl;
+		std::cout << "help        \t (list commands)" << std::endl;
+		std::cout << "colorToggle \t (random color)" << std::endl;
+		std::cout << "setColor    \t (blue, green or red)" << std::endl;
+		std::cout << "printArgs   \t (print passed args)" << std::endl;
+		std::cout << "clear       \t (clear console)" << std::endl;
 		std::cout << endl;
 	};
 

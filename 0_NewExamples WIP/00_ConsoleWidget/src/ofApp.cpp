@@ -10,7 +10,7 @@ void ofApp::exit()
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	data = new customType();
+	data = new dataCustom();
 	data->color = ofColor::fuchsia;
 	data->someString = "hello";
 	data->someVar = -1;
@@ -21,7 +21,9 @@ void ofApp::draw()
 {
 	ofClear(data->color);
 
-	data->someVar = ofGetFrameNum();//update data
+	//update data
+	data->someVar = ofGetFrameNum();
+
 	string title = ofToString(data->someVar);
 	ofSetWindowTitle(title);
 
@@ -31,25 +33,30 @@ void ofApp::draw()
 	{
 		if (ui.BeginWindow(bGui))
 		{
-			ui.AddLabelBig("ConsoleWidget");
+			ui.AddLabelBig("surfingConsole");
+			ui.AddSpacingSeparated();
 
-			if (ui.AddButton("DO")) {
-				s = "DO #" + ofToString(ofGetFrameNum());
-				addToLog(s);
-				c.addLine(s);
-			}
+			ui.AddLabelBig("dataCustom");
+			ui.AddLabel("someVar:" + ofToString(data->someVar));
+			ui.AddLabel("someString:" + ofToString(data->someString));
+			ui.AddLabel("color:" + ofToString(data->color));
+			ui.AddSpacingSeparated();
 
 			if (ui.AddButton("HELP")) {
-				c.help_();
 				s = "HELP";
 				addToLog(s);
+
+				c.help_();
 			}
 			if (ui.AddButton("CLEAR")) {
 				s = "CLEAR";
 				addToLog(s);
+				
 				c.clear_();
 			}
+			ui.AddSpacingSeparated();
 
+			ui.AddLabelBig("Post Commands");
 			ui.AddLabel("setColor");
 			if (ui.AddButton("red", OFX_IM_BUTTON, 2, true)) {
 				s = "setColor red";
@@ -58,6 +65,12 @@ void ofApp::draw()
 			if (ui.AddButton("blue", OFX_IM_BUTTON, 2)) {
 				s = "setColor blue";
 				c.addLineCommnand(s, data);
+			}
+
+			if (ui.AddButton("DO")) {
+				s = "DO #" + ofToString(ofGetFrameNum());
+				addToLog(s);
+				c.addLine(s);
 			}
 
 			ui.EndWindow();
