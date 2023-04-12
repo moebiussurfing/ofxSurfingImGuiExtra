@@ -6,10 +6,12 @@ void ofApp::setup()
 	ofxSurfingHelpers::setMonitorsLayout(1);
 
 	ui.setup();
+	e.setUiPtr(&ui);
+	bGui.set("ofApp", true);
 
 	//--
 
-	// We can activate one of the bundled Themes:
+	// We can force and activate one of the bundled Themes:
 	// Must be called after setup() to overwrite the default loaded theme.
 	//ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingBlue();
 
@@ -17,19 +19,93 @@ void ofApp::setup()
 
 #if(TEST_CUSTOM_FONTS==1) 
 	setupFonts();
-#endif
-
-	//--
-
-
 	bEnable.set("Enable", false);
 	amount.set("amount", 10, 0, 25);
+#endif
+
 }
 
 //--------------------------------------------------------------
+void ofApp::draw()
+{
+	ui.Begin();
+	{
+		// Main
+		drawWindowMain();
+
+		// Surfing Theme Editor
+		e.draw();
+
+		//--
+
+#if(TEST_CUSTOM_FONTS==1) 
+		// Stylized 
+		if (bOpenWindowStylizedFonts) drawWindowStylizedFonts();
+#endif
+	}
+	ui.End();
+}
+
+//--------------------------------------------------------------
+void ofApp::drawWindowMain()
+{
+	if (ui.BeginWindow(bGui))
+	{
+		ui.AddLabelBig("SurfingThemeEditor");
+		ui.Add(e.bGui, OFX_IM_TOGGLE);
+		ui.Add(e.bGui_ThemeSelector, OFX_IM_TOGGLE);
+		ui.Add(e.bGui_Demo, OFX_IM_TOGGLE);
+		ui.AddSpacingBig();
+		ui.Add(ui.bAutoResize, OFX_IM_TOGGLE_ROUNDED);
+		ui.AddSpacingBigSeparated();
+
+		//--
+
+		// Example widgets
+		e.drawDemoSurfingWidgets();
+
+		//--
+
+#if(TEST_CUSTOM_FONTS==1) 
+		ui.AddSpacingBigSeparated();
+
+		if (ui.Add(fontIndex))
+		{
+			//ui.setDefaultFontIndex(fontIndex);
+		}
+
+		s = ofToString(fontIndex) + "/" + ofToString(fontIndex.getMax());
+		ui.AddLabel(s.c_str());
+
+		s = ofToString(ui.getFontName(fontIndex));
+		ui.AddLabel(s.c_str());
+
+		//if (ImGui::Button("Set Font")) {
+		//	ui.setDefaultFontIndex(fontIndex);
+		//}
+
+		ui.AddSpacingBigSeparated();
+
+		ui.AddToggle("STYLIZED WINDOW", bOpenWindowStylizedFonts);
+
+		if (bOpenWindowStylizedFonts)
+		{
+			ui.AddSpacing();
+			ui.AddToggle("STYLIZE FONTS", bStyleFonts);
+			// -> will crash if styles are not queued!
+		}
+#endif
+
+		//--
+
+		ui.EndWindow();
+	}
+}
+
+#if(TEST_CUSTOM_FONTS==1) 
+//--------------------------------------------------------------
 void ofApp::setupFonts()
 {
-#if(TEST_CUSTOM_FONTS==1)
 
 	ui.clearFonts();
 
@@ -73,118 +149,11 @@ void ofApp::setupFonts()
 	int amt = ui.getNumFonts();
 	fontSize.set("Font Size", 10, 6, 30);
 	fontIndex.set("Font Index", 0, 0, amt - 1);
-
-#endif
 }
 
 //--------------------------------------------------------------
-void ofApp::draw()
+void ofApp::drawWindowStylizedFonts()
 {
-	ui.Begin();
-	{
-		// Main
-		drawWindowMain();
-
-		// Theme editor
-		if (bOpenThemeSelector) drawThemeSelector();
-
-#if(TEST_CUSTOM_FONTS==1) 
-		// Stylized 
-		if (bOpenWindowStylized) drawWindowStylized();
-#endif
-
-		// Surfing Theme editor
-		e.draw();
-	}
-	ui.End();
-}
-
-//--------------------------------------------------------------
-void ofApp::drawWindowMain()
-{
-	string s;
-
-	ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-	if (ui.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
-
-	if (ui.BeginWindow("Main Window", &bOpenWindowMain, window_flags))
-	{
-		ImVec2 sz1(ui.getWidgetsWidth(), ui.getWidgetsHeightUnit() * 1);
-		ImVec2 sz2(ui.getWidgetsWidth(), ui.getWidgetsHeightUnit() * 2 - ImGui::GetStyle().ItemSpacing.x);
-
-		ui.AddToggle("Theme Selector", bOpenThemeSelector, OFX_IM_TOGGLE);
-
-		ui.Add(e.bGui, OFX_IM_TOGGLE);
-		ui.Add(e.bGui_Demo, OFX_IM_TOGGLE);
-
-		ui.AddSpacingSeparated();
-
-		//--
-
-#if(TEST_CUSTOM_FONTS==1) 
-		ui.AddSpacingBigSeparated();
-
-		if (ui.Add(fontIndex))
-		{
-			//ui.setDefaultFontIndex(fontIndex);
-		}
-
-		s = ofToString(fontIndex) + "/" + ofToString(fontIndex.getMax());
-		ui.AddLabel(s.c_str());
-
-		s = ofToString(ui.getFontName(fontIndex));
-		ui.AddLabel(s.c_str());
-
-		//if (ImGui::Button("Set Font")) {
-		//	ui.setDefaultFontIndex(fontIndex);
-		//}
-
-		ui.AddSpacingBigSeparated();
-
-		ui.AddToggle("STYLIZED WINDOW", bOpenWindowStylized);
-
-		if (bOpenWindowStylized)
-		{
-			ui.AddSpacing();
-			ui.AddToggle("STYLIZE FONTS", bStyleFonts);
-			// -> will crash if styles are not queued!
-		}
-#endif
-		//--
-
-		// Example widgets
-		e.drawDemoSurfingWidgets(ui);
-
-		//--
-
-		ui.AddSpacingSeparated();
-
-		// a public bool variable to allow handle auto-resize. Applied here to all the windows.
-		ui.Add(ui.bAutoResize, OFX_IM_TOGGLE_ROUNDED_MINI);
-
-		//--
-
-		ui.EndWindow();
-	}
-}
-
-//--------------------------------------------------------------
-void ofApp::drawThemeSelector()
-{
-	ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-	if (ui.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
-
-	ImGui::Begin("Theme Selector", &bOpenThemeSelector, window_flags);
-	{
-		ofxImGuiSurfing::drawThemeSelector(NULL);
-	}
-	ImGui::End();
-}
-
-//--------------------------------------------------------------
-void ofApp::drawWindowStylized()
-{
-#if(TEST_CUSTOM_FONTS==1) 
 
 	// A window but using my ofxSurfingGui.h class helper
 	// Uses my own simpler helpers: 
@@ -203,7 +172,7 @@ void ofApp::drawWindowStylized()
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
 		if (ui.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
-		if (ui.BeginWindow("STYLIZED WINDOW", &bOpenWindowStylized, window_flags))
+		if (ui.BeginWindow("STYLIZED WINDOW", &bOpenWindowStylizedFonts, window_flags))
 		{
 			ui.AddToggle("STYLIZE FONTS", bStyleFonts);
 			// -> will crash if styles are not queued!
@@ -284,6 +253,6 @@ void ofApp::drawWindowStylized()
 		}
 	}
 	ImGui::PopStyleVar();
+}
 
 #endif
-}
