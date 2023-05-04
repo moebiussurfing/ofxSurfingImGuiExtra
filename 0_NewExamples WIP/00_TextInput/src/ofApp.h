@@ -1,5 +1,17 @@
-#pragma once
+/*
 
+	TODO
+
+	use imgui_stdlib.h
+	add anim show/hide
+	font sizes
+	one line text or multi line
+	responsive using ofRectangle
+
+*/
+
+
+#pragma once
 #include "ofMain.h"
 
 #include "ofxSurfingImGui.h"
