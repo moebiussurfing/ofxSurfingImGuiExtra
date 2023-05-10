@@ -1,72 +1,173 @@
 #include "ofApp.h"
 
 //--------------------------------------------------------------
+void ofApp::exit()
+{
+    ofxImGuiSurfing::saveGroup(g);
+}
+
+//--------------------------------------------------------------
 void ofApp::setup()
 {
-	ui.setup();
+    ofxImGuiSurfing::setMonitorsLayout(-1, true, true);
+
+    ui.setup();
+
+    g.add(bGui_Headers);
+    g.add(bGui_Bg);
+    g.add(bGui_ResizePin);
+    g.add(bGui_LockMove);
+    g.add(bGui_Toggle);
+    g.add(bGui_Button);
+    g.add(bGui_Slider);
+    g.add(bGui_Text);
+    g.add(szFont);
+    ofxImGuiSurfing::loadGroup(g);
+}
+
+//--------------------------------------------------------------
+void ofApp::drawImGui_Text()
+{
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(50, 50));
+    {
+        ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+        window_flags |= ImGuiWindowFlags_NoScrollbar;
+        if (!bGui_Bg) window_flags |= ImGuiWindowFlags_NoBackground;
+        if (!bGui_Headers) window_flags |= ImGuiWindowFlags_NoTitleBar;
+        if (!bGui_ResizePin) window_flags |= ImGuiWindowFlags_NoResize;
+        if (bGui_LockMove) window_flags |= ImGuiWindowFlags_NoMove;
+
+        if (ui.BeginWindow(bGui_Text, window_flags))
+        {
+            static bool isChanged = false;
+            static string text;
+
+            const char* label = "myLabel";
+            const char* hint = "MyHint";
+            std::string str = "";
+            ImGuiInputTextFlags flags = 0;
+            ImGuiInputTextCallback callback = NULL;
+            void* user_data = NULL;
+            if (!bGui_Label)label = " ";
+
+            ui.PushFont(SurfingFontTypes(szFont.get()));
+
+            isChanged = ImGui::InputTextWithHint(label, hint, &str, flags, callback, user_data);
+
+            ui.popStyleFont();
+
+            if (isChanged)
+            {
+                ui.AddToLog(text);
+            }
+
+            ui.EndWindow();
+        }
+    }
+    ImGui::PopStyleVar();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	ui.Begin();
-	{
-		static bool bReset = 0;
+    drawImGui();
+}
 
-		if (ui.BeginWindow(bGui))
-		{
-			ui.AddMinimizerToggle();
-			ui.AddAutoResizeToggle();
-			ui.AddSpacingBigSeparated();
+//--------------------------------------------------------------
+void ofApp::drawImGui()
+{
+    ui.Begin();
+    {
+        if (ui.BeginWindow(bGui))
+        {
+            ui.AddMinimizerToggle();
+            ui.AddLogToggle();
+            ui.AddDebugToggle();
+            ui.AddAutoResizeToggle();
+            ui.AddSpacingBigSeparated();
 
-			ui.AddLabelBig("Floating Slider");
-			ui.Add(bGui_ManualSlider);
-			ui.Add(bGui_ManualSliderHeader);
-			ui.Add(controlManual);
-			if (ui.AddButton("Reset")) {
-				bReset = 1;
-			};
-			ui.AddSpacingBigSeparated();
+            ui.AddLabelBig("Windows");
+            ui.Add(bGui_Headers, OFX_IM_TOGGLE_ROUNDED_MINI);
+            ui.Add(bGui_Bg, OFX_IM_TOGGLE_ROUNDED_MINI);
+            ui.Add(bGui_ResizePin, OFX_IM_TOGGLE_ROUNDED_MINI);
+            ui.Add(bGui_LockMove, OFX_IM_TOGGLE_ROUNDED_MINI);
+            ui.AddSpacingBigSeparated();
 
-			ui.Add(textA, OFX_IM_TEXT_INPUT);
-			ui.AddSpacingBigSeparated();
+            ui.AddLabelBig("Toggle");
+            ui.Add(bGui_Toggle);
+            ui.AddSpacingBigSeparated();
 
-			ui.Add(textB, OFX_IM_TEXT_INPUT_NAMED);
-			ui.AddSpacingBigSeparated();
+            ui.AddLabelBig("Buttons");
+            ui.Add(bGui_Button);
+            ui.AddSpacingBigSeparated();
 
-			ui.Add(textC, OFX_IM_TEXT_INPUT_NO_NAME);
-			ui.AddSpacingBigSeparated();
+            ui.AddLabelBig("Slider");
+            ui.Add(bGui_Slider);
+            if (bGui_Slider)
+            {
+                ui.Add(value);
+                if (ui.AddButton("Reset"))
+                {
+                    bResetSlider = 1;
+                };
+            }
+            ui.AddSpacingBigSeparated();
 
-			ui.EndWindow();
-		}
-	
-		if (bReset) {
-			bReset = 0;
-		doResetManualSlider();
-		}
-		draw_ImGui_ManualSlider();
-	}
-	ui.End();
+            ui.AddLabelBig("Text");
+            ui.Add(bGui_Text);
+            ui.Add(bGui_Label);
+            ui.Add(szFont);
+            ui.AddSpacingBigSeparated();
+
+            ui.Add(textA, OFX_IM_TEXT_INPUT);
+            ui.AddSpacingBigSeparated();
+
+            ui.Add(textB, OFX_IM_TEXT_INPUT_NAMED);
+            ui.AddSpacingBigSeparated();
+
+            ui.Add(textC, OFX_IM_TEXT_INPUT_NO_NAME);
+            ui.AddSpacingBigSeparated();
+
+            ui.EndWindow();
+        }
+
+        drawImGui_Text();
+        drawImGui_Slider();
+        drawImGui_Toggle();
+        drawImGui_Button();
+    }
+    ui.End();
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key)
 {
-	if (key == 'g') bGui = !bGui;
+    if (ui.isOverGui() || ui.isOverInputText()) return;
+
+    if (key == 'g') bGui = !bGui;
 }
 
 //--------------------------------------------------------------
-void ofApp::draw_ImGui_ManualSlider()
+void ofApp::drawImGui_Slider()
 {
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(40, 200));
-	{
-		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-		window_flags |= ImGuiWindowFlags_NoBackground;
-		window_flags |= ImGuiWindowFlags_NoScrollbar;
-		if (!bGui_ManualSliderHeader) window_flags |= ImGuiWindowFlags_NoTitleBar;
+    if (bResetSlider)
+    {
+        bResetSlider = 0;
+        doResetSlider();
+    }
 
-		if (ui.BeginWindow(bGui_ManualSlider, window_flags))
-		{
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(40, 200));
+    {
+        ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+        window_flags |= ImGuiWindowFlags_NoScrollbar;
+        if (!bGui_Bg) window_flags |= ImGuiWindowFlags_NoBackground;
+        if (!bGui_Headers) window_flags |= ImGuiWindowFlags_NoTitleBar;
+        if (!bGui_ResizePin) window_flags |= ImGuiWindowFlags_NoResize;
+        if (bGui_LockMove) window_flags |= ImGuiWindowFlags_NoMove;
+
+        if (ui.BeginWindow(bGui_Slider, window_flags))
+        {
+#if 0
 			// markers zones
 			float x1, x2, gap, yy, ww, hh;
 			ww = ofxImGuiSurfing::getPanelWidth();
@@ -87,63 +188,134 @@ void ofApp::draw_ImGui_ManualSlider()
 
 			yy = p.y + 0.66 * hh;
 			draw_list->AddLine(ImVec2(x1, yy), ImVec2(x2, yy), ImGui::GetColorU32(cm), linew);
+#endif
+            //--
 
-			//-
+            // v slider
 
-			// v slider
+            auto c = ImGui::GetStyle().Colors[ImGuiCol_WindowBg];
+            ImVec4 _cBg = ImVec4(c.x, c.y, c.z, c.w * 0.2);
+            ImGui::PushStyleColor(ImGuiCol_SliderGrab, cRange);
+            ImGui::PushStyleColor(ImGuiCol_SliderGrabActive, cRangeRaw);
+            ImGui::PushStyleColor(ImGuiCol_FrameBg, _cBg);
+            ImGui::PushStyleColor(ImGuiCol_FrameBgActive, _cBg);
+            ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, _cBg);
+            {
+                ImVec2 sz = ImVec2(-1.f, -1.f);
+                bool bNoName = true;
+                bool bNoNumber = true;
+                ofxImGuiSurfing::AddVSlider(value, sz, bNoName, bNoNumber);
+            }
+            ImGui::PopStyleColor(5);
 
-			auto c = ImGui::GetStyle().Colors[ImGuiCol_WindowBg];
-			ImVec4 _cBg = ImVec4(c.x, c.y, c.z, c.w * 0.2);
-			ImGui::PushStyleColor(ImGuiCol_SliderGrab, cRange);
-			ImGui::PushStyleColor(ImGuiCol_SliderGrabActive, cRangeRaw);
-			ImGui::PushStyleColor(ImGuiCol_FrameBg, _cBg);
-			ImGui::PushStyleColor(ImGuiCol_FrameBgActive, _cBg);
-			ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, _cBg);
-			{
-				ImVec2 sz = ImVec2(-1.f, -1.f);
-				bool bNoName = true;
-				bool bNoNumber = true;
-				ofxImGuiSurfing::AddVSlider(controlManual, sz, bNoName, bNoNumber);
-			}
-			ImGui::PopStyleColor(5);
-
-			ui.EndWindow();
-		}
-	}
-	ImGui::PopStyleVar();
+            ui.EndWindow();
+        }
+    }
+    ImGui::PopStyleVar();
 }
 
+//--------------------------------------------------------------
+void ofApp::doResetSlider()
+{
+    float xx, yy, ww, hh, pad;
+
+    pad = 20;
+    ww = 200 - 2 * ImGui::GetStyle().WindowPadding.x;
+    hh = ofGetHeight() - 2 * pad;
+    xx = ofGetWidth() - ww - pad;
+    yy = pad;
+
+    ImGuiCond flagsCond = ImGuiCond_None;
+    flagsCond |= ImGuiCond_FirstUseEver;
+
+    flagsCond = ImGuiCond_None;
+
+    ImGui::SetNextWindowSize(ImVec2(ww, hh), flagsCond);
+    ImGui::SetNextWindowPos(ImVec2(xx, yy), flagsCond);
+}
+
+//--
 
 //--------------------------------------------------------------
-void ofApp::doResetManualSlider()
+void ofApp::drawImGui_Toggle()
 {
-	float gx, gy, gw, gh, ww, hh, pad;
-	pad = 10;
-	gw = ofGetWidth() - 2 * pad;
-	gx = pad;
-	gy = pad;
-	ww = gw;
-	hh = 50;
-	ofRectangle rectPreview(ofRectangle(gx, gy, gw, hh)); // initialize
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(40, 200));
+    {
+        ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+        window_flags |= ImGuiWindowFlags_NoScrollbar;
+        if (!bGui_Bg) window_flags |= ImGuiWindowFlags_NoBackground;
+        if (!bGui_Headers) window_flags |= ImGuiWindowFlags_NoTitleBar;
+        if (!bGui_ResizePin) window_flags |= ImGuiWindowFlags_NoResize;
+        if (bGui_LockMove) window_flags |= ImGuiWindowFlags_NoMove;
 
+        if (ui.BeginWindow(bGui_Toggle, window_flags))
+        {
+            float w = ofxImGuiSurfing::getPanelWidth();
+            float h = ofxImGuiSurfing::getPanelHeight();
+            ImVec2 sz = ImVec2(w, h);
 
-	// panels sizes
-	float xx;
-	float yy;
-	int padx = 10;
-	int pady = 10;
-	int pady2 = 50;
+            int iFont = ofMap(h, 0, ofGetHeight() * RATIO_WIDGETS_FONTS, 0, 3, true);
+            ui.PushFont(SurfingFontTypes(iFont));
 
-	ImGuiCond flagsCond = ImGuiCond_None;
-	flagsCond |= ImGuiCond_FirstUseEver;
+            auto c = ImGui::GetStyle().Colors[ImGuiCol_WindowBg];
+            ImVec4 _cBg = ImVec4(c.x, c.y, c.z, c.w * 0.2);
+            ImGui::PushStyleColor(ImGuiCol_SliderGrab, cRange);
+            ImGui::PushStyleColor(ImGuiCol_SliderGrabActive, cRangeRaw);
+            ImGui::PushStyleColor(ImGuiCol_FrameBg, _cBg);
+            ImGui::PushStyleColor(ImGuiCol_FrameBgActive, _cBg);
+            ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, _cBg);
+            {
+                bool bBorder = true;
+                bool bBlink = true;
+                ofxImGuiSurfing::AddBigToggle(bToggle, sz, bBorder, bBlink);
+            }
+            ImGui::PopStyleColor(5);
 
-	ww = 150;
-	xx = ofGetWidth() - ww - padx;
-	yy = rectPreview.getBottomRight().y + pady;
-	hh = ofGetHeight() - yy - pady;
+            ui.popStyleFont();
 
-	flagsCond = ImGuiCond_None;
+            ui.EndWindow();
+        }
+    }
+    ImGui::PopStyleVar();
+}
 
-	ImGui::SetNextWindowSize(ImVec2(ww, hh), flagsCond);
-	ImGui::SetNextWindowPos(ImVec2(xx, yy), flagsCond);
+//--------------------------------------------------------------
+void ofApp::drawImGui_Button()
+{
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(40, 200));
+    {
+        ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+        window_flags |= ImGuiWindowFlags_NoScrollbar;
+        if (!bGui_Bg) window_flags |= ImGuiWindowFlags_NoBackground;
+        if (!bGui_Headers) window_flags |= ImGuiWindowFlags_NoTitleBar;
+        if (!bGui_ResizePin) window_flags |= ImGuiWindowFlags_NoResize;
+        if (bGui_LockMove) window_flags |= ImGuiWindowFlags_NoMove;
+
+        if (ui.BeginWindow(bGui_Button, window_flags))
+        {
+            float w = ofxImGuiSurfing::getPanelWidth();
+            float h = ofxImGuiSurfing::getPanelHeight();
+            ImVec2 sz = ImVec2(w, h);
+
+            int iFont = ofMap(h, 0, ofGetHeight() * RATIO_WIDGETS_FONTS, 0, 3, true);
+            ui.PushFont(SurfingFontTypes(iFont));
+
+            auto c = ImGui::GetStyle().Colors[ImGuiCol_WindowBg];
+            ImVec4 _cBg = ImVec4(c.x, c.y, c.z, c.w * 0.2);
+            ImGui::PushStyleColor(ImGuiCol_SliderGrab, cRange);
+            ImGui::PushStyleColor(ImGuiCol_SliderGrabActive, cRangeRaw);
+            ImGui::PushStyleColor(ImGuiCol_FrameBg, _cBg);
+            ImGui::PushStyleColor(ImGuiCol_FrameBgActive, _cBg);
+            ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, _cBg);
+            if (ofxImGuiSurfing::AddBigButton(vButton, sz))
+            {
+            }
+            ImGui::PopStyleColor(5);
+
+            ui.popStyleFont();
+
+            ui.EndWindow();
+        }
+    }
+    ImGui::PopStyleVar();
 }
