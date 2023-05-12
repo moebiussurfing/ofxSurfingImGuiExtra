@@ -21,22 +21,31 @@ void ofApp::setup()
 	params_Bubble.add(szFont);
 	params_Bubble.add(bLabel);
 	params_Bubble.add(padxBubble, padyBubble);
-	params_Bubble.add(padxText, padyText);
-	//params_Bubble.add(scalex);
+	params_Bubble.add(padxText);
+	params_Bubble.add(padxTextR);
+	params_Bubble.add(padyText);
 	params_Bubble.add(typeInput);
+	params_Bubble.add(typeInputName);
 	params_Bubble.add(vResetBubble);
 	g.add(params_Bubble);
 
-	eventResetBubble = vResetBubble.newListener([this]() {
-		//rounded = 1;
-		padxBubble = padyBubble = 0;
-		padxText = 0;
-		//padxText = 0.1;
-		padyText = 0;
-		//scalex = 0;
-
+	eResetBubble = vResetBubble.newListener([this]() {
 		bResetBubble = 1;
 		});
+
+	eTypeInput = typeInput.newListener([this](int& value) {
+		switch (typeInput.get())
+		{
+		case 0: typeInputName = typeInputNames[0]; break;
+		case 1: typeInputName = typeInputNames[1]; break;
+		case 2: typeInputName = typeInputNames[2]; break;
+		default: break;
+		}
+		});
+
+	ui.AddStyle(typeInputName, OFX_IM_TEXT_DISPLAY);
+
+	//--
 
 	ofxImGuiSurfing::loadGroup(g);
 }
@@ -57,7 +66,7 @@ void ofApp::drawImGui_TextInput()
 
 		static float x, y, w, h;
 
-		ImVec2 size_min = ImVec2(230, 150);
+		ImVec2 size_min = ImVec2(600, 100);
 		ImVec2 size_max = ImVec2(FLT_MAX, FLT_MAX);
 		ImGui::SetNextWindowSizeConstraints(size_min, size_max);
 
@@ -70,9 +79,9 @@ void ofApp::drawImGui_TextInput()
 
 		if (ui.BeginWindow(bGui_TextInput, window_flags))
 		{
-			////TODO: remove pad
+			//TODO: remove pad
 			//RemoveHeaderHeight();
-			//ofxImGuiSurfing::AddSpacingY(ImGui::GetStyle().WindowPadding.y);
+			//if (!bGui_Headers) ofxImGuiSurfing::AddSpacingY(ImGui::GetStyle().WindowPadding.y);
 
 			if (!bGui_Headers) AddHeaderHeight();
 
@@ -108,126 +117,153 @@ void ofApp::drawImGui_TextInput()
 			static bool isChanged = false;
 
 			float xx, yy;
+			float _wBb;
+			float _padr;
 
 			w = ImGui::GetContentRegionAvail().x;
 			h = ImGui::GetContentRegionAvail().y;
 
 			ui.PushFont(SurfingFontTypes(szFont.get()));
 			{
-				ImDrawList* draw_list = ImGui::GetWindowDrawList();
-
-				ImVec2 p = ImGui::GetCursorScreenPos();
-				ImDrawFlags flags = ImDrawFlags_None;
-
-				float pxBubble = padxBubble * (w / 4);
-				float pyBubble = padyBubble * (h / 4);
-
-				x = p.x + pxBubble;
-				y = p.y + pyBubble;
-
-				w -= 2 * pxBubble;
-				h -= 2 * pyBubble;
-
-				w -= 2 * padxBubble;
-				h -= 2 * padyBubble;
-
-				ImRect r(x, y, w, h);
-
-				float round = rounded * (h / 2);
-
-				ImU32 col = ImGui::GetColorU32(colorBubble.get());
-				//ImU32 col = IM_COL32(colorBubble.get().r, colorBubble.get().g, colorBubble.get().b, colorBubble.get().a);
-				//ImU32 col = ImGui::GetColorU32(ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
-				//ImU32 col = IM_COL32(255, 0, 0, 255);
-
-				draw_list->AddRectFilled(r.Min, r.Min + r.Max, col, round);
-
-				float _hh = ui.getWidgetsHeightUnit();
-
-				// _offsetx to center in the bubble
-				xx = ImGui::GetCursorPosX();
-				yy = ImGui::GetCursorPosY();
-
-				xx += padxText * (w / 4);
-				//xx += _offsetx;
-				xx += pxBubble;
-
-				yy += h / 2;
-				yy += padyText * (h / 4);
-				yy += pyBubble;
-
-				float hl = ui.getWidgetsHeightUnit();
-				yy -= hl / 2;
-
-				////TODO:
-				//if (bDebug) {
-				//	ImRect r2(10, 10, 50, 50);
-				//	//ImRect r2(xx, yy, _ww, _hh);
-				//	draw_list->AddRect(r2.Min, r2.Min + r2.Max, IM_COL32(255, 0, 0, 255), 0);
-				//}
-
-				//float _offsetx = scalex * (w / 2);
-				//float _ww = w - 2 * _offsetx;
-
-				//TODO:
-				float _ww = w;
-				_ww -= padxText * (w / 4);
-				//_ww -= pxBubble/2;
-				//float _ww = w - pxBubble;
-				//float _ww = w - 2 * pxBubble;
-
-				//--
-
-				ImGui::SetCursorPosX(xx);
-				ImGui::SetCursorPosY(yy);
-
-				//--
-
-				if (!bLabel) label = "##label";
-				bool _bBlink = bBlink && (text == "");
-
-				PushItemWidth(_ww);
 				{
-					if (_bBlink) ui.BeginBlinkTextDisabled();
-					if (bIntegrate)
-					{
-						ImVec4 c = ImVec4(0, 0, 0, 0);//transparent
-						ImGui::PushStyleColor(ImGuiCol_Border, c);
-						ImGui::PushStyleColor(ImGuiCol_FrameBg, c);
-					}
+					ImDrawList* draw_list = ImGui::GetWindowDrawList();
 
-					if (typeInput == 0)
-					{
-						// A
-						isChanged = ImGui::InputText(label, &text, flags, callback, user_data);
-					}
-					else if (typeInput == 1)
-					{
-						// B
-						isChanged = ImGui::InputTextWithHint(label, hint, &text, flags, callback, user_data);
-					}
-					else if (typeInput == 2)
-					{
-						// C
-						_hh = 2 * ui.getWidgetsHeightUnit();//two lines
-						//ui.AddSpacingY(-_hh / 2);
-						ImVec2 _sz = ImVec2(_ww, _hh);
-						ImGuiInputTextFlags _flags = ImGuiInputTextFlags_None;
-						//_flags |= ImGuiInputTextFlags_CallbackResize;
-						isChanged = ImGui::InputTextMultiline(label, &text, _sz, _flags, callback, user_data);
-					}
+					ImVec2 p = ImGui::GetCursorScreenPos();
+					ImDrawFlags flags = ImDrawFlags_None;
 
-					if (bIntegrate) ImGui::PopStyleColor(2);
-					if (_bBlink) ui.EndBlinkTextDisabled();
+					float pxBubble = padxBubble * (w * 0.25f);
+					float pyBubble = padyBubble * (h * 0.25f);
+
+					x = p.x + pxBubble;
+					y = p.y + pyBubble;
+
+					w -= 2 * pxBubble;
+					h -= 2 * pyBubble;
+
+					w -= 2 * padxBubble;
+					h -= 2 * padyBubble;
+
+					ImRect r(x, y, w, h);
+
+					float round = rounded * (h / 2);
+
+					ImU32 col = ImGui::GetColorU32(colorBubble.get());
+					//ImU32 col = IM_COL32(colorBubble.get().r, colorBubble.get().g, colorBubble.get().b, colorBubble.get().a);
+					//ImU32 col = ImGui::GetColorU32(ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
+					//ImU32 col = IM_COL32(255, 0, 0, 255);
+
+					draw_list->AddRectFilled(r.Min, r.Min + r.Max, col, round);
+
+					float _hh = ui.getWidgetsHeightUnit();
+
+					// _offsetx to center in the bubble
+					xx = ImGui::GetCursorPosX();
+					yy = ImGui::GetCursorPosY();
+
+					xx += padxText * (w * 0.25f);
+					//xx += _offsetx;
+					xx += pxBubble;
+
+					yy += h / 2;
+					yy += padyText * (h * 0.25f);
+					yy += pyBubble;
+
+					float hl = ui.getWidgetsHeightUnit();
+					yy -= hl / 2;
+
+					////TODO:
+					//if (bDebug) {
+					//	ImRect r2(10, 10, 50, 50);
+					//	//ImRect r2(xx, yy, _ww, _hh);
+					//	draw_list->AddRect(r2.Min, r2.Min + r2.Max, IM_COL32(255, 0, 0, 255), 0);
+					//}
+
+					//float _offsetx = scalex * (w / 2);
+					//float _ww = w - 2 * _offsetx;
+
+					//TODO:
+					_wBb = w;
+					_wBb -= padxText * (w * 0.25f);
+
+					_padr = ofMap(padxTextR, 1, 0, 0, w * 0.25);
+					_wBb -= _padr;
+					//_wBb -= pxBubble/2;
+
+					//--
+
+					ImGui::SetCursorPosX(xx);
+					ImGui::SetCursorPosY(yy);
+
+					//--
+
+					if (!bLabel) label = "##label";
+					bool _bBlink = bBlink && (text == "");
+
+					PushItemWidth(_wBb);
+					{
+						if (_bBlink) ui.BeginBlinkTextDisabled();
+						if (bIntegrate)
+						{
+							ImVec4 c = ImVec4(0, 0, 0, 0);//transparent
+							ImGui::PushStyleColor(ImGuiCol_Border, c);
+							ImGui::PushStyleColor(ImGuiCol_FrameBg, c);
+						}
+
+						if (typeInput == 0)
+						{
+							// A
+							isChanged = ImGui::InputText(label, &text, flags, callback, user_data);
+						}
+						else if (typeInput == 1)
+						{
+							// B
+							isChanged = ImGui::InputTextWithHint(label, hint, &text, flags, callback, user_data);
+						}
+						else if (typeInput == 2)
+						{
+							// C
+							_hh = 2 * ui.getWidgetsHeightUnit();//two lines
+							ui.AddSpacingY(-_hh * 0.25);
+							ImVec2 _sz = ImVec2(_wBb, _hh);
+							ImGuiInputTextFlags _flags = ImGuiInputTextFlags_None;
+							//_flags |= ImGuiInputTextFlags_CallbackResize;
+							isChanged = ImGui::InputTextMultiline(label, &text, _sz, _flags, callback, user_data);
+						}
+
+						if (bIntegrate) ImGui::PopStyleColor(2);
+						if (_bBlink) ui.EndBlinkTextDisabled();
+					}
+					PopItemWidth();
 				}
-				PopItemWidth();
-			}
+				//ui.popStyleFont();
 
+				//--
+
+				// Button
+				{
+					string s = "Send";
+					ImVec2 szButton(30 + ImGui::CalcTextSize(s.c_str()).x, ui.getWidgetsHeightUnit());
+					ImGui::SetCursorPosX(xx + _wBb + 0.2 * szButton.x);
+					ImGui::SetCursorPosY(yy);
+					ImVec4 c = ImGui::GetStyle().Colors[ImGuiCol_Text];
+					//ImVec4 _c = ImGui::GetStyle().Colors[ImGuiCol_TextDisabled];
+					ImVec4 _c= ImVec4(c.x, c.y, c.z, c.w * 0.6);
+					ImGui::PushStyleColor(ImGuiCol_Text, _c);
+					if (ImGui::Button(s.c_str(), szButton))
+					{
+						ui.AddToLog(text, OF_LOG_WARNING);
+						//isChanged = true;
+						text = "";
+					};
+					ImGui::PopStyleColor();
+				}
+			}
 			ui.popStyleFont();
 
 			//--
 
 			//TODO:
+			/*
 			if (bButtons)
 			{
 				ImGui::SetCursorPosX(xx);
@@ -245,6 +281,7 @@ void ofApp::drawImGui_TextInput()
 					text = "";
 				};
 			}
+			*/
 
 			// Get enter
 			bool b = ImGui::GetIO().WantTextInput;
@@ -270,14 +307,24 @@ void ofApp::drawImGui_TextInput()
 //--------------------------------------------------------------
 void ofApp::doResetTextInput()
 {
+	rounded = 1;
+	padxBubble = padyBubble = 0;
+	padxText = 0.3;
+	padxTextR = 0.2;
+	typeInput = 1;
+	szFont = 2;
+	colorBubble = ofColor(0, 100);
+
+	//--
+
 	float xx, yy, ww, hh, pad;
 
-	pad = 50;
+	pad = 120;//to borders
+	hh = 175;//height
 
-	ww = ofGetWidth() - 2 * pad;
-	hh = 300;
+	ww = ofGetWidth() - 2 * pad;//width
 	xx = pad;
-	yy = ofGetHeight() / 2 - hh / 2;
+	yy = ofGetHeight() / 2 - hh / 2;//v centered
 
 	ImGuiCond flagsCond = ImGuiCond_None;
 	flagsCond |= ImGuiCond_FirstUseEver;
@@ -301,12 +348,12 @@ void ofApp::drawImGui()
 		if (ui.BeginWindow(bGui))
 		{
 			ui.AddMinimizerToggle();
-			ui.AddLogToggle();
-			ui.AddDebugToggle();
-			ui.AddAutoResizeToggle();
-			ui.AddSpacingBigSeparated();
-
 			if (ui.isMaximized()) {
+				ui.AddLogToggle();
+				ui.AddDebugToggle();
+				ui.AddAutoResizeToggle();
+				ui.AddSpacingBigSeparated();
+
 				ui.AddLabelBig("Windows");
 				ui.Add(bGui_Headers, OFX_IM_TOGGLE_ROUNDED);
 				ui.Add(bGui_Bg, OFX_IM_TOGGLE_ROUNDED);
@@ -333,8 +380,8 @@ void ofApp::drawImGui()
 						bResetSlider = 1;
 					};
 				}
-				ui.AddSpacingBigSeparated();
 			}
+			ui.AddSpacingBigSeparated();
 
 			ui.AddLabelBig("Text");
 			ui.Add(bGui_TextInput);
@@ -436,8 +483,8 @@ void ofApp::drawImGui_Slider()
 			if (bColorize) ImGui::PopStyleColor(5);
 
 			ui.EndWindow();
+		}
 	}
-}
 	ImGui::PopStyleVar();
 }
 
@@ -555,7 +602,8 @@ void ofApp::drawImGui_Button()
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key)
 {
-	if (ui.isOverGui() || ui.isOverInputText()) return;
+	if (ui.isOverInputText()) return;
+	//if (ui.isOverGui()) return;
 
 	if (key == 'g') bGui = !bGui;
 	if (key == 'h') bGui_Headers = !bGui_Headers;

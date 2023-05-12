@@ -71,18 +71,21 @@ public:
 	ofParameter<float> padxBubble{ "padxBubble", 0.f, 0, 1 };
 	ofParameter<float> padyBubble{ "padyBubble", 0.f, 0, 1 };
 	ofParameter<float> padxText{ "padxText", 0.f, 0, 1 };
+	ofParameter<float> padxTextR{ "padxTextR", 1.f, 0, 1 };
 	ofParameter<float> padyText{ "padyText", 0.f, -1, 1 };
-	//ofParameter<float> scalex{ "scalex", 0, 0, 1 };
 	ofParameter<int> typeInput{ "Type", 0, 0, 2 };
+	ofParameter<string> typeInputName{ "TypeName" ,""};
 	ofParameter<void> vResetBubble{ "Reset" };
-	ofEventListener eventResetBubble;
+	ofEventListener eResetBubble;
+	ofEventListener eTypeInput;
 	bool bResetBubble = 0;
-
-	ofParameterGroup g{ "ofApp" };
+	vector<string> typeInputNames{"InputText","InputTextWithHint","InputTextMultiline"};
 
 	bool bColorize = false;//slider
 	bool bBlink = 1;//text bubble
-	bool bIntegrate = 0;
+	bool bIntegrate = 1;
 	bool bButtons = 1;
 	bool bDebug = 0;
+
+	ofParameterGroup g{ "ofApp" };
 };
