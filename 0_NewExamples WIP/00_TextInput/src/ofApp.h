@@ -67,11 +67,16 @@ public:
 	ofParameter<int> szFont{ "Font Size", 0, 0, 3 };
 	ofParameter<float>  rounding{ "Round", 0, 0, 1 };
 	ofParameter<ofColor> colorBubble{ "color Bubble", ofColor::red, ofColor(), ofColor() };
-	ofParameter<float>  padx{ "padx", 50, 0, 100 };
-	ofParameter<float>  pady{ "pady", 50, 0, 100 };
-	ofParameter<float>  spacingx{ "spacingx", 50, 0, 100 };
-	ofParameter<float>  spacingy{ "spacingy", 50, 0, 100 };
+	ofParameter<float>  padx{ "padx", .5f, 0, 1 };
+	ofParameter<float>  pady{ "pady", .5f, 0, 1 };
+	ofParameter<float>  spacingx{ "spacingx", .5f, 0, 1 };
+	ofParameter<float>  spacingy{ "spacingy", .5f, 0, 1 };
 	ofParameter<float>  scale{ "scale", 0, 0, 1 };
 
 	ofParameterGroup g{ "ofApp" };
+
+	bool bColorize = false;
+	bool bBlink = false;
+	bool bIntegrate = true;
+	bool bButtons= true;
 };
