@@ -9,6 +9,7 @@
 class BigTextInput
 {
 public:
+	ofParameter<bool> bGui_Global{ "BigTextInput", true };//TODO:
 	ofParameter<bool> bGui_Config{ "Config", true };
 	ofParameter<bool> bGui{ "TextInput", true };
 	ofParameterGroup params{ "TextInputBubble" };
@@ -122,6 +123,7 @@ public:
 			ui.AddStyle(typeInputName, OFX_IM_TEXT_DISPLAY);
 			ui.AddStyle(vResetBubble, OFX_IM_BUTTON_BIG);
 		}
+
 		drawImGui_Config(ui);
 		drawImGui_TextInput(ui);
 	};
