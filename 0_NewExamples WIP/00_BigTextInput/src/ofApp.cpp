@@ -7,6 +7,9 @@ void ofApp::setup()
 
 	ui.setup();
 
+	bigTextInput.setPathGlobal("Gpt");
+	bigTextInput.setName("Prompt");
+	
 	bigTextInput.setHint("Type search");
 }
 
@@ -30,9 +33,8 @@ void ofApp::drawImGui()
 				ui.AddAutoResizeToggle();
 				ui.AddSpacingBigSeparated();
 
-				ui.AddLabelBig("InputText");
-				ui.Add(bigTextInput.bGui);
-				ui.Add(bigTextInput.bGui_Config);
+				ui.Add(bigTextInput.bGui, OFX_IM_TOGGLE_ROUNDED);
+				ui.Add(bigTextInput.bGui_Config,OFX_IM_TOGGLE_ROUNDED);
 			}
 
 			ui.EndWindow();
