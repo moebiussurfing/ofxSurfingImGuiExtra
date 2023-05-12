@@ -7,7 +7,7 @@
 	font sizes
 	one line text or multi line
 	responsive using ofRectangle
-	substract window header 
+	substract window header
 		to correlate hide/show header
 	add anim show/hide
 
@@ -59,24 +59,30 @@ public:
 	ofParameter<string> textB{ "TextB","" };
 	ofParameter<string> textC{ "TextC","" };
 
-	ofParameter<bool> bGui_Text{ "Text", true };
-	void drawImGui_Text();
+	ofParameter<bool> bGui_TextInput{ "Text", true };
+	void drawImGui_TextInput();
+	void doResetTextInput();
 
 	ofParameterGroup params_Bubble{ "Bubble" };
 	ofParameter<bool> bLabel{ "Label", true };
 	ofParameter<int> szFont{ "Font Size", 0, 0, 3 };
-	ofParameter<float>  rounding{ "Round", 0, 0, 1 };
+	ofParameter<float> rounded{ "Rounded", 0, 0, 1 };
 	ofParameter<ofColor> colorBubble{ "color Bubble", ofColor::red, ofColor(), ofColor() };
-	ofParameter<float>  padx{ "padx", .5f, 0, 1 };
-	ofParameter<float>  pady{ "pady", .5f, 0, 1 };
-	ofParameter<float>  spacingx{ "spacingx", .5f, 0, 1 };
-	ofParameter<float>  spacingy{ "spacingy", .5f, 0, 1 };
-	ofParameter<float>  scale{ "scale", 0, 0, 1 };
+	ofParameter<float> padxBubble{ "padxBubble", 0.f, 0, 1 };
+	ofParameter<float> padyBubble{ "padyBubble", 0.f, 0, 1 };
+	ofParameter<float> padxText{ "padxText", 0.f, 0, 1 };
+	ofParameter<float> padyText{ "padyText", 0.f, -1, 1 };
+	//ofParameter<float> scalex{ "scalex", 0, 0, 1 };
+	ofParameter<int> typeInput{ "Type", 0, 0, 2 };
+	ofParameter<void> vResetBubble{ "Reset" };
+	ofEventListener eventResetBubble;
+	bool bResetBubble = 0;
 
 	ofParameterGroup g{ "ofApp" };
 
-	bool bColorize = false;
-	bool bBlink = false;
-	bool bIntegrate = true;
-	bool bButtons= true;
+	bool bColorize = false;//slider
+	bool bBlink = 1;//text bubble
+	bool bIntegrate = 0;
+	bool bButtons = 1;
+	bool bDebug = 0;
 };
