@@ -827,9 +827,9 @@
                   "uri": "file:///C:/Users/moebi/OneDrive/Documents/openFrameworks/addons/ofxSurfingImGui/src/ImGui/WindowLog.h"
                 },
                 "region": {
-                  "startLine": 1252,
+                  "startLine": 1254,
                   "startColumn": 20,
-                  "endLine": 1252,
+                  "endLine": 1254,
                   "endColumn": 62
                 }
               },
@@ -1289,7 +1289,7 @@
             "resultFile"
           ],
           "hashes": {
-            "sha-256": "89d8dc9b4c9ef7dfea4392dab55c2252d01a0c447a16b37421e82200fd1db300"
+            "sha-256": "34db1e4c956dfb3d85e91a80cb28ecf65209a8e46e81b0a4ccbed3af6a0eee73"
           }
         },
         {
@@ -7154,7 +7154,7 @@
             "uri": "file:///c:/users/moebi/onedrive/documents/openframeworks/addons/ofxsurfingimgui/src/imgui/widgets/guisugar.h"
           },
           "hashes": {
-            "sha-256": "902f31007030f683319cceaf2a8a972699f95cf876d9f38fc8144361482c6d54"
+            "sha-256": "a7f45099a9a16487de2d22854c971dcfb7c2aefee999d385c398345d42dd4697"
           }
         },
         {
@@ -7162,7 +7162,7 @@
             "uri": "file:///c:/users/moebi/onedrive/documents/openframeworks/addons/ofxsurfingimgui/src/imgui/widgets/guiconstants.h"
           },
           "hashes": {
-            "sha-256": "54e4642b136d37c7eec96307883b45546e8d0827aeb1ee1e077c093ffe251239"
+            "sha-256": "9dc966f954f944fda0ee637216a728ef64fe3a4702e18e6b70085273e215de6b"
           }
         },
         {
@@ -7170,7 +7170,7 @@
             "uri": "file:///c:/users/moebi/onedrive/documents/openframeworks/addons/ofxsurfingimgui/src/imgui/utils/surfinghelpers.h"
           },
           "hashes": {
-            "sha-256": "76950399928b147eea3fb8e98642343a86b766c515e2435b385c2f5099fd60fa"
+            "sha-256": "4ef13d22cd4e7fd1eb24458dfe2be4b15d386b492d122005014e7fa9211310af"
           }
         },
         {

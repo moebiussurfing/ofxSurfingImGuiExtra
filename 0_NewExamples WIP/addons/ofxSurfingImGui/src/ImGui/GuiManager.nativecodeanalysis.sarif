@@ -827,9 +827,9 @@
                   "uri": "file:///C:/Users/moebi/OneDrive/Documents/openFrameworks/addons/ofxSurfingImGui/src/ImGui/WindowLog.h"
                 },
                 "region": {
-                  "startLine": 1252,
+                  "startLine": 1254,
                   "startColumn": 20,
-                  "endLine": 1252,
+                  "endLine": 1254,
                   "endColumn": 62
                 }
               },
@@ -1496,9 +1496,9 @@
                 },
                 "region": {
                   "startLine": 362,
-                  "startColumn": 13,
+                  "startColumn": 7,
                   "endLine": 362,
-                  "endColumn": 39
+                  "endColumn": 33
                 }
               },
               "logicalLocations": [
@@ -1524,9 +1524,9 @@
                 },
                 "region": {
                   "startLine": 373,
-                  "startColumn": 13,
+                  "startColumn": 7,
                   "endLine": 373,
-                  "endColumn": 39
+                  "endColumn": 33
                 }
               },
               "logicalLocations": [
@@ -1552,9 +1552,9 @@
                 },
                 "region": {
                   "startLine": 408,
-                  "startColumn": 13,
+                  "startColumn": 7,
                   "endLine": 408,
-                  "endColumn": 39
+                  "endColumn": 33
                 }
               },
               "logicalLocations": [
@@ -1580,9 +1580,9 @@
                 },
                 "region": {
                   "startLine": 419,
-                  "startColumn": 13,
+                  "startColumn": 7,
                   "endLine": 419,
-                  "endColumn": 39
+                  "endColumn": 33
                 }
               },
               "logicalLocations": [
@@ -1608,9 +1608,9 @@
                 },
                 "region": {
                   "startLine": 453,
-                  "startColumn": 13,
+                  "startColumn": 7,
                   "endLine": 453,
-                  "endColumn": 39
+                  "endColumn": 33
                 }
               },
               "logicalLocations": [
@@ -1636,9 +1636,9 @@
                 },
                 "region": {
                   "startLine": 464,
-                  "startColumn": 13,
+                  "startColumn": 7,
                   "endLine": 464,
-                  "endColumn": 39
+                  "endColumn": 33
                 }
               },
               "logicalLocations": [
@@ -1664,9 +1664,9 @@
                 },
                 "region": {
                   "startLine": 499,
-                  "startColumn": 13,
+                  "startColumn": 7,
                   "endLine": 499,
-                  "endColumn": 39
+                  "endColumn": 33
                 }
               },
               "logicalLocations": [
@@ -1692,9 +1692,9 @@
                 },
                 "region": {
                   "startLine": 510,
-                  "startColumn": 13,
+                  "startColumn": 7,
                   "endLine": 510,
-                  "endColumn": 39
+                  "endColumn": 33
                 }
               },
               "logicalLocations": [
@@ -1719,10 +1719,10 @@
                   "uri": "file:///C:/Users/moebi/OneDrive/Documents/openFrameworks/addons/ofxSurfingImGui/src/ImGui/GuiManager.h"
                 },
                 "region": {
-                  "startLine": 684,
-                  "startColumn": 13,
-                  "endLine": 684,
-                  "endColumn": 39
+                  "startLine": 690,
+                  "startColumn": 7,
+                  "endLine": 690,
+                  "endColumn": 33
                 }
               },
               "logicalLocations": [
@@ -1747,10 +1747,10 @@
                   "uri": "file:///C:/Users/moebi/OneDrive/Documents/openFrameworks/addons/ofxSurfingImGui/src/ImGui/GuiManager.h"
                 },
                 "region": {
-                  "startLine": 701,
-                  "startColumn": 13,
-                  "endLine": 701,
-                  "endColumn": 39
+                  "startLine": 707,
+                  "startColumn": 7,
+                  "endLine": 707,
+                  "endColumn": 33
                 }
               },
               "logicalLocations": [
@@ -1775,10 +1775,10 @@
                   "uri": "file:///C:/Users/moebi/OneDrive/Documents/openFrameworks/addons/ofxSurfingImGui/src/ImGui/GuiManager.h"
                 },
                 "region": {
-                  "startLine": 1764,
-                  "startColumn": 17,
-                  "endLine": 1764,
-                  "endColumn": 57
+                  "startLine": 1821,
+                  "startColumn": 11,
+                  "endLine": 1821,
+                  "endColumn": 51
                 }
               },
               "logicalLocations": [
@@ -1803,9 +1803,9 @@
                   "uri": "file:///C:/Users/moebi/OneDrive/Documents/openFrameworks/addons/ofxSurfingImGui/src/ImGui/GuiManager.cpp"
                 },
                 "region": {
-                  "startLine": 21,
+                  "startLine": 20,
                   "startColumn": 6,
-                  "endLine": 21,
+                  "endLine": 20,
                   "endColumn": 46
                 }
               },
@@ -1831,7 +1831,33 @@
                   "uri": "file:///C:/Users/moebi/OneDrive/Documents/openFrameworks/addons/ofxSurfingImGui/src/ImGui/GuiManager.cpp"
                 },
                 "region": {
-                  "startLine": 471,
+                  "startLine": 465,
+                  "startColumn": 13
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "SurfingGuiManager::setupFontDefault",
+                  "decoratedName": "?setupFontDefault@SurfingGuiManager@@AEAAXXZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26444",
+          "message": {
+            "text": "Don't try to declare a local variable with no name (es.84)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/moebi/OneDrive/Documents/openFrameworks/addons/ofxSurfingImGui/src/ImGui/GuiManager.cpp"
+                },
+                "region": {
+                  "startLine": 484,
                   "startColumn": 13
                 }
               },
@@ -1857,7 +1883,7 @@
                   "uri": "file:///C:/Users/moebi/OneDrive/Documents/openFrameworks/addons/ofxSurfingImGui/src/ImGui/GuiManager.cpp"
                 },
                 "region": {
-                  "startLine": 513,
+                  "startLine": 519,
                   "startColumn": 13
                 }
               },
@@ -1883,7 +1909,7 @@
                   "uri": "file:///C:/Users/moebi/OneDrive/Documents/openFrameworks/addons/ofxSurfingImGui/src/ImGui/GuiManager.cpp"
                 },
                 "region": {
-                  "startLine": 1747,
+                  "startLine": 1862,
                   "startColumn": 14
                 }
               },
@@ -1909,9 +1935,9 @@
                   "uri": "file:///C:/Users/moebi/OneDrive/Documents/openFrameworks/addons/ofxSurfingImGui/src/ImGui/GuiManager.cpp"
                 },
                 "region": {
-                  "startLine": 3511,
+                  "startLine": 3650,
                   "startColumn": 48,
-                  "endLine": 3511,
+                  "endLine": 3650,
                   "endColumn": 52
                 }
               },
@@ -2371,7 +2397,7 @@
             "resultFile"
           ],
           "hashes": {
-            "sha-256": "89d8dc9b4c9ef7dfea4392dab55c2252d01a0c447a16b37421e82200fd1db300"
+            "sha-256": "34db1e4c956dfb3d85e91a80cb28ecf65209a8e46e81b0a4ccbed3af6a0eee73"
           }
         },
         {
@@ -2426,7 +2452,7 @@
             "resultFile"
           ],
           "hashes": {
-            "sha-256": "8c6f277d32c3fd2aff0ba9aa97722b15c70ffc37b3dfc81374e6410d27c00238"
+            "sha-256": "a83cacf49ee73f365e5073e85153f01375487e1ffacff498e278dc21b31ffc6d"
           }
         },
         {
@@ -2438,7 +2464,7 @@
             "resultFile"
           ],
           "hashes": {
-            "sha-256": "d006334847766a6ebece5f20faae176a03baf6ebf40c3795df90f668e18b4f05"
+            "sha-256": "ac9c4e65259d89affc3f00bfccf6ccab502bae3842f7508b9a8fc82cbdb358ca"
           }
         },
         {
@@ -8284,7 +8310,7 @@
             "uri": "file:///c:/users/moebi/onedrive/documents/openframeworks/addons/ofxsurfingimgui/src/imgui/widgets/guisugar.h"
           },
           "hashes": {
-            "sha-256": "902f31007030f683319cceaf2a8a972699f95cf876d9f38fc8144361482c6d54"
+            "sha-256": "a7f45099a9a16487de2d22854c971dcfb7c2aefee999d385c398345d42dd4697"
           }
         },
         {
@@ -8292,7 +8318,7 @@
             "uri": "file:///c:/users/moebi/onedrive/documents/openframeworks/addons/ofxsurfingimgui/src/imgui/widgets/guiconstants.h"
           },
           "hashes": {
-            "sha-256": "54e4642b136d37c7eec96307883b45546e8d0827aeb1ee1e077c093ffe251239"
+            "sha-256": "9dc966f954f944fda0ee637216a728ef64fe3a4702e18e6b70085273e215de6b"
           }
         },
         {
@@ -8300,7 +8326,7 @@
             "uri": "file:///c:/users/moebi/onedrive/documents/openframeworks/addons/ofxsurfingimgui/src/imgui/utils/surfinghelpers.h"
           },
           "hashes": {
-            "sha-256": "76950399928b147eea3fb8e98642343a86b766c515e2435b385c2f5099fd60fa"
+            "sha-256": "4ef13d22cd4e7fd1eb24458dfe2be4b15d386b492d122005014e7fa9211310af"
           }
         },
         {
