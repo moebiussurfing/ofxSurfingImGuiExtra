@@ -167,6 +167,7 @@ void SurfingImCoolbar::setup(ofxImGui::Gui& ui) {
 		ui.addFontFromMemory(FONT_ICON_BUFFER_NAME_IGFD, 18.f, &icons_config, icons_ranges);
 	}
 #endif
+#endif
 
 	const std::vector<std::string> icons_name = {
 		"Settings",   //
@@ -191,7 +192,6 @@ void SurfingImCoolbar::setup(ofxImGui::Gui& ui) {
 	for (const auto& name : icons_name) {
 		_appDatas.textures.push_back(std::make_pair(name, loadTexture(ofToDataPath("res/" + name + ".png"))));
 	}
-#endif
 
 	bDoneSetup = 1;
 }
