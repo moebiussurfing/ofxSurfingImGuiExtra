@@ -1,12 +1,13 @@
 #pragma once
-
 #include "ofMain.h"
 
 #include "ofxSurfingImGui.h"
+#include "SurfingImCoolbar.h"
 
 class ofApp : public ofBaseApp
 {
 public:
+	void setup();
 	void draw();
 	void keyPressed(int key);
 
@@ -17,5 +18,6 @@ public:
 	ofParameter<float> speed{ "Speed", .5f, 0.f, 1.f };
 	ofParameter<string> name{ "Name", ""};
 	ofParameterGroup params{ "MyParamGroup", bEnable, speed, name };
-
+	
+	SurfingImCoolbar bar;
 };

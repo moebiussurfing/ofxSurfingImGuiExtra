@@ -1,4 +1,7 @@
-﻿// dear imgui: standalone example application for GLFW + OpenGL 3, using programmable pipeline
+﻿#pragma once
+#include "ofMain.h"
+
+// dear imgui: standalone example application for GLFW + OpenGL 3, using programmable pipeline
 // If you are new to dear imgui, see examples/README.txt and documentation at the top of imgui.cpp.
 // (GLFW is a cross-platform general purpose library for handling windows, inputs, OpenGL/Vulkan graphics context creation, etc.)
 
@@ -19,15 +22,12 @@
 #include <vector>
 #include <array>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
 
-
-class SurfImCoolbar
+class SurfingImCoolbar
 {
 public:
-	SurfImCoolbar();
-	~SurfImCoolbar();
+	SurfingImCoolbar();
+	~SurfingImCoolbar();
 
 	int display_w, display_h;
 
@@ -49,5 +49,8 @@ public:
 	void drawCoolBar(AppDatas& vAppDatas, const size_t& vMaxIcons, const char* vLabel, const ImCoolBarFlags& vFlags = ImCoolBarFlags_Vertical, const ImGui::ImCoolBarConfig& vConfig = {});
 	void setup();
 	void draw();
+
+	AppDatas _appDatas;
+	GLuint background_id;
 
 };
