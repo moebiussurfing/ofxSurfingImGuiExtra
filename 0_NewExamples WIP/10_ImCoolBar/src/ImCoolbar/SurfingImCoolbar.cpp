@@ -132,16 +132,41 @@ void SurfingImCoolbar::drawCoolBar(AppDatas& vAppDatas, const size_t& vMaxIcons,
 	}
 }
 
-void SurfingImCoolbar::setup() {
+void SurfingImCoolbar::setup(ofxImGui::Gui& ui) {
 	ofLogNotice(__FUNCTION__);
 
+#ifndef SURF_DISABLE_FONTS
+#if 0
 	// load icon font file (CustomFont.cpp)
 	ImGui::GetIO().Fonts->AddFontDefault();
+
 	static const ImWchar icons_ranges[] = { ICON_MIN_IGFD, ICON_MAX_IGFD, 0 };
 	ImFontConfig icons_config;
 	icons_config.MergeMode = true;
 	icons_config.PixelSnapH = true;
 	ImGui::GetIO().Fonts->AddFontFromMemoryCompressedBase85TTF(FONT_ICON_BUFFER_NAME_IGFD, 50.0f, &icons_config, icons_ranges);
+#else
+	//if (ui != nullptr)
+	{
+		ImGui::GetIO().Fonts->AddFontDefault();
+
+		static const ImWchar icons_ranges[] = { ICON_MIN_IGFD, ICON_MAX_IGFD, 0 };
+		ImFontConfig icons_config;
+		icons_config.MergeMode = true;
+		icons_config.PixelSnapH = true;
+		ImGui::GetIO().Fonts->AddFontFromMemoryCompressedBase85TTF(FONT_ICON_BUFFER_NAME_IGFD, 50.0f, &icons_config, icons_ranges);
+
+		//// Add fontawesome fonts by merging new glyphs
+		//ImFontConfig config;
+		//config.MergeMode = true;
+		//config.GlyphMinAdvanceX = 13.0f; // Use if you want to make the icon monospaced
+		//static const ImWchar icon_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
+
+		//TODO: add AddFontFromMemoryCompressedBase85TTF to ofxImGui
+		//addFontFromMemory(void* fontData, int fontDataSize, float fontSize, const ImFontConfig* _fontConfig, const ImWchar* _glyphRanges, bool _setAsDefaultFont )
+		ui.addFontFromMemory(FONT_ICON_BUFFER_NAME_IGFD, 18.f, &icons_config, icons_ranges);
+	}
+#endif
 
 	const std::vector<std::string> icons_name = {
 		"Settings",   //
@@ -157,19 +182,26 @@ void SurfingImCoolbar::setup() {
 		"GeoGebra"    //
 	};
 
-	background_id = loadTexture(ofToDataPath("res/desert.jpg"));
 	//background_id = loadTexture("res/desert.jpg");
+	//for (const auto& name : icons_name) {
+	//	_appDatas.textures.push_back(std::make_pair(name, loadTexture("res/" + name + ".png")));
+	//}
 
+	background_id = loadTexture(ofToDataPath("res/desert.jpg"));
 	for (const auto& name : icons_name) {
 		_appDatas.textures.push_back(std::make_pair(name, loadTexture(ofToDataPath("res/" + name + ".png"))));
-		//_appDatas.textures.push_back(std::make_pair(name, loadTexture("res/" + name + ".png")));
 	}
+#endif
+
+	bDoneSetup = 1;
 }
 
 void SurfingImCoolbar::draw() {
 	//ofLogNotice(__FUNCTION__);
 
-	drawBackground(background_id);
+	if (!bDoneSetup) return;
+
+	if (bBg) drawBackground(background_id);
 
 	drawCoolBar(_appDatas, 11, "Top##CoolBarMainWin", ImCoolBarFlags_Horizontal, { ImVec2(0.5f, 0.0f), 50.0f, 100.0f });
 	drawCoolBar(_appDatas, 6, "Left##CoolBarMainWin", ImCoolBarFlags_Vertical, { ImVec2(0.0f, 0.5f), 50.0f, 100.0f });
@@ -185,11 +217,11 @@ void SurfingImCoolbar::draw() {
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2());
 		ImGui::PopStyleVar();
 		font_ptr->Scale = ImGui::GetCoolBarItemScale();
-		ImGui::Button(label, ImVec2(w, w));
+		bool b = ImGui::Button(label, ImVec2(w, w));
 		font_ptr->Scale = ref_font_scale;
 		ImGui::PopFont();
 
-		ofLogNotice(__FUNCTION__) << label;
+		if (b) ofLogNotice(__FUNCTION__) << label;
 	};
 
 	static ImGui::ImCoolBarConfig _config;

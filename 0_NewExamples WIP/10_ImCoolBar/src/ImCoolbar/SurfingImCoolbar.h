@@ -1,5 +1,8 @@
 ﻿#pragma once
 #include "ofMain.h"
+#include "ofxSurfingImGui.h"
+
+#define SURF_DISABLE_FONTS
 
 // dear imgui: standalone example application for GLFW + OpenGL 3, using programmable pipeline
 // If you are new to dear imgui, see examples/README.txt and documentation at the top of imgui.cpp.
@@ -47,10 +50,13 @@ public:
 	};
 
 	void drawCoolBar(AppDatas& vAppDatas, const size_t& vMaxIcons, const char* vLabel, const ImCoolBarFlags& vFlags = ImCoolBarFlags_Vertical, const ImGui::ImCoolBarConfig& vConfig = {});
-	void setup();
+	void setup(ofxImGui::Gui &ui);
 	void draw();
 
 	AppDatas _appDatas;
 	GLuint background_id;
+
+	bool bBg = 0;
+	bool bDoneSetup = 0;
 
 };
