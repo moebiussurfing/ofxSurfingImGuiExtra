@@ -27,8 +27,8 @@ SOFTWARE.
 #include "CentralPane.h"
 
 #include <LayoutManager/LayoutManager.h>
-#include "ofxImGui.h"
 #define IMGUI_DEFINE_MATH_OPERATORS
+#include "ofxImGui.h"
 #include <imgui_internal.h>
 
 CentralPane::CentralPane() = default;

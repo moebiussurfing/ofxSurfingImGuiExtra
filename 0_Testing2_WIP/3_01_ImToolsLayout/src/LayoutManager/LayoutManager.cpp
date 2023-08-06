@@ -30,7 +30,7 @@ SOFTWARE.
 #include <ctools/FileHelper.h>
 #include <ctools/cTools.h>
 
-#define IMGUI_DEFINE_MATH_OPERATORS
+//#define IMGUI_DEFINE_MATH_OPERATORS
 //#include <imgui/imgui_internal.h>
 
 LayoutManager::LayoutManager() = default;
