@@ -25,7 +25,7 @@ public:
 
 	//--
 
-	//ofxSurfingGui ui;
+	ofxSurfingGui ui_;
 	
 	//std::unique_ptr<ofxSurfingGui> ui;
 	//void setUiPtr(std::unique_ptr<ofxSurfingGui> _ui);
