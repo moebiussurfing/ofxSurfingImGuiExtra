@@ -11,6 +11,7 @@
 
 #include "ofMain.h"
 
+//#define OFXIMGUI_DEBUG
 #include "ofxSurfingImGui.h"
 
 #include "myClassA.h"
@@ -23,16 +24,12 @@ public:
 	void draw();
 	void keyPressed(int key);
 
-	ofParameterGroup params;
+	ofParameterGroup parameters;
 	ofParameter<bool> bEnable1;
-	ofParameter<bool> bEnable2;
-	ofParameter<bool> bEnable3;
 	ofParameter<void> bPrevious;
 	ofParameter<void> bNext;
 	ofParameter<float> lineWidth;
 	ofParameter<float> separation;
-	ofParameter<float> speed;
-	ofParameter<int> shapeType;
 	ofParameter<int> amount;
 	ofParameter<int> size;
 

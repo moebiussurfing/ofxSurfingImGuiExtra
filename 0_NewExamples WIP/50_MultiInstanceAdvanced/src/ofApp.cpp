@@ -39,6 +39,22 @@ void ofApp::draw()
 {
 	if (!bGui) return; // this is the global show visible toggle
 
+	//--
+
+	// custom styles
+	static bool b = 1;
+	if (b) {
+		b = 0;
+		ui.ClearStyles();
+		ui.AddStyle(bPrevious, OFX_IM_BUTTON_SMALL, 2, true);
+		ui.AddStyle(bNext, OFX_IM_BUTTON_SMALL, 2, false);
+		ui.AddStyle(bEnable1, OFX_IM_TOGGLE_SMALL_BORDER_BLINK);
+		ui.AddStyle(bEnable2, OFX_IM_TOGGLE_SMALL_BORDER_BLINK);
+		ui.AddStyle(bEnable3, OFX_IM_TOGGLE_SMALL_BORDER_BLINK);
+	}
+
+	//--
+
 	ui.Begin();
 	{
 		if (ui.BeginWindow(bGui))
@@ -56,6 +72,7 @@ void ofApp::draw()
 			// (Or independent if do not shares the ui.)
 			ui.AddMinimizerToggle();
 			ui.AddAutoResizeToggle();
+			ui.AddDebugToggle();
 			//ui.AddAdvancedToggle();
 			ui.AddSpacingBigSeparated();
 
@@ -152,6 +169,10 @@ void ofApp::draw()
 		// but using the local instantiated ofxSurfingGui object! 
 		// (There´s not an ofxSurfingImGui ui internally instantiated in the class object! Neither a referenced pointer stored.)
 		D.draw(&ui);
+
+		//--
+
+		if (ui.bDebug) ui.getGuiPtr()->drawOfxImGuiDebugWindow();
 	}
 	ui.End();
 

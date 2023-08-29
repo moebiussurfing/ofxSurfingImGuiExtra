@@ -3,36 +3,43 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	params.setName("paramsGroup");
-	params.add(bPrevious.set("<"));
-	params.add(bNext.set(">"));
-	params.add(bEnable1.set("Enable1", false));
-	params.add(bEnable2.set("Enable2", false));
-	params.add(bEnable3.set("Enable3", false));
-	params.add(lineWidth.set("lineWidth", 0.5, 0, 1));
-	params.add(separation.set("separation", 50, 1, 100));
-	params.add(speed.set("speed", 0.5, 0, 1));
-	params.add(shapeType.set("shapeType", 0, -50, 50));
-	params.add(size.set("size", 100, 0, 100));
-	params.add(amount.set("amount", 10, 0, 25));
+	parameters.setName("paramsGroup");
+	parameters.add(bPrevious.set("<"));
+	parameters.add(bNext.set(">"));
+	parameters.add(bEnable1.set("Enable1", false));
+	parameters.add(lineWidth.set("lineWidth", 0.5, 0, 1));
+	parameters.add(separation.set("separation", 50, 1, 100));
+	parameters.add(size.set("size", 100, 0, 100));
+	parameters.add(amount.set("amount", 10, 0, 25));
 
 	//--
 
 	//ui.setName("ofApp"); // Optional naming to separate settings folders and avoid sharing some ui states.
-	ui.setup(); // Can be omitted in many scenarios..
+#if 0
+	// Can be omitted in many scenarios..
+	ui.setup(); 
+	ui.startup();
+#endif
 
 	//--
 
+#ifdef SURFING_USE_INSTANCE2
+	A.setup();
+#endif
+
+#ifdef SURFING_USE_REFERENCED
+	A.setup();
 	A.setUiPtr(&ui);
+#endif
 
 	//--
-	
+
 	//// Advanced
 	//callback_t myFunctionDraw = std::bind(&ofApp::drawWidgets, this);
 	////std::function<void()> myFunctionDraw = std::bind(&ofApp::drawWidgets, this);
 	//C.setDrawWidgetsFunction(myFunctionDraw);
 
-	ui.startup();
+	//ui.startup();
 }
 
 //--------------------------------------------------------------
@@ -44,6 +51,20 @@ void ofApp::update()
 void ofApp::draw()
 {
 	if (!bGui) return; // this is the global show visible toggle
+
+	//--
+
+	// custom styles
+	static bool b = 1;
+	if (b) {
+		b = 0;
+		ui.ClearStyles();
+		ui.AddStyle(bPrevious, OFX_IM_BUTTON_SMALL, 2, true);
+		ui.AddStyle(bNext, OFX_IM_BUTTON_SMALL, 2, false);
+		ui.AddStyle(bEnable1, OFX_IM_TOGGLE_SMALL_BORDER_BLINK);
+	}
+
+	//--
 
 	ui.Begin();
 	{
@@ -62,7 +83,9 @@ void ofApp::draw()
 			// (Or independent if do not shares the ui.)
 			ui.AddMinimizerToggle();
 			ui.AddAutoResizeToggle();
-			ui.AddAdvancedToggle();
+			ui.AddDebugToggle();
+			//ui.AddAdvancedToggle();
+
 			ui.AddSpacingBigSeparated();
 
 			//ui.DrawWidgetsGlobalScaleMini();
@@ -85,7 +108,7 @@ void ofApp::draw()
 
 			ui.AddLabel("These are exposed \nor public ofParams \nfrom the classes objects \nbut populated here");
 
-			if (ui.isMaximized()) 
+			if (ui.isMaximized())
 			{
 				ui.AddSpacingBigSeparated();
 
@@ -97,21 +120,7 @@ void ofApp::draw()
 				// (but we could queue custom styles for each param too 
 				// that will be applied when populating the group widgets)
 				// Note that these ofParams are local in ofApp.
-				ui.AddGroup(params);
-
-				//--
-
-				// This is a ofParam widget but customized instead of using the default styled
-				//ImGui::PushItemWidth(50);
-				//mGui::SetNextItemWidth(50);
-				ui.Add(amount, OFX_IM_VSLIDER, 3);
-				ui.SameLine();
-				ui.Add(separation, OFX_IM_VSLIDER, 3);
-				//ui.Add(separation, OFX_IM_VSLIDER, 3);
-				//ImGui::PopItemWidth();
-
-				// This is a ofParam widget but customized instead of using the default styled
-				//ui.Add(bPrevious, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
+				ui.AddGroup(parameters);
 			}
 
 			//--
@@ -119,11 +128,19 @@ void ofApp::draw()
 			ui.EndWindow();
 		}
 
-		A.drawImGuiWindow();
+		//--
+
+		//A.drawImGuiWindow();
+
+		//--
+
+		if (ui.bDebug) ui.getGuiPtr()->drawOfxImGuiDebugWindow();
 	}
 	ui.End();
 
-	//A.draw();
+	//--
+
+	A.drawImGui();
 }
 
 //--------------------------------------------------------------
