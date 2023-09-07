@@ -58,8 +58,8 @@ void SurfingDockingManager::draw()
 	size = ImVec2(ofGetWindowSize());
 	mainFrame.Display(size);
 
-	// Insert external widgets if already settled!
-	if (functionDraw != nullptr) functionDraw();
+	//// Insert external widgets if already settled!
+	//if (functionDraw != nullptr) functionDraw();
 }
 
 void SurfingDockingManager::exit() 

@@ -31,6 +31,7 @@ SOFTWARE.
 
 #include <LayoutManager/LayoutManager.h>
 
+// Panels classes
 #include "LeftPane.h"
 #include "RightPane.h"
 #include "BottomPane.h"
@@ -40,10 +41,13 @@ SOFTWARE.
 
 void MainFrame::Init()
 {
-	LoadConfigFile(ofToDataPath("config.xml"));
 	//LoadConfigFile("config.xml");
-	
+	LoadConfigFile(ofToDataPath(pathSettings));
+
+	// Distribute Default Layout.
+	// Will be resolved automatically when the app is first opened.
 	LayoutManager::Instance()->Init("Layouts", "Default Layout");
+
 	LayoutManager::Instance()->AddPane(LeftPane::Instance(), "Left", (1 << 0), PaneDisposal::LEFT, true, true);
 	LayoutManager::Instance()->AddPane(RightPane::Instance(), "Right", (1 << 1), PaneDisposal::RIGHT, true, true);
 	LayoutManager::Instance()->AddPane(BottomPane::Instance(), "Bottom", (1 << 2), PaneDisposal::BOTTOM, true, true);
@@ -54,8 +58,8 @@ void MainFrame::Init()
 
 void MainFrame::Unit()
 {
-	SaveConfigFile(ofToDataPath("config.xml"));
 	//SaveConfigFile("config.xml");
+	SaveConfigFile(ofToDataPath(pathSettings));
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -65,15 +69,21 @@ static int _widgetId = 8953;
 
 void MainFrame::Display(ImVec2 vSize)
 {
-	// Menu
+	// Top Menu
 
 	if (ImGui::BeginMainMenuBar())
 	{
+		//--
+
 		// 1st column
+		
 		// All the visible toggles
 		LayoutManager::Instance()->DisplayMenu(vSize);
 
+		//--
+
 		// 2nd column
+
 		if (ImGui::BeginMenu("ImGui"))
 		{
 			ImGui::MenuItem("Show ImGui", "", &m_ShowImGui);
@@ -82,13 +92,18 @@ void MainFrame::Display(ImVec2 vSize)
 			ImGui::EndMenu();
 		}
 
+		//--
+
 		// 3rd column. right aligned
+		 
 		// ImGui Infos
 		auto io = ImGui::GetIO();
 		const auto label = ct::toStr("Dear ImGui %s (Docking)", ImGui::GetVersion());
 		const auto size = ImGui::CalcTextSize(label.c_str());
 		ImGui::ItemSize(ImVec2(ImGui::GetContentRegionAvail().x - size.x - ImGui::GetStyle().FramePadding.x * 2.0f, 0));
 		ImGui::Text("%s", label.c_str());
+
+		//--
 
 		ImGui::EndMainMenuBar();
 	}
@@ -99,19 +114,28 @@ void MainFrame::Display(ImVec2 vSize)
 
 	if (LayoutManager::Instance()->BeginDockSpace(ImGuiDockNodeFlags_PassthruCentralNode))
 	{
+		//TODO:
 		//MainFrame::sCentralWindowHovered |= LayoutManager::Instance()->IsDockSpaceHoleHovered();
 
 		LayoutManager::Instance()->EndDockSpace();
 	}
 
-	// all panels
+	//--
+
+	// All panels
+	
 	_widgetId = LayoutManager::Instance()->DisplayPanes(_widgetId);
+
+	//--
 
 	LayoutManager::Instance()->InitAfterFirstDisplay(vSize);
 
 	LayoutManager::Instance()->DrawDialogsAndPopups();
 
-	// more windows
+	//--
+
+	// More windows
+	
 	if (m_ShowImGui) ImGui::ShowDemoWindow(&m_ShowImGui);
 	if (m_ShowMetric) ImGui::ShowMetricsWindow(&m_ShowMetric);
 }
@@ -127,7 +151,7 @@ std::string MainFrame::getXml(const std::string& vOffset, const std::string& vUs
 	std::string str;
 
 	str += LayoutManager::Instance()->getXml(vOffset, "app");
-	
+
 	return str;
 }
 
@@ -141,12 +165,10 @@ bool MainFrame::setFromXml(tinyxml2::XMLElement* vElem, tinyxml2::XMLElement* vP
 	std::string strParentName;
 
 	strName = vElem->Value();
-	if (vElem->GetText())
-		strValue = vElem->GetText();
-	if (vParent != 0)
-		strParentName = vParent->Value();
+	if (vElem->GetText()) strValue = vElem->GetText();
+	if (vParent != 0) strParentName = vParent->Value();
 
 	LayoutManager::Instance()->setFromXml(vElem, vParent, "app");
-	
+
 	return true;
 }

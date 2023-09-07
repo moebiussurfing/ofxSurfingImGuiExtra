@@ -1,3 +1,16 @@
+/*
+
+	This example is an exploration of ImTools / LayoutManager class
+	to check if it's useful to create some docking helpers.
+
+	TODO
+
+	- get center rectangle to draw a viewport.
+	- manually layout save/load. 
+
+*/
+
+
 
 #pragma once
 #include "ofMain.h"
@@ -6,7 +19,6 @@
 
 #include "ofxSurfingImGui.h"
 
-// Required for the advanced feature
 #include <functional>
 using callback_t = std::function<void()>;
 

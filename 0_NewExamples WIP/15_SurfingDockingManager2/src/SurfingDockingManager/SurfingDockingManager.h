@@ -6,9 +6,8 @@
 #include "ofxSurfingImGui.h"
 #include "MainFrame.h"
 
-// Required for the advanced feature
-#include <functional>
-using callback_t = std::function<void()>;
+//#include <functional>
+//using callback_t = std::function<void()>;
 
 class SurfingDockingManager
 {
@@ -30,11 +29,11 @@ public:
 
 	//--
 
-	// Pointer to store a function
-	callback_t functionDraw = nullptr;
+	//// Pointer to store a function
+	//callback_t functionDraw = nullptr;
 
-	// Set external widgets to be inserted!
-	void setDrawWidgetsFunction(callback_t f = nullptr) {
-		functionDraw = f;
-	};
+	//// Set external widgets to be inserted!
+	//void setDrawWidgetsFunction(callback_t f = nullptr) {
+	//	functionDraw = f;
+	//}
 };

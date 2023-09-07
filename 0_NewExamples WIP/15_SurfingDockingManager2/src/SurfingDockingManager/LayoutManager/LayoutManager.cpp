@@ -41,11 +41,11 @@ LayoutManager::LayoutManager() = default;
 LayoutManager::~LayoutManager() = default;
 
 void LayoutManager::AddPane(
-	AbstractPane *vPane,
+	AbstractPane* vPane,
 	const char* vName,
 	PaneFlags vFlag,
 	PaneDisposal vPaneDisposal,
-	bool vIsOpenedDefault, 
+	bool vIsOpenedDefault,
 	bool vIsFocusedDefault)
 {
 	assert(vFlag); // flag != 0
@@ -53,7 +53,7 @@ void LayoutManager::AddPane(
 	assert(vName && strlen(vName)); // vPane->m_PaneName not nullptr
 	assert(m_PanesByName.find(vName) == m_PanesByName.end()); // pane name not already exist
 	assert(m_PanesByFlag.find(vFlag) == m_PanesByFlag.end()); // pane flag not already exist
-	
+
 	vPane->m_PaneName = vName;
 	vPane->m_PaneFlag = vFlag;
 	vPane->m_PaneDisposal = vPaneDisposal;
@@ -91,15 +91,18 @@ void LayoutManager::Init(const char* vMenuLabel, const char* vDefautlMenuLabel)
 	strncpy(m_DefaultMenuLabel, vDefautlMenuLabel, ct::mini((size_t)PANE_NAME_BUFFER_SIZE, strlen(vDefautlMenuLabel)));
 #endif
 
-	//TODO:
-	//if(0)
 	//if (!FileHelper::Instance()->IsFileExist("imgui.ini"))
+	//{
+	//	m_FirstLayout = true; // need default layout
+	//	LogVarDebug("We will apply default layout :)");
+	//}
+	
+	//TODO:
 	bool b = ofFile().doesFileExist(ofToDataPath("../imgui.ini"));
-	if(b)
+	if (!b)
 	{
 		m_FirstLayout = true; // need default layout
-		ofLogWarning("We will apply default layout :)");
-		//LogVarDebug("We will apply default layout :)");
+		ofLogWarning(__FUNCTION__) << "We will apply default layout.";
 	}
 }
 
@@ -210,34 +213,34 @@ void LayoutManager::ApplyInitialDockingLayout(ImVec2 vSize)
 	{
 		switch (pane.second->m_PaneDisposal)
 		{
-			case PaneDisposal::CENTRAL:
-			{
-				ImGui::DockBuilderDockWindow(pane.first, dockMainID);
-				break;
-			}
-			case PaneDisposal::LEFT:
-			{
-				ImGui::DockBuilderDockWindow(pane.first, dockLeftID);
-				break;
-			}
-			case PaneDisposal::RIGHT:
-			{
-				ImGui::DockBuilderDockWindow(pane.first, dockRightID);
-				break;
-			}
-			case PaneDisposal::BOTTOM:
-			{
-				ImGui::DockBuilderDockWindow(pane.first, dockBottomID);
-				break;
-			}
-			case PaneDisposal::TOP:
-			{
-				ImGui::DockBuilderDockWindow(pane.first, dockTopID);
-				break;
-			}
+		case PaneDisposal::CENTRAL:
+		{
+			ImGui::DockBuilderDockWindow(pane.first, dockMainID);
+			break;
+		}
+		case PaneDisposal::LEFT:
+		{
+			ImGui::DockBuilderDockWindow(pane.first, dockLeftID);
+			break;
+		}
+		case PaneDisposal::RIGHT:
+		{
+			ImGui::DockBuilderDockWindow(pane.first, dockRightID);
+			break;
+		}
+		case PaneDisposal::BOTTOM:
+		{
+			ImGui::DockBuilderDockWindow(pane.first, dockBottomID);
+			break;
+		}
+		case PaneDisposal::TOP:
+		{
+			ImGui::DockBuilderDockWindow(pane.first, dockTopID);
+			break;
+		}
 		};
 	}
-	
+
 	ImGui::DockBuilderFinish(m_DockSpaceID);
 
 	m_Pane_Shown = m_Pane_Opened_Default; // will show when pane will be passed
@@ -251,17 +254,17 @@ static bool LayoutManager_MenuItem(const char* label, const char* shortcut, T* v
 {
 	bool selected = *vContainer & vFlag;
 	const bool res = ImGui::MenuItem(label, shortcut, &selected, true);
-	if (res) 
+	if (res)
 	{
-		if (selected) 
+		if (selected)
 		{
-			if (vOnlyOneSameTime) 
+			if (vOnlyOneSameTime)
 				*vContainer = vFlag; // set
-			else 
+			else
 				*vContainer = (T)(*vContainer | vFlag);// add
 		}
-		else if (!vOnlyOneSameTime) 
-				*vContainer = (T)(*vContainer & ~vFlag); // remove
+		else if (!vOnlyOneSameTime)
+			*vContainer = (T)(*vContainer & ~vFlag); // remove
 	}
 	return res;
 }
@@ -286,7 +289,7 @@ void LayoutManager::DisplayMenu(ImVec2 vSize)
 				LayoutManager_MenuItem<PaneFlags>(buffer, "", &m_Pane_Shown, pane->m_PaneFlag);
 			}
 		}
-		
+
 		ImGui::EndMenu();
 	}
 }
@@ -378,24 +381,24 @@ void LayoutManager::AddSpecificPaneToExisting(const char* vNewPane, const char* 
 //// PRIVATE //////////////////////////////////////////
 ///////////////////////////////////////////////////////
 
-bool LayoutManager::IsSpecificPaneFocused(const char *vlabel)
+bool LayoutManager::IsSpecificPaneFocused(const char* vlabel)
 {
 	ImGuiWindow* window = ImGui::FindWindowByName(vlabel);
 	if (window)
 	{
-		return 
-			window->DockTabIsVisible || 
+		return
+			window->DockTabIsVisible ||
 			window->ViewportOwned;
 	}
 	return false;
 }
 
-void LayoutManager::FocusSpecificPane(const char *vlabel)
+void LayoutManager::FocusSpecificPane(const char* vlabel)
 {
 	ImGuiWindow* window = ImGui::FindWindowByName(vlabel);
 	if (window)
 	{
-		if(!window->DockTabIsVisible)
+		if (!window->DockTabIsVisible)
 			ImGui::FocusWindow(window);
 	}
 }

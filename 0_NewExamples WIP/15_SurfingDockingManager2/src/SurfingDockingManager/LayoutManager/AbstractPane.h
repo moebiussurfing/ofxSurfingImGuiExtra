@@ -29,11 +29,14 @@ SOFTWARE.
 #include <string>
 
 //TODO
-// Required for the advanced feature
+// Required for populating widgets from a parent scope
 #include <functional>
 using callback_t = std::function<void()>;
 
+// Binary id (?)
 typedef int PaneFlags;
+
+// App window viewport zones
 enum class PaneDisposal
 {
 	CENTRAL = 0,
@@ -63,6 +66,7 @@ public:
 public:
 	virtual bool Init() = 0;
 	virtual void Unit() = 0;
+
 	virtual int DrawPanes(int vWidgetId, std::string vUserDatas) = 0;
 	virtual void DrawDialogsAndPopups(std::string vUserDatas) = 0;
 	virtual int DrawWidgets(int vWidgetId, std::string vUserDatas) = 0;
@@ -74,9 +78,8 @@ public:
 
 //TODO
 public:
-	// Pointer to store a function
+	// Pointer to store a function that will populate the widgets 
 	callback_t functionDraw = nullptr;
-	//std::function<void()> functionDraw = nullptr;
 
 public:
 	// Set external widgets to be inserted!

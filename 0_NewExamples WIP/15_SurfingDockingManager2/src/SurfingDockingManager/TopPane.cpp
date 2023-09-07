@@ -24,16 +24,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#include "TopPane.h"
-
-#include <LayoutManager/LayoutManager.h>
-
 
 #include "ofxSurfingImGui.h"
-//#define IMGUI_DEFINE_MATH_OPERATORS
-//#include <imgui_internal.h>
-//#include <imgui/imgui_internal.h>
 
+#include "TopPane.h"
+#include <LayoutManager/LayoutManager.h>
 
 TopPane::TopPane() = default;
 TopPane::~TopPane() = default;

@@ -24,16 +24,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#include "LeftPane.h"
-
-#include <LayoutManager/LayoutManager.h>
-
 
 #include "ofxSurfingImGui.h"
-//#define IMGUI_DEFINE_MATH_OPERATORS
-//#include <imgui_internal.h>
-//#include <imgui/imgui_internal.h>>
 
+#include "LeftPane.h"
+#include <LayoutManager/LayoutManager.h>
 
 LeftPane::LeftPane() = default;
 LeftPane::~LeftPane() = default;
@@ -69,7 +64,7 @@ int LeftPane::DrawPanes(int vWidgetId, std::string vUserDatas)
 			//ImGuiWindowFlags_NoResize |
 			ImGuiWindowFlags_NoBringToFrontOnFocus))
 		{
-			ImGui::Text("Hello World");
+			ImGui::Text("Hello World LeftPane");
 		}
 
 		ImGui::End();

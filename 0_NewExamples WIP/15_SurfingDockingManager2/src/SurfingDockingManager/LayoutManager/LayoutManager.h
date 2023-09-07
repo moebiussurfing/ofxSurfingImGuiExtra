@@ -25,22 +25,20 @@ SOFTWARE.
 
 #pragma once
 
-#include <ctools/ConfigAbstract.h>
-
-#include <AbstractPane.h>
-//#include <Helper/AbstractPane.h>
-
 #include "imgui_internal.h"
 #include "ofxSurfingImGui.h"
-//#include <imgui.h>
-//#include <imgui/imgui.h>
+
+#include <ctools/ConfigAbstract.h>
+#include <AbstractPane.h>
+
+//--
 
 #include <vector>
 #include <array>
 
 namespace ImGui
 {
-	// ImGui::Begin for bitwize
+	// ImGui::Begin for bitwise
 	template<typename T>
 	IMGUI_API bool BeginFlag(const char* name, T* vContainer, T vFlag, ImGuiWindowFlags flags)
 	{
@@ -61,8 +59,10 @@ private:
 	bool m_FirstStart = true;
 	char m_MenuLabel[PANE_NAME_BUFFER_SIZE + 1] = "";
 	char m_DefaultMenuLabel[PANE_NAME_BUFFER_SIZE + 1] = "";
+
+	// Zones sizes
 	std::array<float, (size_t)PaneDisposal::Count> m_PaneDisposalSizes = 
-	{	0.0f, // central size is ignored because depednant of others
+	{	0.0f, // central size is ignored because dependent of others
 		200.0f, // left size
 		200.0f, // right size
 		200.0f, // bottom size

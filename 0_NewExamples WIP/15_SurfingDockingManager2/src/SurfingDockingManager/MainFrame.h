@@ -21,6 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+
 #pragma once
 
 #include "ofxSurfingImGui.h"
@@ -32,8 +33,8 @@ SOFTWARE.
 class MainFrame : public conf::ConfigAbstract
 {
 private:
-	bool m_ShowImGui = false;				// show ImGui win
-	bool m_ShowMetric = false;				// show metrics
+	bool m_ShowImGui = false; // show ImGui win
+	bool m_ShowMetric = false; // show metrics
 
 public:
 	void Init();
@@ -44,5 +45,7 @@ public:
 	// configuration
 	std::string getXml(const std::string& vOffset, const std::string& vUserDatas = "");
 	bool setFromXml(tinyxml2::XMLElement* vElem, tinyxml2::XMLElement* vParent, const std::string& vUserDatas = "");
+
+	string pathSettings = "config.xml";
 };
 
