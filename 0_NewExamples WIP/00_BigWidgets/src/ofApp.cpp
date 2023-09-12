@@ -200,7 +200,7 @@ void ofApp::drawImGui_Toggle()
 			ImVec2 sz = ImVec2(w, h);
 
 			int iFont = ofMap(h, 0, ofGetHeight() * RATIO_WIDGETS_FONTS, 0, 3, true);
-			ui.PushFont(SurfingFontTypes(iFont));
+			ui.PushFontStyle(SurfingFontTypes(iFont));
 
 			auto c = ImGui::GetStyle().Colors[ImGuiCol_WindowBg];
 			ImVec4 _cBg = ImVec4(c.x, c.y, c.z, c.w * 0.2);
@@ -216,7 +216,7 @@ void ofApp::drawImGui_Toggle()
 			}
 			ImGui::PopStyleColor(5);
 
-			ui.popStyleFont();
+			ui.PopFontStyle();
 
 			//--
 
@@ -247,7 +247,7 @@ void ofApp::drawImGui_Button()
 			ImVec2 sz = ImVec2(w, h);
 
 			int iFont = ofMap(h, 0, ofGetHeight() * RATIO_WIDGETS_FONTS, 0, 3, true);
-			ui.PushFont(SurfingFontTypes(iFont));
+			ui.PushFontStyle(SurfingFontTypes(iFont));
 
 			auto c = ImGui::GetStyle().Colors[ImGuiCol_WindowBg];
 			ImVec4 _cBg = ImVec4(c.x, c.y, c.z, c.w * 0.2);
@@ -261,7 +261,7 @@ void ofApp::drawImGui_Button()
 			}
 			ImGui::PopStyleColor(5);
 
-			ui.popStyleFont();
+			ui.PopFontStyle();
 
 			ui.EndWindow();
 		}
@@ -272,7 +272,7 @@ void ofApp::drawImGui_Button()
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key)
 {
-	if (ui.isOverInputText()) return;
+	if (ui.isMouseOverInputText()) return;
 	//if (ui.isOverGui()) return;
 
 	if (key == 'g') bGui = !bGui;

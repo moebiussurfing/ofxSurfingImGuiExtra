@@ -29,6 +29,7 @@ void ofApp::setup()
 	params.add(params2);
 
 	ui.setup();
+	ui.startup();
 }
 
 //--------------------------------------------------------------

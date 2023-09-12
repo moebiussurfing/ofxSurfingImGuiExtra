@@ -247,7 +247,7 @@ private:
 				w = ImGui::GetContentRegionAvail().x;
 				h = ImGui::GetContentRegionAvail().y;
 
-				ui.PushFont(SurfingFontTypes(szFont.get()));
+				ui.PushFontStyle(SurfingFontTypes(szFont.get()));
 				{
 					{
 						ImDrawList* draw_list = ImGui::GetWindowDrawList();
@@ -383,7 +383,7 @@ private:
 						ImGui::PopStyleColor();
 					}
 				}
-				ui.popStyleFont();
+				ui.PopFontStyle();
 
 				//--
 
