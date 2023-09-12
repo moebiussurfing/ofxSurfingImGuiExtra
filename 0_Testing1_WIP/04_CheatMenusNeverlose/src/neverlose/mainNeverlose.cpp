@@ -1,7 +1,7 @@
 #pragma once
 #include "ofxSurfingImGui.h"
 
-#include "imgui_widgets_Neverlose.cpp"
+#include "imgui_widgets_Neverlose.hpp"
 
 
 
@@ -175,7 +175,8 @@ inline void drawImGuiNeverlose()
 
 				ImGuiEx::Checkbox("Skoro t'ma otstypit " ICON_FA_DAGGER, &bools[0]);
 				ImGuiEx::SliderInt("Slider", &ints[0], 0, 100, "%d%%");
-				Combo("Combo", &combo, items.data(), items.size());
+				ImGui::Combo("Combo", &combo, items.data(), items.size());
+				//ImGuiEx::Combo("Combo", &combo, items.data(), items.size());
 				InputText("Input", buf, sizeof buf);
 				ColorEdit4("Color", color, ALPHA);
 				Button("Button", ImVec2(GetWindowWidth(), 25));

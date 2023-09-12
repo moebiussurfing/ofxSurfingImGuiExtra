@@ -9,7 +9,6 @@
 
     lot of errors
     should copy code snippets from ...
-
     https://www.youtube.com/watch?v=wQjYGid-Uqo
     evrope
     neverlose-last

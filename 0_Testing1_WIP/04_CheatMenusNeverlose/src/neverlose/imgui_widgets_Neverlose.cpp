@@ -1,15 +1,11 @@
-#pragma once
-#include "ofxSurfingImGui.h"
-#include "gui.hpp"
+
+#include "imgui_widgets_Neverlose.hpp"
 
 
 //#define  IMGUI_DEFINE_MATH_OPERATORS
 //#include "imgui.h"
 //#include "imgui_internal.h"
 
-using namespace ImGui;
-
-namespace ImGuiEx {
 
 //// dear imgui, v1.89.7 WIP
 //// (widgets code)
@@ -1113,7 +1109,7 @@ namespace ImGuiEx {
 //#endif // #ifndef IMGUI_DISABLE_OBSOLETE_FUNCTIONS
 //
 
-static inline bool Checkbox( const char* label, bool* v ) {
+bool ImGuiEx::Checkbox( const char* label, bool* v ) {
 
     ImGuiWindow* window = GetCurrentWindow( );
     ImDrawList* draw = window->DrawList;
@@ -1668,162 +1664,182 @@ static inline bool Checkbox( const char* label, bool* v ) {
 //// - EndComboPreview() [Internal]
 //// - Combo()
 ////-------------------------------------------------------------------------
-//
-//static float CalcMaxPopupHeightFromItemCount(int items_count)
-//{
-//    ImGuiContext& g = *GImGui;
-//    if (items_count <= 0)
-//        return FLT_MAX;
-//    return (g.FontSize + g.Style.ItemSpacing.y) * items_count - g.Style.ItemSpacing.y + (g.Style.WindowPadding.y * 2);
-//}
-//
-//bool ImGui::BeginCombo( const char* label, const char* preview_value, ImGuiComboFlags flags ) {
-//
-//    ImGuiContext& g = *GImGui;
-//    ImGuiWindow* window = GetCurrentWindow( );
-//
-//    ImDrawList* draw = window->DrawList;
-//    ImVec2 pos = window->DC.CursorPos;
-//    
-//    ImGuiNextWindowDataFlags backup_next_window_data_flags = g.NextWindowData.Flags;
-//    g.NextWindowData.ClearFlags( ); // We behave like Begin() and need to consume those values
-//
-//    ImGuiStyle& style = g.Style;
-//    ImGuiID id = window->GetID(label);
-//
-//    ImVec2 label_size = CalcTextSize( label, 0, 1 );
-//    ImVec2 size = { 130, label_size.y + style.FramePadding.y * 2 };
-//
-//    float w = GetWindowWidth( );
-//    ImRect bb( pos + ImVec2( w - size.x, 0 ), pos + ImVec2( w, size.y ) );
-//    ImRect total_bb( pos, bb.Max );
-//    ItemAdd( total_bb, id, &bb );
-//    ItemSize( total_bb, style.FramePadding.y );
-//
-//    // Open on click
-//    bool hovered, held;
-//    bool pressed = ButtonBehavior( bb, id, &hovered, &held );
-//    ImGuiID popup_id = ImHashStr( "##ComboPopup", 0, id );
-//    bool popup_open = IsPopupOpen( popup_id, ImGuiPopupFlags_None );
-//    if ( pressed && !popup_open ) {
-//
-//        OpenPopupEx( popup_id, ImGuiPopupFlags_None );
-//        popup_open = true;
-//    }
-//
-//    static std::unordered_map < ImGuiID, float > values;
-//    auto value = values.find( id );
-//    if ( value == values.end( ) ) {
-//
-//        values.insert( { id, 0.f } );
-//        value = values.find( id );
-//    }
-//
-//    value->second = ImLerp( value->second, ( hovered ? 0.5f : 0.f ), 0.05f );
-//
-//    draw->AddRectFilled( bb.Min, bb.Max, gui.frame_inactive.to_im_color( ), 3 );
-//    draw->AddRectFilled( bb.Min, bb.Max, gui.frame_active.to_im_color( value->second ), 3 );
-//
-//    if ( preview_value != NULL && !( flags & ImGuiComboFlags_NoPreview ) ) {
-//
-//        PushStyleColor( ImGuiCol_Text, gui.text_disabled.to_vec4( ) );
-//        RenderTextClipped( bb.Min + style.FramePadding, bb.Max - ImVec2( 5, 0 ), preview_value, NULL, NULL );
-//        PopStyleColor( );
-//    }
-//
-//    if ( CalcTextSize( preview_value ).x > bb.GetWidth( ) )
-//        draw->AddRectFilledMultiColor( ImVec2( bb.Max.x - 50, bb.Min.y ), bb.Max, gui.frame_inactive.to_im_color( 0.f ), gui.frame_inactive.to_im_color( ), gui.frame_inactive.to_im_color( ), gui.frame_inactive.to_im_color( 0.f ) );
-//
-//    draw->AddRect( bb.Min, bb.Max, gui.border.to_im_color( ), 3 );
-//
-//    RenderArrow( draw, ImVec2( bb.Max.x - 13, bb.Min.y + 3 ), gui.text.to_im_color( ), ImGuiDir_Down, 10 );
-//
-//    draw->AddText( ImVec2( total_bb.Min.x, bb.GetCenter( ).y - label_size.y / 2 ), gui.text_disabled.to_im_color( ), label );
-//
-//    if ( !popup_open )
-//        return false;
-//
-//    g.NextWindowData.Flags = backup_next_window_data_flags;
-//    return BeginComboPopup( popup_id, bb, flags );
-//}
-//
-//bool ImGui::BeginComboPopup(ImGuiID popup_id, const ImRect& bb, ImGuiComboFlags flags)
-//{
-//    ImGuiContext& g = *GImGui;
-//    if (!IsPopupOpen(popup_id, ImGuiPopupFlags_None))
-//    {
-//        g.NextWindowData.ClearFlags();
-//        return false;
-//    }
-//
-//    // Set popup size
-//    float w = bb.GetWidth();
-//    if (g.NextWindowData.Flags & ImGuiNextWindowDataFlags_HasSizeConstraint)
-//    {
-//        g.NextWindowData.SizeConstraintRect.Min.x = ImMax(g.NextWindowData.SizeConstraintRect.Min.x, w);
-//    }
-//    else
-//    {
-//        if ((flags & ImGuiComboFlags_HeightMask_) == 0)
-//            flags |= ImGuiComboFlags_HeightRegular;
-//        IM_ASSERT(ImIsPowerOfTwo(flags & ImGuiComboFlags_HeightMask_)); // Only one
-//        int popup_max_height_in_items = -1;
-//        if (flags & ImGuiComboFlags_HeightRegular)     popup_max_height_in_items = 8;
-//        else if (flags & ImGuiComboFlags_HeightSmall)  popup_max_height_in_items = 4;
-//        else if (flags & ImGuiComboFlags_HeightLarge)  popup_max_height_in_items = 20;
-//        ImVec2 constraint_min(0.0f, 0.0f), constraint_max(FLT_MAX, FLT_MAX);
-//        if ((g.NextWindowData.Flags & ImGuiNextWindowDataFlags_HasSize) == 0 || g.NextWindowData.SizeVal.x <= 0.0f) // Don't apply constraints if user specified a size
-//            constraint_min.x = w;
-//        if ((g.NextWindowData.Flags & ImGuiNextWindowDataFlags_HasSize) == 0 || g.NextWindowData.SizeVal.y <= 0.0f)
-//            constraint_max.y = CalcMaxPopupHeightFromItemCount(popup_max_height_in_items);
-//        SetNextWindowSizeConstraints(constraint_min, constraint_max);
-//    }
-//
-//    // This is essentially a specialized version of BeginPopupEx()
-//    char name[16];
-//    ImFormatString(name, IM_ARRAYSIZE(name), "##Combo_%02d", g.BeginPopupStack.Size); // Recycle windows based on depth
-//
-//    // Set position given a custom constraint (peak into expected window size so we can position it)
-//    // FIXME: This might be easier to express with an hypothetical SetNextWindowPosConstraints() function?
-//    // FIXME: This might be moved to Begin() or at least around the same spot where Tooltips and other Popups are calling FindBestWindowPosForPopupEx()?
-//    if (ImGuiWindow* popup_window = FindWindowByName(name))
-//        if (popup_window->WasActive)
-//        {
-//            // Always override 'AutoPosLastDirection' to not leave a chance for a past value to affect us.
-//            ImVec2 size_expected = CalcWindowNextAutoFitSize(popup_window);
-//            popup_window->AutoPosLastDirection = (flags & ImGuiComboFlags_PopupAlignLeft) ? ImGuiDir_Left : ImGuiDir_Down; // Left = "Below, Toward Left", Down = "Below, Toward Right (default)"
-//            ImRect r_outer = GetPopupAllowedExtentRect(popup_window);
-//            ImVec2 pos = FindBestWindowPosForPopupEx(bb.GetBL(), size_expected, &popup_window->AutoPosLastDirection, r_outer, bb, ImGuiPopupPositionPolicy_ComboBox);
-//            SetNextWindowPos( pos - ImVec2( 0, size_expected.y / 2 ) );
-//        }
-//
-//    // We don't use BeginPopupEx() solely because we have a custom name string, which we could make an argument to BeginPopupEx()
-//    ImGuiWindowFlags window_flags = ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_Popup | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoMove;
-//    PushStyleVar( ImGuiStyleVar_WindowPadding, ImVec2( 6, 6 ) ); // Horizontally align ourselves with the framed text
-//    PushStyleVar( ImGuiStyleVar_PopupRounding, 6 );
-//    PushStyleVar( ImGuiStyleVar_PopupBorderSize, 1 );
-//    PushStyleColor( ImGuiCol_PopupBg, gui.frame_inactive.to_vec4( 0.9f ) );
-//    bool ret = Begin( name, NULL, window_flags );
-//    draw_blur( GetWindowDrawList( ) );
-//    SetCursorPos( ImVec2( 8, 0 ) );
-//    BeginGroup( );
-//    PopStyleColor( );
-//    PopStyleVar( 3 );
-//    EndGroup( );
-//    if (!ret)
-//    {
-//        EndPopup( );
-//        IM_ASSERT(0);   // This should never happen as we tested for IsPopupOpen() above
-//        return false;
-//    }
-//    return true;
-//}
-//
-//void ImGui::EndCombo()
-//{
-//    EndPopup();
-//}
-//
+
+static float CalcMaxPopupHeightFromItemCount(int items_count)
+{
+    ImGuiContext& g = *GImGui;
+    if (items_count <= 0)
+        return FLT_MAX;
+    return (g.FontSize + g.Style.ItemSpacing.y) * items_count - g.Style.ItemSpacing.y + (g.Style.WindowPadding.y * 2);
+}
+
+bool ImGuiEx::BeginCombo( const char* label, const char* preview_value, ImGuiComboFlags flags ) {
+
+    ImGuiContext& g = *GImGui;
+    ImGuiWindow* window = GetCurrentWindow( );
+
+    ImDrawList* draw = window->DrawList;
+    ImVec2 pos = window->DC.CursorPos;
+    
+    ImGuiNextWindowDataFlags backup_next_window_data_flags = g.NextWindowData.Flags;
+    g.NextWindowData.ClearFlags( ); // We behave like Begin() and need to consume those values
+
+    ImGuiStyle& style = g.Style;
+    ImGuiID id = window->GetID(label);
+
+    ImVec2 label_size = CalcTextSize( label, 0, 1 );
+    ImVec2 size = { 130, label_size.y + style.FramePadding.y * 2 };
+
+    float w = GetWindowWidth( );
+    ImRect bb( pos + ImVec2( w - size.x, 0 ), pos + ImVec2( w, size.y ) );
+    ImRect total_bb( pos, bb.Max );
+    ItemAdd( total_bb, id, &bb );
+    ItemSize( total_bb, style.FramePadding.y );
+
+    // Open on click
+    bool hovered, held;
+    bool pressed = ButtonBehavior( bb, id, &hovered, &held );
+    ImGuiID popup_id = ImHashStr( "##ComboPopup", 0, id );
+    bool popup_open = IsPopupOpen( popup_id, ImGuiPopupFlags_None );
+    if ( pressed && !popup_open ) {
+
+        OpenPopupEx( popup_id, ImGuiPopupFlags_None );
+        popup_open = true;
+    }
+
+    static std::unordered_map < ImGuiID, float > values;
+    auto value = values.find( id );
+    if ( value == values.end( ) ) {
+
+        values.insert( { id, 0.f } );
+        value = values.find( id );
+    }
+
+    value->second = ImLerp( value->second, ( hovered ? 0.5f : 0.f ), 0.05f );
+
+    draw->AddRectFilled( bb.Min, bb.Max, gui.frame_inactive.to_im_color( ), 3 );
+    draw->AddRectFilled( bb.Min, bb.Max, gui.frame_active.to_im_color( value->second ), 3 );
+
+    if ( preview_value != NULL && !( flags & ImGuiComboFlags_NoPreview ) ) {
+
+        PushStyleColor( ImGuiCol_Text, gui.text_disabled.to_vec4( ) );
+        RenderTextClipped( bb.Min + style.FramePadding, bb.Max - ImVec2( 5, 0 ), preview_value, NULL, NULL );
+        PopStyleColor( );
+    }
+
+    if ( CalcTextSize( preview_value ).x > bb.GetWidth( ) )
+        draw->AddRectFilledMultiColor( ImVec2( bb.Max.x - 50, bb.Min.y ), bb.Max, gui.frame_inactive.to_im_color( 0.f ), gui.frame_inactive.to_im_color( ), gui.frame_inactive.to_im_color( ), gui.frame_inactive.to_im_color( 0.f ) );
+
+    draw->AddRect( bb.Min, bb.Max, gui.border.to_im_color( ), 3 );
+
+    RenderArrow( draw, ImVec2( bb.Max.x - 13, bb.Min.y + 3 ), gui.text.to_im_color( ), ImGuiDir_Down, 10 );
+
+    draw->AddText( ImVec2( total_bb.Min.x, bb.GetCenter( ).y - label_size.y / 2 ), gui.text_disabled.to_im_color( ), label );
+
+    if ( !popup_open )
+        return false;
+
+    g.NextWindowData.Flags = backup_next_window_data_flags;
+    return BeginComboPopup( popup_id, bb, flags );
+}
+
+bool ImGuiEx::BeginComboPopup(ImGuiID popup_id, const ImRect& bb, ImGuiComboFlags flags)
+{
+    ImGuiContext& g = *GImGui;
+    if (!IsPopupOpen(popup_id, ImGuiPopupFlags_None))
+    {
+        g.NextWindowData.ClearFlags();
+        return false;
+    }
+
+    // Set popup size
+    float w = bb.GetWidth();
+    if (g.NextWindowData.Flags & ImGuiNextWindowDataFlags_HasSizeConstraint)
+    {
+        g.NextWindowData.SizeConstraintRect.Min.x = ImMax(g.NextWindowData.SizeConstraintRect.Min.x, w);
+    }
+    else
+    {
+        if ((flags & ImGuiComboFlags_HeightMask_) == 0)
+            flags |= ImGuiComboFlags_HeightRegular;
+        IM_ASSERT(ImIsPowerOfTwo(flags & ImGuiComboFlags_HeightMask_)); // Only one
+        int popup_max_height_in_items = -1;
+        if (flags & ImGuiComboFlags_HeightRegular)     popup_max_height_in_items = 8;
+        else if (flags & ImGuiComboFlags_HeightSmall)  popup_max_height_in_items = 4;
+        else if (flags & ImGuiComboFlags_HeightLarge)  popup_max_height_in_items = 20;
+        ImVec2 constraint_min(0.0f, 0.0f), constraint_max(FLT_MAX, FLT_MAX);
+        if ((g.NextWindowData.Flags & ImGuiNextWindowDataFlags_HasSize) == 0 || g.NextWindowData.SizeVal.x <= 0.0f) // Don't apply constraints if user specified a size
+            constraint_min.x = w;
+        if ((g.NextWindowData.Flags & ImGuiNextWindowDataFlags_HasSize) == 0 || g.NextWindowData.SizeVal.y <= 0.0f)
+            constraint_max.y = CalcMaxPopupHeightFromItemCount(popup_max_height_in_items);
+        SetNextWindowSizeConstraints(constraint_min, constraint_max);
+    }
+
+    // This is essentially a specialized version of BeginPopupEx()
+    char name[16];
+    ImFormatString(name, IM_ARRAYSIZE(name), "##Combo_%02d", g.BeginPopupStack.Size); // Recycle windows based on depth
+
+    // Set position given a custom constraint (peak into expected window size so we can position it)
+    // FIXME: This might be easier to express with an hypothetical SetNextWindowPosConstraints() function?
+    // FIXME: This might be moved to Begin() or at least around the same spot where Tooltips and other Popups are calling FindBestWindowPosForPopupEx()?
+    if (ImGuiWindow* popup_window = FindWindowByName(name))
+        if (popup_window->WasActive)
+        {
+            // Always override 'AutoPosLastDirection' to not leave a chance for a past value to affect us.
+            ImVec2 size_expected = CalcWindowNextAutoFitSize(popup_window);
+            popup_window->AutoPosLastDirection = (flags & ImGuiComboFlags_PopupAlignLeft) ? ImGuiDir_Left : ImGuiDir_Down; // Left = "Below, Toward Left", Down = "Below, Toward Right (default)"
+            ImRect r_outer = GetPopupAllowedExtentRect(popup_window);
+            ImVec2 pos = FindBestWindowPosForPopupEx(bb.GetBL(), size_expected, &popup_window->AutoPosLastDirection, r_outer, bb, ImGuiPopupPositionPolicy_ComboBox);
+            SetNextWindowPos( pos - ImVec2( 0, size_expected.y / 2 ) );
+        }
+
+    // We don't use BeginPopupEx() solely because we have a custom name string, which we could make an argument to BeginPopupEx()
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_Popup | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoMove;
+    PushStyleVar( ImGuiStyleVar_WindowPadding, ImVec2( 6, 6 ) ); // Horizontally align ourselves with the framed text
+    PushStyleVar( ImGuiStyleVar_PopupRounding, 6 );
+    PushStyleVar( ImGuiStyleVar_PopupBorderSize, 1 );
+    PushStyleColor( ImGuiCol_PopupBg, gui.frame_inactive.to_vec4( 0.9f ) );
+    bool ret = Begin( name, NULL, window_flags );
+    //draw_blur( GetWindowDrawList( ) );
+    SetCursorPos( ImVec2( 8, 0 ) );
+    BeginGroup( );
+    PopStyleColor( );
+    PopStyleVar( 3 );
+    EndGroup( );
+    if (!ret)
+    {
+        EndPopup( );
+        IM_ASSERT(0);   // This should never happen as we tested for IsPopupOpen() above
+        return false;
+    }
+    return true;
+}
+
+void ImGuiEx::EndCombo()
+{
+    EndPopup();
+}
+
+//?
+void ImGuiEx::EndPopup()
+{
+    ImGuiContext& g = *GImGui;
+    ImGuiWindow* window = g.CurrentWindow;
+    IM_ASSERT(window->Flags & ImGuiWindowFlags_Popup);  // Mismatched BeginPopup()/EndPopup() calls
+    IM_ASSERT(g.BeginPopupStack.Size > 0);
+
+    // Make all menus and popups wrap around for now, may need to expose that policy (e.g. focus scope could include wrap/loop policy flags used by new move requests)
+    if (g.NavWindow == window)
+        NavMoveRequestTryWrapping(window, ImGuiNavMoveFlags_LoopY);
+
+    // Child-popups don't need to be laid out
+    IM_ASSERT(g.WithinEndChild == false);
+    if (window->Flags & ImGuiWindowFlags_ChildWindow)
+        g.WithinEndChild = true;
+    End();
+    g.WithinEndChild = false;
+}
+
 //// Call directly after the BeginCombo/EndCombo block. The preview is designed to only host non-interactive elements
 //// (Experimental, see GitHub issues: #1658, #4168)
 //bool ImGui::BeginComboPreview()
@@ -1876,105 +1892,105 @@ static inline bool Checkbox( const char* label, bool* v ) {
 //    window->DC.IsSameLine = false;
 //    preview_data->PreviewRect = ImRect();
 //}
-//
-//// Getter for the old Combo() API: const char*[]
-//static bool Items_ArrayGetter(void* data, int idx, const char** out_text)
-//{
-//    const char* const* items = (const char* const*)data;
-//    if (out_text)
-//        *out_text = items[idx];
-//    return true;
-//}
-//
-//// Getter for the old Combo() API: "item1\0item2\0item3\0"
-//static bool Items_SingleStringGetter(void* data, int idx, const char** out_text)
-//{
-//    // FIXME-OPT: we could pre-compute the indices to fasten this. But only 1 active combo means the waste is limited.
-//    const char* items_separated_by_zeros = (const char*)data;
-//    int items_count = 0;
-//    const char* p = items_separated_by_zeros;
-//    while (*p)
-//    {
-//        if (idx == items_count)
-//            break;
-//        p += strlen(p) + 1;
-//        items_count++;
-//    }
-//    if (!*p)
-//        return false;
-//    if (out_text)
-//        *out_text = p;
-//    return true;
-//}
-//
-//// Old API, prefer using BeginCombo() nowadays if you can.
-//bool ImGui::Combo(const char* label, int* current_item, bool (*items_getter)(void*, int, const char**), void* data, int items_count, int popup_max_height_in_items)
-//{
-//    ImGuiContext& g = *GImGui;
-//
-//    // Call the getter to obtain the preview string which is a parameter to BeginCombo()
-//    const char* preview_value = NULL;
-//    if (*current_item >= 0 && *current_item < items_count)
-//        items_getter(data, *current_item, &preview_value);
-//
-//    // The old Combo() API exposed "popup_max_height_in_items". The new more general BeginCombo() API doesn't have/need it, but we emulate it here.
-//    if (popup_max_height_in_items != -1 && !(g.NextWindowData.Flags & ImGuiNextWindowDataFlags_HasSizeConstraint))
-//        SetNextWindowSizeConstraints(ImVec2(0, 0), ImVec2(FLT_MAX, CalcMaxPopupHeightFromItemCount(popup_max_height_in_items)));
-//
-//    if (!BeginCombo(label, preview_value, ImGuiComboFlags_None))
-//        return false;
-//
-//    // Display items
-//    // FIXME-OPT: Use clipper (but we need to disable it on the appearing frame to make sure our call to SetItemDefaultFocus() is processed)
-//    bool value_changed = false;
-//    for (int i = 0; i < items_count; i++)
-//    {
-//        PushID(i);
-//        const bool item_selected = (i == *current_item);
-//        const char* item_text;
-//        if (!items_getter(data, i, &item_text))
-//            item_text = "*Unknown item*";
-//        PushStyleVar( ImGuiStyleVar_ItemSpacing, ImVec2( 8, 4 ) );
-//        if ( Selectable( item_text, item_selected, ImGuiSelectableFlags_NoPadWithHalfSpacing, ImVec2( 0, 25 ) ) )
-//        {
-//            value_changed = true;
-//            *current_item = i;
-//        }
-//        PopStyleVar( );
-//        if (item_selected)
-//            SetItemDefaultFocus();
-//        PopID();
-//    }
-//
-//    EndCombo();
-//
-//    if (value_changed)
-//        MarkItemEdited(g.LastItemData.ID);
-//
-//    return value_changed;
-//}
-//
-//// Combo box helper allowing to pass an array of strings.
-//bool ImGui::Combo(const char* label, int* current_item, const char* const items[], int items_count, int height_in_items)
-//{
-//    const bool value_changed = Combo(label, current_item, Items_ArrayGetter, (void*)items, items_count, height_in_items);
-//    return value_changed;
-//}
-//
-//// Combo box helper allowing to pass all items in a single string literal holding multiple zero-terminated items "item1\0item2\0"
-//bool ImGui::Combo(const char* label, int* current_item, const char* items_separated_by_zeros, int height_in_items)
-//{
-//    int items_count = 0;
-//    const char* p = items_separated_by_zeros;       // FIXME-OPT: Avoid computing this, or at least only when combo is open
-//    while (*p)
-//    {
-//        p += strlen(p) + 1;
-//        items_count++;
-//    }
-//    bool value_changed = Combo(label, current_item, Items_SingleStringGetter, (void*)items_separated_by_zeros, items_count, height_in_items);
-//    return value_changed;
-//}
-//
+
+// Getter for the old Combo() API: const char*[]
+static bool Items_ArrayGetter(void* data, int idx, const char** out_text)
+{
+    const char* const* items = (const char* const*)data;
+    if (out_text)
+        *out_text = items[idx];
+    return true;
+}
+
+// Getter for the old Combo() API: "item1\0item2\0item3\0"
+static bool Items_SingleStringGetter(void* data, int idx, const char** out_text)
+{
+    // FIXME-OPT: we could pre-compute the indices to fasten this. But only 1 active combo means the waste is limited.
+    const char* items_separated_by_zeros = (const char*)data;
+    int items_count = 0;
+    const char* p = items_separated_by_zeros;
+    while (*p)
+    {
+        if (idx == items_count)
+            break;
+        p += strlen(p) + 1;
+        items_count++;
+    }
+    if (!*p)
+        return false;
+    if (out_text)
+        *out_text = p;
+    return true;
+}
+
+// Old API, prefer using BeginCombo() nowadays if you can.
+bool ImGuiEx::Combo(const char* label, int* current_item, bool (*items_getter)(void*, int, const char**), void* data, int items_count, int popup_max_height_in_items)
+{
+    ImGuiContext& g = *GImGui;
+
+    // Call the getter to obtain the preview string which is a parameter to BeginCombo()
+    const char* preview_value = NULL;
+    if (*current_item >= 0 && *current_item < items_count)
+        items_getter(data, *current_item, &preview_value);
+
+    // The old Combo() API exposed "popup_max_height_in_items". The new more general BeginCombo() API doesn't have/need it, but we emulate it here.
+    if (popup_max_height_in_items != -1 && !(g.NextWindowData.Flags & ImGuiNextWindowDataFlags_HasSizeConstraint))
+        SetNextWindowSizeConstraints(ImVec2(0, 0), ImVec2(FLT_MAX, CalcMaxPopupHeightFromItemCount(popup_max_height_in_items)));
+
+    if (!BeginCombo(label, preview_value, ImGuiComboFlags_None))
+        return false;
+
+    // Display items
+    // FIXME-OPT: Use clipper (but we need to disable it on the appearing frame to make sure our call to SetItemDefaultFocus() is processed)
+    bool value_changed = false;
+    for (int i = 0; i < items_count; i++)
+    {
+        PushID(i);
+        const bool item_selected = (i == *current_item);
+        const char* item_text;
+        if (!items_getter(data, i, &item_text))
+            item_text = "*Unknown item*";
+        PushStyleVar( ImGuiStyleVar_ItemSpacing, ImVec2( 8, 4 ) );
+        if ( Selectable( item_text, item_selected, ImGuiSelectableFlags_NoPadWithHalfSpacing, ImVec2( 0, 25 ) ) )
+        {
+            value_changed = true;
+            *current_item = i;
+        }
+        PopStyleVar( );
+        if (item_selected)
+            SetItemDefaultFocus();
+        PopID();
+    }
+
+    EndCombo();
+
+    if (value_changed)
+        MarkItemEdited(g.LastItemData.ID);
+
+    return value_changed;
+}
+
+// Combo box helper allowing to pass an array of strings.
+bool ImGuiEx::Combo(const char* label, int* current_item, const char* const items[], int items_count, int height_in_items)
+{
+    const bool value_changed = Combo(label, current_item, Items_ArrayGetter, (void*)items, items_count, height_in_items);
+    return value_changed;
+}
+
+// Combo box helper allowing to pass all items in a single string literal holding multiple zero-terminated items "item1\0item2\0"
+bool ImGuiEx::Combo(const char* label, int* current_item, const char* items_separated_by_zeros, int height_in_items)
+{
+    int items_count = 0;
+    const char* p = items_separated_by_zeros;       // FIXME-OPT: Avoid computing this, or at least only when combo is open
+    while (*p)
+    {
+        p += strlen(p) + 1;
+        items_count++;
+    }
+    bool value_changed = Combo(label, current_item, Items_SingleStringGetter, (void*)items_separated_by_zeros, items_count, height_in_items);
+    return value_changed;
+}
+
 ////-------------------------------------------------------------------------
 //// [SECTION] Data Type and Data Formatting Helpers [Internal]
 ////-------------------------------------------------------------------------
@@ -2992,7 +3008,7 @@ static inline bool Checkbox( const char* label, bool* v ) {
 
 // Note: p_data, p_min and p_max are _pointers_ to a memory address holding the data. For a slider, they are all required.
 // Read code of e.g. SliderFloat(), SliderInt() etc. or examples in 'Demo->Widgets->Data Types' to understand how to use this function directly.
-static inline bool SliderScalar( const char* label, ImGuiDataType data_type, void* p_data, const void* p_min, const void* p_max, const char* format, ImGuiSliderFlags flags ) {
+bool ImGuiEx::SliderScalar( const char* label, ImGuiDataType data_type, void* p_data, const void* p_min, const void* p_max, const char* format, ImGuiSliderFlags flags ) {
 
     ImGuiWindow* window = GetCurrentWindow( );
     ImVec2 pos = window->DC.CursorPos;
@@ -3129,12 +3145,12 @@ static inline bool SliderScalar( const char* label, ImGuiDataType data_type, voi
 //    *v_rad = v_deg * (2 * IM_PI) / 360.0f;
 //    return value_changed;
 //}
-//
-static inline bool SliderInt(const char* label, int* v, int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
+
+bool ImGuiEx::SliderInt(const char* label, int* v, int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
 {
     return SliderScalar(label, ImGuiDataType_S32, v, &v_min, &v_max, format, flags);
 }
-//
+
 //bool ImGui::SliderInt2(const char* label, int v[2], int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
 //{
 //    return SliderScalarN(label, ImGuiDataType_S32, v, 2, &v_min, &v_max, format, flags);
@@ -8665,4 +8681,3 @@ static inline bool SliderInt(const char* label, int* v, int v_min, int v_max, co
 //#endif // #ifndef IMGUI_DISABLE
 
 
-}
