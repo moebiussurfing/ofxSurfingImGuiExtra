@@ -6,11 +6,14 @@
 
 	make classes for these big widgets
 
-	use imgui_stdlib.h ofParams string
-	font sizes
-	responsive using ofRectangle
-	substract window header to correlate hide/show header
-	add anim show/hide
+	text input
+		fix header/debug resize? only docking
+		fix black bf
+		use imgui_stdlib.h ofParams string?
+		subtract window header to correlate hide/show header?
+
+	docking: check if it's possible to hide headers 
+		when a docking structured layout.
 
 */
 
@@ -61,4 +64,9 @@ public:
 	BigTextInput bigTextInput;
 
 	ofParameterGroup g{ "ofApp" };
+
+
+	void BeginNoDecoration();
+	void EndNoDecoration();
+	ImGuiWindowFlags window_flags;
 };

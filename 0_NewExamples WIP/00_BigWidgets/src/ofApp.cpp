@@ -98,25 +98,12 @@ void ofApp::drawImGui()
 
 		//--
 
-		bool b = ui.bDebug;
-		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-		if (b) {
-			window_flags |= ImGuiWindowFlags_NoTitleBar;
-			window_flags |= ImGuiWindowFlags_NoDecoration;
-
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 20);
-		}
-
 		ImGui::SetNextWindowSize({ 400,400 }, ImGuiCond_FirstUseEver);
 
 		if (ui.BeginWindow(ui.bGui_GameMode, window_flags))
 		{
-			// mnnually dock here
+			// mannually dock here
 			ui.EndWindow();
-		}
-
-		if (b) {
-			ImGui::PopStyleVar();
 		}
 	}
 	ui.End();
@@ -182,15 +169,18 @@ void ofApp::drawImGui_Slider()
 				ImVec2 sz = ImVec2(-1.f, -1.f);
 				bool bNoName = true;
 				bool bNoNumber = true;
-				ofxImGuiSurfing::AddVSlider(value, sz, bNoName, bNoNumber);
+				bool b = ofxImGuiSurfing::AddVSlider(value, sz, bNoName, bNoNumber);
 				ofxImGuiSurfing::AddMouse(value);
 				ui.AddTooltip(value);
+
+				string s = ofToString(value.get(), 3);
+				if (b) ui.AddToLog(s, OF_LOG_WARNING);
 			}
 			if (bColorize) ImGui::PopStyleColor(5);
 
 			ui.EndWindow();
+		}
 	}
-}
 	ImGui::PopStyleVar();
 }
 
@@ -270,9 +260,12 @@ void ofApp::drawImGui_Button()
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
 		window_flags |= ImGuiWindowFlags_NoScrollbar;
 		if (!bGui_Bg) window_flags |= ImGuiWindowFlags_NoBackground;
+		//if (!bGui_Headers) window_flags |= ImGuiWindowFlags_NoDecoration;
 		if (!bGui_Headers) window_flags |= ImGuiWindowFlags_NoTitleBar;
 		if (!bGui_ResizePin) window_flags |= ImGuiWindowFlags_NoResize;
 		if (bGui_LockMove) window_flags |= ImGuiWindowFlags_NoMove;
+
+		//BeginNoDecoration();
 
 		if (ui.BeginWindow(bGui_Button, window_flags))
 		{
@@ -282,7 +275,7 @@ void ofApp::drawImGui_Button()
 			float h = ofxImGuiSurfing::getPanelHeight();
 			ImVec2 sz = ImVec2(w, h);
 
-			int iFont = ofMap(h, 0, ofGetHeight() * RATIO_WIDGETS_FONTS, 0, 3, true);
+			int iFont = ofMap(h, ofGetHeight()/2, ofGetHeight() * RATIO_WIDGETS_FONTS, 0, 3, true);
 			ui.PushFontStyle(SurfingFontTypes(iFont));
 
 			auto c = ImGui::GetStyle().Colors[ImGuiCol_WindowBg];
@@ -307,6 +300,8 @@ void ofApp::drawImGui_Button()
 
 			ui.EndWindow();
 		}
+
+		//EndNoDecoration();
 	}
 	ImGui::PopStyleVar();
 }
@@ -325,7 +320,39 @@ void ofApp::keyPressed(int key)
 }
 
 //--------------------------------------------------------------
+void ofApp::BeginNoDecoration()
+{
+	bool b = ui.bDebug;
+	/*ImGuiWindowFlags*/ window_flags = ImGuiWindowFlags_None;
+	if (b) {
+		window_flags |= ImGuiWindowFlags_NoTitleBar;
+		window_flags |= ImGuiWindowFlags_NoDecoration;
+
+		//ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 20);
+
+		ImGui::PushStyleColor(ImGuiCol_TitleBg, ImGui::GetStyle().Colors[ImGuiCol_WindowBg]);
+		ImGui::PushStyleColor(ImGuiCol_TitleBgCollapsed, ImGui::GetStyle().Colors[ImGuiCol_WindowBg]);
+		ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImGui::GetStyle().Colors[ImGuiCol_WindowBg]);
+
+		//ImGui::PushStyleColor(ImGuiCol_Border, ImGui::GetStyle().Colors[ImGuiCol_WindowBg]);
+	}
+}
+
+//--------------------------------------------------------------
+void ofApp::EndNoDecoration()
+{
+	bool b = ui.bDebug;
+	if (b) {
+
+		//ImGui::PopStyleColor();
+
+		ImGui::PopStyleColor(3);
+
+		//ImGui::PopStyleVar();
+	}
+}
+
+//--------------------------------------------------------------
 void ofApp::exit()
 {
-	ofxImGuiSurfing::saveGroup(g);
 }
