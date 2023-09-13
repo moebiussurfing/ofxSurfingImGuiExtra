@@ -24,6 +24,7 @@ public:
 	vector < const char* > rage_subtabs = { "General", "Anti aim", "Subtab" };
 
 	color_t accent_color = { 0.3f, 0.49f, 1.f, 1.f };
+	//color_t accent_color = { 1.f, 1., 1.f, 1.f };
 
 	color_t text = { 1.f, 1.f, 1.f, 1.f };
 	color_t text_disabled = { 0.51f, 0.52f, 0.56f, 1.f };

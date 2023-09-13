@@ -5,20 +5,26 @@
 
 /*
 
-    WIP migration from 
-
-    lot of errors
-    should copy code snippets from ...
+    WIP Example
+    
+    migration from 
+    neverlose-last cheat menu from 
+    @evrope
     https://www.youtube.com/watch?v=wQjYGid-Uqo
-    evrope
-    neverlose-last
+
+    This code requires too much ImGui core modifications.
+    So, maybe will be only useful to learn:
+    - insert icon fonts.
+    - split layout panels with left and top tabs/panels.
+    - use some widgets:
+        the color picker, slider or toggles.
+    - insert images
 
 */
 
 #include "ofxSurfingImGui.h"
 
 class ofApp : public ofBaseApp{
-    
 public:
     void setup();
     void draw();
@@ -53,7 +59,6 @@ public:
     ofxSurfingGui ui;
 
     void setupFonts();
-    ImFont* customFont = nullptr;
     ImFont* customFont0 = nullptr;
     ImFont* customFont1 = nullptr;
     ImFont* customFont2 = nullptr;

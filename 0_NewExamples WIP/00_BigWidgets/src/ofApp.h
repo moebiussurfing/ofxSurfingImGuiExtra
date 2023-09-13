@@ -2,13 +2,14 @@
 
 	TODO
 
-	use imgui_stdlib.h
-		ofParams string
+	add big knobs
+
+	make classes for these big widgets
+
+	use imgui_stdlib.h ofParams string
 	font sizes
-	one line text or multi line
 	responsive using ofRectangle
-	substract window header
-		to correlate hide/show header
+	substract window header to correlate hide/show header
 	add anim show/hide
 
 */
@@ -26,6 +27,7 @@
 class ofApp : public ofBaseApp {
 public:
 	void setup();
+	void setupImGui();
 	void exit();
 	void draw();
 	void keyPressed(int key);

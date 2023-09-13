@@ -1,3 +1,13 @@
+/*
+
+TODO
+
+fix layout responsive for buttons: submit
+fix string params callbacks
+
+*/
+
+
 #pragma once
 #include "ofMain.h"
 

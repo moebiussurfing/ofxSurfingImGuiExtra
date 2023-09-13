@@ -1,11 +1,12 @@
 #include "ofApp.h"
 
 //--------------------------------------------------------------
-void ofApp::setup()
+void ofApp::setupImGui()
 {
-	ofxImGuiSurfing::setMonitorsLayout(-1, true, true);
+	ui.setImGuiViewPort(true); // Allow floating window out the app window.
 
-	ui.setup();
+	//ui.setup();
+	ui.setup(IM_GUI_MODE_INSTANTIATED_DOCKING_RAW);
 
 	g.add(bGui_Headers);
 	g.add(bGui_Bg);
@@ -16,6 +17,14 @@ void ofApp::setup()
 	g.add(bGui_Slider);
 
 	bigTextInput.setHint("Type search");
+}
+
+//--------------------------------------------------------------
+void ofApp::setup()
+{
+	ofxImGuiSurfing::setMonitorsLayout(-1, true, true);
+
+	setupImGui();
 
 	//--
 
@@ -35,8 +44,12 @@ void ofApp::drawImGui()
 	{
 		if (ui.BeginWindow(bGui))
 		{
+			ui.Add(ui.bGui_GameMode, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
+			ui.AddSpacingBigSeparated();
+
 			ui.AddMinimizerToggle();
 			if (ui.isMaximized()) {
+
 				ui.AddLogToggle();
 				ui.AddDebugToggle();
 				ui.AddAutoResizeToggle();
@@ -81,8 +94,30 @@ void ofApp::drawImGui()
 		drawImGui_Slider();
 		drawImGui_Toggle();
 		drawImGui_Button();
-
 		bigTextInput.draw(ui);
+
+		//--
+
+		bool b = ui.bDebug;
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+		if (b) {
+			window_flags |= ImGuiWindowFlags_NoTitleBar;
+			window_flags |= ImGuiWindowFlags_NoDecoration;
+
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 20);
+		}
+
+		ImGui::SetNextWindowSize({ 400,400 }, ImGuiCond_FirstUseEver);
+
+		if (ui.BeginWindow(ui.bGui_GameMode, window_flags))
+		{
+			// mnnually dock here
+			ui.EndWindow();
+		}
+
+		if (b) {
+			ImGui::PopStyleVar();
+		}
 	}
 	ui.End();
 }
@@ -149,12 +184,13 @@ void ofApp::drawImGui_Slider()
 				bool bNoNumber = true;
 				ofxImGuiSurfing::AddVSlider(value, sz, bNoName, bNoNumber);
 				ofxImGuiSurfing::AddMouse(value);
+				ui.AddTooltip(value);
 			}
 			if (bColorize) ImGui::PopStyleColor(5);
 
 			ui.EndWindow();
-		}
 	}
+}
 	ImGui::PopStyleVar();
 }
 
@@ -256,9 +292,15 @@ void ofApp::drawImGui_Button()
 			ImGui::PushStyleColor(ImGuiCol_FrameBg, _cBg);
 			ImGui::PushStyleColor(ImGuiCol_FrameBgActive, _cBg);
 			ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, _cBg);
+
+			ui.BeginBlinkText();
+
 			if (ofxImGuiSurfing::AddBigButton(vButton, sz))
 			{
 			}
+
+			ui.EndBlinkText();
+
 			ImGui::PopStyleColor(5);
 
 			ui.PopFontStyle();

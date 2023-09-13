@@ -40,40 +40,21 @@ void ofApp::setupFonts()
 
 	ImGui::StyleColorsDark();
 
-	// Add fontawesome fonts by merging new glyphs
+	auto gui = ui.getImGuiPtr();
+	
+	customFont0 = gui->addFontFromMemory(museo500_binary, museo500_size, 14);
+
 	ImFontConfig config;
-	config.MergeMode = true;
+	config.MergeMode = true;//merging glyphs
 	config.PixelSnapH = true;//?
 	//config.GlyphMinAdvanceX = 13.0f;//to make the icon monospaced
 
 	static const ImWchar icon_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
-
-	auto gui = ui.getImGuiPtr();
-	
-	string s = ofToDataPath("assets/fonts/telegrama_render.otf");
-	customFont = gui->addFont(s, 18.f, &config, icon_ranges);
-	customFont0 = gui->addFontFromMemory(museo500_binary, museo500_size, 14);
 	customFont1 = gui->addFontFromMemory(&font_awesome_binary, font_awesome_size, 13, &config, icon_ranges);
+
 	customFont2 = gui->addFontFromMemory(museo900_binary, museo900_size, 28);
-}
 
-//--------------------------------------------------------------
-void ofApp::exit()
-{
-	//TODO: fix exit crash
-
-	//ImGuiIO& io = ImGui::GetIO();
-	//io.Fonts->Clear();
-
-	delete customFont;
-	delete customFont0;
-	delete customFont1;
-	delete customFont2;
-
-	customFont = nullptr;
-	customFont0 = nullptr;
-	customFont1 = nullptr;
-	customFont2 = nullptr;
+	setupNeverlose(gui);
 }
 
 //--------------------------------------------------------------
@@ -89,16 +70,17 @@ void ofApp::draw()
 
 	ui.Begin();
 	{
-		ImGui::PushFont(customFont1);
+		ImGui::PushFont(customFont0);
 		drawImGuiNeverlose();
 		ImGui::PopFont();
 
-		//IMGUI_SUGAR__WINDOWS_CONSTRAINTS;
-		//if (ui.BeginWindow(bGui))
-		//{
-		//	ui.AddLabel("Hi");
-		//	ui.EndWindow();
-		//}
+		IMGUI_SUGAR__WINDOWS_CONSTRAINTS;
+		if (ui.BeginWindow(bGui))
+		{
+			SetWindowSize(ImVec2(40, 40));
+			ui.AddLabel("Hi");
+			ui.EndWindow();
+		}
 
 		ui.DrawDebugImGuiContextsWindows();
 	}
@@ -111,4 +93,19 @@ void ofApp::keyPressed(int key)
 	if (key == 'g') {
 		bGui = !bGui;
 	}
+}
+
+//--------------------------------------------------------------
+void ofApp::exit()
+{
+	return;
+	//TODO: fix exit crash
+
+	delete customFont0;
+	delete customFont1;
+	delete customFont2;
+
+	customFont0 = nullptr;
+	customFont1 = nullptr;
+	customFont2 = nullptr;
 }

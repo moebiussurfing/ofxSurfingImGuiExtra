@@ -10,59 +10,57 @@
 
 #include "bytes.hpp"
 
+using namespace SurfImGui;
 using namespace ImGui;
 
 #define ALPHA    ( ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_Float | ImGuiColorEditFlags_NoDragDrop | ImGuiColorEditFlags_PickerHueBar | ImGuiColorEditFlags_NoBorder )
 
 #define NO_ALPHA ( ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_NoAlpha | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_Float | ImGuiColorEditFlags_NoDragDrop | ImGuiColorEditFlags_PickerHueBar | ImGuiColorEditFlags_NoBorder )
 
+// Our state
+static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 //IDirect3DTexture9* avatar{ };
 //IDirect3DTexture9* bg{ };
+static ofImage   avatar;
+static GLuint    avatarID;
+static ofImage   bg;
+static GLuint    bgID;
 
 
-//inline void initNeverlose()
-//{
-//	//IMGUI_CHECKVERSION();
-//
-//	ImGuiIO& io = ImGui::GetIO(); (void)io;
-//	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-//	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-//
-//#if 1
-//	// Setup Dear ImGui style
-//	ImGui::StyleColorsDark();
-//#endif
-//
-//	///*
-//	// Load Fonts
-//	// - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
-//	// - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-//	// - If the file cannot be loaded, the function will return a nullptr. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-//	// - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-//	// - Use '#define IMGUI_ENABLE_FREETYPE' in your imconfig file to use Freetype for higher quality font rendering.
-//	// - Read 'docs/FONTS.md' for more instructions and details.
-//	// - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-//	//io.Fonts->AddFontFromMemoryTTF(museo500_binary, sizeof museo500_binary, 14);
-//	//static const ImWchar icon_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
-//	//ImFontConfig icons_config;
-//	//icons_config.MergeMode = true;
-//	//icons_config.PixelSnapH = true;
-//	//io.Fonts->AddFontFromMemoryTTF(&font_awesome_binary, sizeof font_awesome_binary, 13, &icons_config, icon_ranges);
-//	//io.Fonts->AddFontFromMemoryTTF(museo900_binary, sizeof museo900_binary, 28);
-//	// 	io.Fonts->AddFontFromMemoryTTF(museo500_binary, sizeof museo500_binary, 14);
-//	static const ImWchar icon_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
-//	ImFontConfig icons_config;
-//	icons_config.MergeMode = true;
-//	icons_config.PixelSnapH = true;
-//	io.Fonts->AddFontFromMemoryTTF(&font_awesome_binary, font_awesome_size, 13, &icons_config, icon_ranges);
-//	io.Fonts->AddFontFromMemoryTTF(museo900_binary, museo900_size, 28);
-//	//*/
-//
-//	// Our state
-//	//ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-//}
+inline void setupNeverlose(ofxImGui::Gui* gui)
+{
+	// Load images
 
+	avatar.load("image.png");
+	avatarID = gui->loadImage(avatar);
+
+	bg.load("bg.png");
+	bgID = gui->loadImage(bg);
+}
+
+#if 0
+inline void initNeverlose(/*ofxImGui::Gui* gui*/)
+{
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+#if 1
+	// Setup Dear ImGui style
+	ImGui::StyleColorsDark();
+#endif
+
+	io.Fonts->AddFontFromMemoryTTF(museo500_binary, sizeof museo500_size, 14);
+	static const ImWchar icon_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
+	ImFontConfig icons_config;
+	icons_config.MergeMode = true;
+	icons_config.PixelSnapH = true;
+	io.Fonts->AddFontFromMemoryTTF(&font_awesome_binary, font_awesome_size, 13, &icons_config, icon_ranges);
+	io.Fonts->AddFontFromMemoryTTF(museo900_binary, museo900_size, 28);
+}
+#endif
 
 inline void drawImGuiNeverlose()
 {
@@ -73,9 +71,11 @@ inline void drawImGuiNeverlose()
 	vector < const char* > items = { "Option", "Option 1", "Option 2", "Option 3", "Option 4", "Option 5", ICON_FA_AXE_BATTLE " Option 6", "Option 7", "Option 8", "Option 9" };
 	static char buf[64];
 
-	static float color[4] = { 1.f, 1.f, 1.f, 1.f };
+	//static float color[4] = { 1.f, 1.f, 1.f, 1.f };
+	static float color[4] = { gui.accent_color.r ,gui.accent_color.g ,gui.accent_color.b ,gui.accent_color.a };
 
 	PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+	PushStyleVar(ImGuiStyleVar_WindowRounding, 10);
 
 	ImGuiWindowFlags flags = ImGuiWindowFlags_None;
 	flags |= ImGuiWindowFlags_NoDecoration;
@@ -94,12 +94,18 @@ inline void drawImGuiNeverlose()
 		SetWindowSize(ImVec2(690, 500));
 
 		//GetBackgroundDrawList()->AddImage(bg, ImVec2(0, 0), io.DisplaySize);
+		GetBackgroundDrawList()->AddImage((ImTextureID)(uintptr_t)(bgID), ImVec2(0, 0), io.DisplaySize);
 
-		draw->AddText(io.Fonts->Fonts[1], io.Fonts->Fonts[1]->FontSize, pos + ImVec2(170 / 2 - io.Fonts->Fonts[1]->CalcTextSizeA(io.Fonts->Fonts[1]->FontSize, FLT_MAX, 0, "NEVERLOSE").x / 2 + 1, 20), gui.accent_color.to_im_color(), "NEVERLOSE");
-		draw->AddText(io.Fonts->Fonts[1], io.Fonts->Fonts[1]->FontSize, pos + ImVec2(170 / 2 - io.Fonts->Fonts[1]->CalcTextSizeA(io.Fonts->Fonts[1]->FontSize, FLT_MAX, 0, "NEVERLOSE").x / 2, 20), GetColorU32(ImGuiCol_Text), "NEVERLOSE");
+		static int ifont = 6;
+		//ImGui::SliderInt("f", &ifont, 0, io.Fonts->Fonts.size()-1);
+
+		draw->AddText(io.Fonts->Fonts[ifont], io.Fonts->Fonts[ifont]->FontSize, pos + ImVec2(170 / 2 - io.Fonts->Fonts[ifont]->CalcTextSizeA(io.Fonts->Fonts[ifont]->FontSize, FLT_MAX, 0, "NEVERLOSE").x / 2 + 1, 20), gui.accent_color.to_im_color(), "NEVERLOSE");
+		draw->AddText(io.Fonts->Fonts[ifont], io.Fonts->Fonts[ifont]->FontSize, pos + ImVec2(170 / 2 - io.Fonts->Fonts[ifont]->CalcTextSizeA(io.Fonts->Fonts[ifont]->FontSize, FLT_MAX, 0, "NEVERLOSE").x / 2, 20), GetColorU32(ImGuiCol_Text), "NEVERLOSE");
 
 		draw->AddLine(pos + ImVec2(0, size.y - 50), pos + ImVec2(170, size.y - 50), GetColorU32(ImGuiCol_WindowBg, 0.5f));
-		//draw->AddImageRounded(avatar, pos + ImVec2(15, size.y - 40), pos + ImVec2(45, size.y - 10), ImVec2(0, 0), ImVec2(1, 1), ImColor(1.f, 1.f, 1.f, 1.f), 100);
+
+		draw->AddImageRounded((ImTextureID)(uintptr_t)(avatarID), pos + ImVec2(15, size.y - 40), pos + ImVec2(45, size.y - 10), ImVec2(0, 0), ImVec2(1, 1), ImColor(1.f, 1.f, 1.f, 1.f), 100);
+
 		draw->AddText(pos + ImVec2(50, size.y - 40), gui.text.to_im_color(), "evrope");
 		draw->AddText(pos + ImVec2(50, size.y - 25), gui.text_disabled.to_im_color(), "Till:");
 		draw->AddText(pos + ImVec2(50 + CalcTextSize("Till: ").x, size.y - 25), gui.accent_color.to_im_color(), "Lifetime");
@@ -138,7 +144,7 @@ inline void drawImGuiNeverlose()
 		EndChild();
 
 		SetCursorPos(ImVec2(190, 20));
-		Button(ICON_FA_SAVE " Save", ImVec2(100, 25));
+		SurfImGui::Button(ICON_FA_SAVE " Save", ImVec2(100, 25));
 
 		PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
 
@@ -173,13 +179,13 @@ inline void drawImGuiNeverlose()
 
 			gui.group_box(ICON_FA_FEATHER " Feather", ImVec2(GetWindowWidth() / 2 - GetStyle().ItemSpacing.x / 2, 210)); {
 
-				ImGuiEx::Checkbox("Skoro t'ma otstypit " ICON_FA_DAGGER, &bools[0]);
-				ImGuiEx::SliderInt("Slider", &ints[0], 0, 100, "%d%%");
-				ImGui::Combo("Combo", &combo, items.data(), items.size());
-				//ImGuiEx::Combo("Combo", &combo, items.data(), items.size());
-				InputText("Input", buf, sizeof buf);
-				ColorEdit4("Color", color, ALPHA);
-				Button("Button", ImVec2(GetWindowWidth(), 25));
+				SurfImGui::Checkbox("Skoro t'ma otstypit " ICON_FA_DAGGER, &bools[0]);
+				SurfImGui::SliderInt("Slider", &ints[0], 0, 100, "%d%%");
+				///*Surf*/ImGui::Combo("Combo", &combo, items.data(), items.size());
+				//SurfImGui::InputText("Input", buf, sizeof buf);
+				bool b = SurfImGui::ColorEdit4("Color", color, ALPHA);
+				if (b)gui.accent_color = { color[0], color[1], color[2], color[3] };
+				SurfImGui::Button("Button", ImVec2(GetWindowWidth(), 25));
 
 			} gui.end_group_box();
 
@@ -188,7 +194,7 @@ inline void drawImGuiNeverlose()
 			gui.group_box(ICON_FA_CROWN " Crown", ImVec2(GetWindowWidth() / 2 - GetStyle().ItemSpacing.x / 2, GetWindowHeight())); {
 
 				for (int i = 1; i < 50; ++i) {
-					ImGuiEx::Checkbox(std::to_string(i).c_str(), &bools[i]);
+					SurfImGui::Checkbox(std::to_string(i).c_str(), &bools[i]);
 
 					if (i != 49)
 						Separator();
@@ -228,5 +234,6 @@ inline void drawImGuiNeverlose()
 
 	} ImGui::End();
 
+	PopStyleVar();
 	PopStyleVar();
 }
