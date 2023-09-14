@@ -7,25 +7,18 @@
 
     WIP Example
     
-    migration from 
-    neverlose-last cheat menu from 
-    @evrope
+    migrated from 
+    neverlose-last cheat menu from @evrope
     https://www.youtube.com/watch?v=wQjYGid-Uqo
 
-    This code requires too much ImGui core modifications.
-    So, maybe will be only useful to learn:
+    Will be only useful to learn:
     - insert icon fonts.
     - split layout panels with left and top tabs/panels.
-    - use some widgets:
-        the color picker, slider or toggles.
-    - insert images
+    - use some custom widgets: the color picker, slider or toggles.
+    - insert images.
 
-    - Color picker requires AddRectFilledMultiColorRounded 
-        defined into imgui.h:
-        //TODO
-        IMGUI_API void  AddRectFilledMultiColorRounded(const ImVec2& p_min, const ImVec2& p_max, ImU32 bg_color, ImU32 col_upr_left, ImU32 col_upr_right, ImU32 col_bot_right, ImU32 col_bot_left, float rounding, ImDrawFlags rounding_corners = ImDrawFlags_RoundCornersAll);
-        as is declared into \neverlose\imgui_widgets_Neverlose.cpp
-
+    - fix required: text input, combos
+    - fix crash on exit
 */
 
 #include "ofxSurfingImGui.h"
