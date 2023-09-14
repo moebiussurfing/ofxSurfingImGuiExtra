@@ -19,6 +19,7 @@
 
     - fix required: text input, combos
     - fix crash on exit
+
 */
 
 #include "ofxSurfingImGui.h"

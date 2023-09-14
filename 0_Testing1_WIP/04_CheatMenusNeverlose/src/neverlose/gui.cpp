@@ -1,7 +1,6 @@
 #include "gui.hpp"
 using namespace ImGui;
 
-
 c_gui gui;
 
 

@@ -35,7 +35,6 @@ namespace ofxSurfingfImGui
 
 
 
-
 		static void MarkItemEdited(ImGuiID id)
 		{
 			// This marking is solely to be able to provide info for IsItemDeactivatedAfterEdit().
@@ -56,7 +55,6 @@ namespace ofxSurfingfImGui
 		}
 
 
-		//from imgui_widgets
 
 		static bool ButtonEx(const char* label, const ImVec2& size_arg, ImGuiButtonFlags flags) {
 
@@ -94,18 +92,9 @@ namespace ofxSurfingfImGui
 			return pressed;
 		}
 
-		//IMGUI_API bool          InputTextEx(const char* label, const char* hint, char* buf, int buf_size, const ImVec2& size_arg, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback = NULL, void* user_data = NULL);
 
-		//IMGUI_API void          InputTextDeactivateHook(ImGuiID id);
-
-
-
-			// Widgets: Selectables
-	// - A selectable highlights when hovered, and can display another color when selected.
-	// - Neighbors selectable extend their highlight bounds in order to leave no gap between them. This is so a series of selected Selectable appear contiguous.
 		IMGUI_API bool          Selectable(const char* label, bool selected = false, ImGuiSelectableFlags flags = 0, const ImVec2& size = ImVec2(0, 0)); // "bool selected" carry the selection state (read-only). Selectable() is clicked is returns true so you can modify your selection state. size.x==0.0: use remaining width, size.x>0.0: specify width. size.y==0.0: use label height, size.y>0.0: specify height
 		IMGUI_API bool          Selectable(const char* label, bool* p_selected, ImGuiSelectableFlags flags = 0, const ImVec2& size = ImVec2(0, 0));      // "bool* p_selected" point to the selection state (read-write), as a convenient helper.
-
 
 
 		IMGUI_API void          ColorEditOptionsPopup(const float* col, ImGuiColorEditFlags flags);
@@ -132,8 +121,6 @@ namespace ofxSurfingfImGui
 #endif
 
 
-
-		//TODO
 		static inline void AddRectFilledMultiColorRounded(ImDrawList* draw_list, const ImVec2& p_min, const ImVec2& p_max, ImU32 bg_color, ImU32 col_upr_left, ImU32 col_upr_right, ImU32 col_bot_right, ImU32 col_bot_left, float rounding, ImDrawFlags rounding_corners = ImDrawFlags_RoundCornersAll)
 		{
 			rounding = ImMin(rounding, ImFabs(p_max.x - p_min.x) * (((rounding_corners & ImDrawCornerFlags_Top) == ImDrawCornerFlags_Top) || ((rounding_corners & ImDrawCornerFlags_Bot) == ImDrawCornerFlags_Bot) ? 0.5f : 1.0f) - 1.0f);

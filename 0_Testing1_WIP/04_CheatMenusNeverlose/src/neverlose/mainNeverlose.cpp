@@ -100,7 +100,7 @@ inline void drawImGuiNeverlose()
 		ifont = ofClamp(ifont, 0, io.Fonts->Fonts.size() - 1);
 		//ImGui::SliderInt("f", &ifont, 0, io.Fonts->Fonts.size()-1);
 
-		draw->AddText(io.Fonts->Fonts[ifont], io.Fonts->Fonts[ifont]->FontSize, pos + ImVec2(170 / 2 - io.Fonts->Fonts[ifont]->CalcTextSizeA(io.Fonts->Fonts[ifont]->FontSize, FLT_MAX, 0, "NEVERLOSE").x / 2 + 1, 20), gui.accent_color.to_im_color(), "NEVERLOSE");
+		draw->AddText(io.Fonts->Fonts[ifont], io.Fonts->Fonts[ifont]->FontSize, pos + ImVec2(170 / 2 - io.Fonts->Fonts[ifont]->CalcTextSizeA(io.Fonts->Fonts[ifont]->FontSize, FLT_MAX, 0, "NEVERLOSE").x / 2 + 1, 20 + 1), gui.accent_color.to_im_color(), "NEVERLOSE");
 		draw->AddText(io.Fonts->Fonts[ifont], io.Fonts->Fonts[ifont]->FontSize, pos + ImVec2(170 / 2 - io.Fonts->Fonts[ifont]->CalcTextSizeA(io.Fonts->Fonts[ifont]->FontSize, FLT_MAX, 0, "NEVERLOSE").x / 2, 20), GetColorU32(ImGuiCol_Text), "NEVERLOSE");
 
 		draw->AddLine(pos + ImVec2(0, size.y - 50), pos + ImVec2(170, size.y - 50), GetColorU32(ImGuiCol_WindowBg, 0.5f));
