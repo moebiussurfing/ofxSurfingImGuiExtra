@@ -38,12 +38,13 @@ void ofApp::setupFonts()
 {
 	ofSetLogLevel(OF_LOG_VERBOSE);
 
-	ImGui::StyleColorsDark();
+	ImGui::StyleColorsDark();//need fix for other themes
 
 	auto gui = ui.getImGuiPtr();
 	
 	customFont0 = gui->addFontFromMemory(museo500_binary, museo500_size, 14);
 
+#if 1
 	ImFontConfig config;
 	config.MergeMode = true;//merging glyphs
 	config.PixelSnapH = true;//?
@@ -53,6 +54,7 @@ void ofApp::setupFonts()
 	customFont1 = gui->addFontFromMemory(&font_awesome_binary, font_awesome_size, 13, &config, icon_ranges);
 
 	customFont2 = gui->addFontFromMemory(museo900_binary, museo900_size, 28);
+#endif
 
 	setupNeverlose(gui);
 }

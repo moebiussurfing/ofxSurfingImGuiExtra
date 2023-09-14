@@ -20,6 +20,12 @@
         the color picker, slider or toggles.
     - insert images
 
+    - Color picker requires AddRectFilledMultiColorRounded 
+        defined into imgui.h:
+        //TODO
+        IMGUI_API void  AddRectFilledMultiColorRounded(const ImVec2& p_min, const ImVec2& p_max, ImU32 bg_color, ImU32 col_upr_left, ImU32 col_upr_right, ImU32 col_bot_right, ImU32 col_bot_left, float rounding, ImDrawFlags rounding_corners = ImDrawFlags_RoundCornersAll);
+        as is declared into \neverlose\imgui_widgets_Neverlose.cpp
+
 */
 
 #include "ofxSurfingImGui.h"
