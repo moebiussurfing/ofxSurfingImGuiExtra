@@ -1,6 +1,17 @@
 #pragma once
 #include "ofMain.h"
 
+/*
+
+    This is an OF 0.11 WIP example porting ImGuizmo from @CedricGuillemet
+    https://forum.openframeworks.cc/t/ofximgui-how-to-add-imguizmo/24982/24
+    https://github.com/CedricGuillemet/ImGuizmo // -> Raw ImGui repo.
+    https://github.com/nariakiiwatani/ofxImGuizmo // -> Repo with OF helpers (cam/transforms).
+    https://github.com/nariakiiwatani/ImGuizmo // -> Small fixes.
+
+*/
+
+
 #include "ofxSurfingImGui.h"
 #include "ImGuizmoMain.cpp"
 
@@ -32,7 +43,8 @@ public:
     float cameraProjection[16];
 
     // build a procedural texture. 
-    // Copy/pasted and adapted from https://rosettacode.org/wiki/Plasma_effect#Graphics_version
+    // Copy/pasted and adapted from 
+    // https://rosettacode.org/wiki/Plasma_effect#Graphics_version
     unsigned int procTexture;
 
     uint32_t* tempBitmap = new uint32_t[256 * 256];

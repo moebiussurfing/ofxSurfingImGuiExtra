@@ -1,6 +1,3 @@
-#include <stdint.h>     // intptr_t
-#include <Windows.h>
-
 
 // https://github.com/CedricGuillemet/ImGuizmo
 // v 1.89 WIP
