@@ -15,11 +15,21 @@
 #include "ofxSurfingImGui.h"
 #include "ImGuizmoMain.cpp"
 
+#define USE_ONLY_GIZMOS
+//#define USE_Sequencer
+//#define USE_GraphEditor
+//#define USE_ZoomSlider
+
+#include "glm/gtx/matrix_decompose.hpp"
+
+#include "ofxImGuizmo.h"
+
 class ofApp : public ofBaseApp{
     
 public:
     void setup();
     void draw();
+    void drawScene();
     void keyPressed(int key);
 
     ofParameter<bool> bGui{"Show Gui", true};
@@ -60,4 +70,29 @@ public:
     MySequence mySequence;
 
     bool firstFrame = true;
+
+
+    //TODO
+    ofNode myNode;
+    void setOfNodeTransformMatrix(ofNode* node, const glm::mat4& m44) {
+        glm::vec3 scale;
+        glm::quat orientation;
+        glm::vec3 translation;
+        glm::vec3 skew;
+        glm::vec4 perspective;
+
+        glm::decompose(m44, scale, orientation, translation, skew, perspective);
+
+        node->setGlobalPosition(translation);
+        node->setGlobalOrientation(glm::inverse(orientation));
+        node->setScale(scale);
+    }
+
+
+
+    //TODO: ofxImGuizmo
+    ofCamera cam_;
+    ImGuizmo::OPERATION op_;
+    ImGuizmo::MODE mode_;
+    ofNode node_;
 };

@@ -5,15 +5,22 @@ void ofApp::setup()
 {
 	ui.setup();
 
-	setupImGuizmo();
+	setupImGuizmo();	
+	
+	cam_.setPosition({ 0,0,100 });
+	cam_.lookAt({ 0,0,0 });
 }
 
 //--------------------------------------------------------------
 void ofApp::setupImGuizmo()
 {
+#ifndef USE_ONLY_GIZMOS
+
+	// texture containers
 	glGenTextures(1, &procTexture);
 	glBindTexture(GL_TEXTURE_2D, procTexture);
 
+	// create texture for zoom slider
 	for (int y = 0; y < 256; y++)
 	{
 		for (int x = 0; x < 256; x++)
@@ -42,12 +49,32 @@ void ofApp::setupImGuizmo()
 	mySequence.myItems.push_back(MySequence::MySequenceItem{ 3, 12, 60, false });
 	mySequence.myItems.push_back(MySequence::MySequenceItem{ 2, 61, 90, false });
 	mySequence.myItems.push_back(MySequence::MySequenceItem{ 4, 90, 99, false });
+
+#endif
+}
+
+
+//--------------------------------------------------------------
+void ofApp::drawScene() {
+	cam_.begin();
+	
+	node_.draw();
+
+
+
+	float sz = 10;
+	ofDrawCone(myNode.getPosition(), sz * myNode.getScale().x, sz * 1.5 * myNode.getScale().y);
+
+	cam_.end();
 }
 
 //--------------------------------------------------------------
 void ofApp::drawImGuizmo()
 {
 	ImGuiIO& io = ImGui::GetIO();
+
+#if 1
+	// camera
 	if (isPerspective)
 	{
 		Perspective(fov, io.DisplaySize.x / io.DisplaySize.y, 0.1f, 100.f, cameraProjection);
@@ -58,79 +85,126 @@ void ofApp::drawImGuizmo()
 		OrthoGraphic(-viewWidth, viewWidth, -viewHeight, viewHeight, 1000.f, -1000.f, cameraProjection);
 	}
 	ImGuizmo::SetOrthographic(!isPerspective);
+#endif
+
 	ImGuizmo::BeginFrame();
 
+
+	//ofPushStyle();
+	//ofNoFill();
+	//ofDrawBox(5);
+	//ofPopStyle();
+
+
+
+	//TODO: ofxImGuizmo
+	auto mat = node_.getGlobalTransformMatrix();
+	if (ImGuizmo::Manipulate(cam_, mat, op_, mode_)) {
+		glm::mat4 transformation;
+		glm::vec3 scale;
+		glm::quat rotation;
+		glm::vec3 translation;
+		glm::vec3 skew;
+		glm::vec4 perspective;
+		glm::decompose(mat, scale, rotation, translation, skew, perspective);
+		node_.setPosition(translation);
+		node_.setScale(scale);
+		node_.setOrientation(rotation);
+	}
+
+
+
+	// editor
 	ImGui::SetNextWindowPos(ImVec2(1024, 100), ImGuiCond_Appearing);
 	ImGui::SetNextWindowSize(ImVec2(256, 256), ImGuiCond_Appearing);
 
 	// create a window and insert the inspector
 	ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_Appearing);
 	ImGui::SetNextWindowSize(ImVec2(320, 340), ImGuiCond_Appearing);
+
 	ImGui::Begin("Editor");
-	if (ImGui::RadioButton("Full view", !useWindow)) useWindow = false;
-	ImGui::SameLine();
-	if (ImGui::RadioButton("Window", useWindow)) useWindow = true;
-
-	ImGui::Text("Camera");
-	bool viewDirty = false;
-	if (ImGui::RadioButton("Perspective", isPerspective)) isPerspective = true;
-	ImGui::SameLine();
-	if (ImGui::RadioButton("Orthographic", !isPerspective)) isPerspective = false;
-	if (isPerspective)
 	{
-		ImGui::SliderFloat("Fov", &fov, 20.f, 110.f);
-	}
-	else
-	{
-		ImGui::SliderFloat("Ortho width", &viewWidth, 1, 20);
-	}
-	viewDirty |= ImGui::SliderFloat("Distance", &camDistance, 1.f, 10.f);
-	ImGui::SliderInt("Gizmo count", &gizmoCount, 1, 4);
-
-	if (viewDirty || firstFrame)
-	{
-		float eye[] = { cosf(camYAngle) * cosf(camXAngle) * camDistance, sinf(camXAngle) * camDistance, sinf(camYAngle) * cosf(camXAngle) * camDistance };
-		float at[] = { 0.f, 0.f, 0.f };
-		float up[] = { 0.f, 1.f, 0.f };
-		LookAt(eye, at, up, cameraView);
-		firstFrame = false;
-	}
-
-	ImGui::Text("X: %f Y: %f", io.MousePos.x, io.MousePos.y);
-	if (ImGuizmo::IsUsing())
-	{
-		ImGui::Text("Using gizmo");
-	}
-	else
-	{
-		ImGui::Text(ImGuizmo::IsOver() ? "Over gizmo" : "");
+		if (ImGui::RadioButton("Full view", !useWindow)) useWindow = false;
 		ImGui::SameLine();
-		ImGui::Text(ImGuizmo::IsOver(ImGuizmo::TRANSLATE) ? "Over translate gizmo" : "");
-		ImGui::SameLine();
-		ImGui::Text(ImGuizmo::IsOver(ImGuizmo::ROTATE) ? "Over rotate gizmo" : "");
-		ImGui::SameLine();
-		ImGui::Text(ImGuizmo::IsOver(ImGuizmo::SCALE) ? "Over scale gizmo" : "");
-	}
-	ImGui::Separator();
-	for (int matId = 0; matId < gizmoCount; matId++)
-	{
-		ImGuizmo::SetID(matId);
+		if (ImGui::RadioButton("Window", useWindow)) useWindow = true;
 
-		EditTransform(cameraView, cameraProjection, objectMatrix[matId], lastUsing == matId);
+		// camera
+		ImGui::Text("Camera");
+		bool viewDirty = false;
+		if (ImGui::RadioButton("Perspective", isPerspective)) isPerspective = true;
+		ImGui::SameLine();
+		if (ImGui::RadioButton("Orthographic", !isPerspective)) isPerspective = false;
+		if (isPerspective)
+		{
+			ImGui::SliderFloat("Fov", &fov, 20.f, 110.f);
+		}
+		else
+		{
+			ImGui::SliderFloat("Ortho width", &viewWidth, 1, 20);
+		}
+		viewDirty |= ImGui::SliderFloat("Distance", &camDistance, 1.f, 10.f);
+		ImGui::SliderInt("Gizmo count", &gizmoCount, 1, 4);
+		ImGui::SliderInt("Select", &lastUsing, 1, gizmoCount);
+
+		if (viewDirty || firstFrame)
+		{
+			float eye[] = { cosf(camYAngle) * cosf(camXAngle) * camDistance, sinf(camXAngle) * camDistance, sinf(camYAngle) * cosf(camXAngle) * camDistance };
+			float at[] = { 0.f, 0.f, 0.f };
+			float up[] = { 0.f, 1.f, 0.f };
+			LookAt(eye, at, up, cameraView);
+			firstFrame = false;
+		}
+
+		// debug info
+		ImGui::Text("X: %f Y: %f", io.MousePos.x, io.MousePos.y);
 		if (ImGuizmo::IsUsing())
 		{
-			lastUsing = matId;
+			ImGui::Text("Using gizmo");
 		}
-	}
+		else
+		{
+			ImGui::Text(ImGuizmo::IsOver() ? "Over gizmo" : "");
+			ImGui::SameLine();
+			ImGui::Text(ImGuizmo::IsOver(ImGuizmo::TRANSLATE) ? "Over translate gizmo" : "");
+			ImGui::SameLine();
+			ImGui::Text(ImGuizmo::IsOver(ImGuizmo::ROTATE) ? "Over rotate gizmo" : "");
+			ImGui::SameLine();
+			ImGui::Text(ImGuizmo::IsOver(ImGuizmo::SCALE) ? "Over scale gizmo" : "");
+		}
+		ImGui::Separator();
 
+		// gizmos/objects
+		for (int matId = 0; matId < gizmoCount; matId++)
+		{
+			ImGuizmo::SetID(matId);
+
+			EditTransform(cameraView, cameraProjection, objectMatrix[matId], lastUsing == matId);
+
+			if (ImGuizmo::IsUsing())
+			{
+				lastUsing = matId;
+			}
+		}
+
+		//TODO:
+		// get object 0
+		const glm::mat4 m44 = glm::make_mat4(objectMatrix[0]);
+		setOfNodeTransformMatrix(&myNode, m44);
+	}
 	ImGui::End();
 
 	//----
+
+#ifndef USE_ONLY_GIZMOS
+
+	// Other controls
 
 	ImGui::SetNextWindowPos(ImVec2(10, 350), ImGuiCond_Appearing);
 
 	ImGui::SetNextWindowSize(ImVec2(940, 480), ImGuiCond_Appearing);
 	ImGui::Begin("Other controls");
+
+#ifdef USE_ZoomSlider
 	if (ImGui::CollapsingHeader("Zoom Slider"))
 	{
 		static float uMin = 0.4f, uMax = 0.6f;
@@ -149,9 +223,11 @@ void ofApp::drawImGuizmo()
 			ImGui::PopID();
 		}
 	}
+#endif
 
 	//----
 
+#ifdef USE_Sequencer
 	if (ImGui::CollapsingHeader("Sequencer"))
 	{
 		// let's create the sequencer
@@ -176,8 +252,10 @@ void ofApp::drawImGuizmo()
 			// switch (type) ....
 		}
 	}
+#endif
+
 #ifndef USE_GraphEditor
-	ImGui::End();
+	ImGui::End();//Other controls
 #endif
 
 #ifdef USE_GraphEditor
@@ -211,7 +289,9 @@ void ofApp::drawImGuizmo()
 		GraphEditor::Show(delegate, options, viewState, true, &fit);
 
 		ImGui::End();
-}
+	}
+#endif
+
 #endif
 
 }
@@ -226,6 +306,9 @@ void ofApp::draw()
 		drawImGuizmo();
 	}
 	ui.End();
+
+
+	drawScene();
 }
 
 //--------------------------------------------------------------
@@ -233,5 +316,13 @@ void ofApp::keyPressed(int key)
 {
 	if (key == 'g') {
 		bGui = !bGui;
+	}
+	
+	//TODO: ofxImGuizmo
+	switch (key) {
+	case 'w': op_ = ImGuizmo::TRANSLATE; break;
+	case 'e': op_ = ImGuizmo::SCALE; break;
+	case 'r': op_ = ImGuizmo::ROTATE; break;
+	case ' ': mode_ = mode_ == ImGuizmo::LOCAL ? ImGuizmo::WORLD : ImGuizmo::LOCAL; break;
 	}
 }
