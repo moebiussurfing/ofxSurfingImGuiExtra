@@ -1,5 +1,15 @@
 #pragma once
 
+
+#define USE_ONLY_GIZMOS//disables all below
+
+//#define USE_Sequencer
+//#define USE_GraphEditor
+//#define USE_ZoomSlider
+
+
+
+
 // https://github.com/CedricGuillemet/ImGuizmo
 // v 1.89 WIP
 //
@@ -39,7 +49,7 @@
 #include <algorithm>
 
 static bool useWindow = true;
-static int gizmoCount = 1;
+static int gizmoCount = 4;
 static float camDistance = 8.f;
 static ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::TRANSLATE);
 
@@ -298,7 +308,7 @@ static void EditTransform(float* cameraView, float* cameraProjection, float* mat
 
    ImGuizmo::DrawGrid(cameraView, cameraProjection, identityMatrix, 100.f);
 
-   //ImGuizmo::DrawCubes(cameraView, cameraProjection, &objectMatrix[0][0], gizmoCount);
+   ImGuizmo::DrawCubes(cameraView, cameraProjection, &objectMatrix[0][0], gizmoCount);
    
    ImGuizmo::Manipulate(cameraView, cameraProjection, mCurrentGizmoOperation, mCurrentGizmoMode, matrix, NULL, useSnap ? &snap[0] : NULL, boundSizing ? bounds : NULL, boundSizingSnap ? boundsSnap : NULL);
 
@@ -311,6 +321,7 @@ static void EditTransform(float* cameraView, float* cameraProjection, float* mat
    }
 }
 
+#ifdef USE_Sequencer
 //
 //
 // ImSequencer interface
@@ -510,16 +521,16 @@ struct MySequence : public ImSequencer::SequenceInterface
       draw_list->PopClipRect();
    }
 };
+#endif
 
+#ifdef USE_GraphEditor
 //
 //
 // GraphEditor interface
 //
 //
 
-// Disables as requires C++17/OF 12
-//#define USE_GraphEditor
-#ifdef USE_GraphEditor
+// Disabled as requires C++17/OF 12
 
 template <typename T, std::size_t N>
 struct Array
