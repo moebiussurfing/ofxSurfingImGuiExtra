@@ -18,8 +18,8 @@ public:
     ofParameter<bool> bEnable3;
     ofParameter<bool> bPrevious;
     ofParameter<bool> bNext;
-    ofParameter<float> lineWidth;
-    ofParameter<float> separation;
+    ofParameter<float> lineMin;
+    ofParameter<float> lineMax;
     ofParameter<float> speed;
     ofParameter<int> shapeType;
     ofParameter<int> amount;
@@ -29,8 +29,8 @@ public:
     ofParameter<int> amount2;
     ofParameter<int> size2;
     ofParameterGroup params3;
-    ofParameter<float> lineWidth3;
-    ofParameter<float> separation3;
+    ofParameter<float> separationMin;
+    ofParameter<float> separationMax;
     ofParameter<float> speed3;
     ofParameter<int> shapeType3;
 
