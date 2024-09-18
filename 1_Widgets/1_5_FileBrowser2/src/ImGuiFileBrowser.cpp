@@ -705,7 +705,8 @@ namespace ofxImGuiSurfing
         input_combobox_sz.y = std::min((inputcb_filter_files.size() + 1) * frame_height + style.WindowPadding.y *  2.0f,
                                         8 * ImGui::GetFrameHeight() + style.WindowPadding.y *  2.0f);
 
-        if(show_inputbar_combobox && ( ImGui::GetFocusedFocusScope() == focus_scope_id || ImGui::GetCurrentContext()->ActiveIdIsAlive == input_id  ))
+        //if(show_inputbar_combobox && ( ImGui::GetFocusedFocusScope() == focus_scope_id || ImGui::GetCurrentContext()->ActiveIdIsAlive == input_id  ))
+		if (show_inputbar_combobox && (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows) || ImGui::GetCurrentContext()->ActiveId == input_id))
         {
             ImGuiWindowFlags popupFlags = ImGuiWindowFlags_NoTitleBar           |
                                           ImGuiWindowFlags_NoResize             |

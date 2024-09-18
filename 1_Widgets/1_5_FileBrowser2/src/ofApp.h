@@ -2,23 +2,18 @@
 #pragma once
 
 // Taken from: https://github.com/d3cod3/ofxVisualProgramming
-
 // https://github.com/d3cod3/ofxVisualProgramming/blob/master/src/objects/data/FileToData.h
 // https://github.com/d3cod3/ofxVisualProgramming/blob/master/src/objects/data/FileToData.cpp
 
 /*
-
-TODO:
-WIP
-not working..
-nothing appears.
-
+	TODO:
+	WIP
+	not working..
 */
 
 
 #include "ofMain.h"
 
-//#include "ofxImGui.h"
 #include "ofxSurfingImGui.h"
 
 #include "ImGuiFileBrowser.h"
@@ -29,7 +24,7 @@ public:
 	void draw();
 	void keyPressed(int key);
 
-	ofxImGui::Gui gui;
+	ofxSurfingGui gui;
 
 	ofxImGuiSurfing::ImGuiFileBrowser fileBrowser;
 

@@ -6,10 +6,6 @@ void ofApp::setup()
 	ofSetLogLevel(OF_LOG_VERBOSE);
 
 	gui.setup();
-
-	// style
-	ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
-	ofxImGuiSurfing::setDefaultFont(gui);
 }
 
 //--------------------------------------------------------------
@@ -22,29 +18,34 @@ void ofApp::draw() {
 
 	gui.Begin();
 	{
-		ImGui::Begin("Browser");
+		if(gui.BeginWindow("Files browser"))
 		{
 			ImGui::Checkbox("show", &show);
 
-			std::string valid_types;
-			//valid_types = "xml";
-			valid_types = "*.*";
-			//valid_types = ".xml";
-			
-			std::string nameProposal = "nameProposal";
-			std::string text = "Browse your files";
+			if (show) {
 
-			mode = ofxImGuiSurfing::ImGuiFileBrowser::DialogMode::OPEN;
-			//mode = ofxImGuiSurfing::ImGuiFileBrowser::DialogMode::SAVE;
-			//mode = ofxImGuiSurfing::ImGuiFileBrowser::DialogMode::SELECT;
+				std::string valid_types;
 
-			bool b = getFileDialog(fileBrowser, &show, text, mode, valid_types);
-			if (b) {
-				strPath = fileBrowser.selected_fn;
-				strFileName = fileBrowser.selected_path;
+				valid_types = "*.*";
+				//valid_types = "xml";
+				//valid_types = ".json";
+
+				std::string nameProposal = "nameProposal";
+				std::string text = "Browse your files";
+
+				mode = ofxImGuiSurfing::ImGuiFileBrowser::DialogMode::OPEN;
+				//mode = ofxImGuiSurfing::ImGuiFileBrowser::DialogMode::SAVE;
+				//mode = ofxImGuiSurfing::ImGuiFileBrowser::DialogMode::SELECT;
+
+				bool b = getFileDialog(fileBrowser, &show, text, mode, valid_types);
+				if (b) {
+					strPath = fileBrowser.selected_fn;
+					strFileName = fileBrowser.selected_path;
+				}
 			}
+
+			gui.EndWindow();
 		}
-		ImGui::End();
 	}
 	gui.End();
 }
@@ -53,6 +54,7 @@ void ofApp::draw() {
 void ofApp::keyPressed(int key) {
 	show = !show;
 }
+
 
 // https://github.com/d3cod3/ofxVisualProgramming/blob/master/src/objects/data/FileToData.cpp
 //    // file dialog

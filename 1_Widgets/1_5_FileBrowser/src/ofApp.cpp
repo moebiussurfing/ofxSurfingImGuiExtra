@@ -1,35 +1,28 @@
 #include "ofApp.h"
 
 //--------------------------------------------------------------
-void ofApp::setup()
-{
+void ofApp::setup() {
 	ofSetLogLevel(OF_LOG_VERBOSE);
 
 	gui.setup();
-
-	// style
-	ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
-	ofxImGuiSurfing::setDefaultFont(gui);
-
-	ofDirectory dataDirectory(ofToDataPath("", true));
 }
 
 //--------------------------------------------------------------
 void ofApp::draw() {
-
-	ofSetBackgroundColor(24);
-
-	ofDrawBitmapStringHighlight(strPath, 20, 400);
-	ofDrawBitmapStringHighlight(strPathName, 20, 420);
-
 	gui.Begin();
-
-	if (ofxImGuiSurfing::drawGui_FileDialog()) {
-		ofLogWarning(__FUNCTION__) << "filePath     : " << ofxImGuiSurfing::filePath;
-		ofLogWarning(__FUNCTION__) << "filePathName : " << ofxImGuiSurfing::filePathName;
-		strPath = filePath;
-		strPathName = filePathName;
+	{
+		if (ofxImGuiSurfing::drawGui_FileDialog()) {
+			ofLogWarning() << "filePath     : " << ofxImGuiSurfing::filePath;
+			ofLogWarning() << "filePathName : " << ofxImGuiSurfing::filePathName;
+			strPath = filePath;
+			strPathName = filePathName;
+		}
 	}
-
 	gui.End();
+
+	// display last picked file
+	if (strPath != "" || strPathName != "") {
+		ofDrawBitmapStringHighlight(strPath, 20, 40);
+		ofDrawBitmapStringHighlight(strPathName, 20, 420);
+	}
 }
