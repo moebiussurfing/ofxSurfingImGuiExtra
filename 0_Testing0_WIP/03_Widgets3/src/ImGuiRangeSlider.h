@@ -1,3 +1,5 @@
+// Taken from: https : //github.com/iamclint/ImGuiRangeSlider
+
 #pragma once
 
 #include "ofxImGui.h"

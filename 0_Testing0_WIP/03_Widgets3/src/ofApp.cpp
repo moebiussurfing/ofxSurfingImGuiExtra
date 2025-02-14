@@ -368,7 +368,7 @@ void ofApp::draw()
 
 				// with some common toggles that we must customize/assign destinations.
 				{
-					ui.drawAdvancedBundle(true);
+					ui.DrawAdvancedBundle(true);
 				}
 			}
 			ui.EndWindow();
@@ -443,7 +443,9 @@ void ofApp::draw()
 
 					//IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
 					//ofxImGuiSurfing::AddRangeParam("RgVal", valueMin, valueMax, "%.2f  %.2f", 1.0f, ImVec2(_w100, _h), false);
-					ofxImGuiSurfing::AddRangeParam("RgVal", valueMin, valueMax, "%.2f  %.2f", 1.0f);
+					
+					//ofxImGuiSurfing::AddRangeParam("RgVal", valueMin, valueMax, "%.2f  %.2f", 1.0f);
+					
 					//IMGUI_SUGAR_SLIDER_WIDTH_POP;
 
 					//ImGui::SameLine();
@@ -502,7 +504,9 @@ void ofApp::draw()
 				if (bEnablers[4])
 				{
 					static bool bOpen = false;
-					ImGui::SetNextTreeNodeOpen(bOpen, ImGuiCond_Appearing);
+
+					//ImGui::SetNextTreeNodeOpen(bOpen, ImGuiCond_Appearing);
+					ImGui::SetNextItemOpen(true);
 
 					ui.AddGroup(params1);
 
