@@ -8,7 +8,7 @@ void ofApp::setup()
 	ofSetFrameRate(60);
 
 	ui.setup();
-	ui.setImGuiAutoResize(false);
+	//ui.setImGuiAutoResize(false);
 
 	entt::entity entity = registry.create();
 
