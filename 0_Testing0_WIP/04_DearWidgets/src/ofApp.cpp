@@ -158,9 +158,9 @@ void ofApp::draw_MoreWidgets()
 	{
 		ImDrawList* draw_list = ImGui::GetWindowDrawList();
 
-		//ofxImGuiSurfing::drawTimecode(draw_list, ofGetElapsedTimef());
+		ofxImGuiSurfing::drawTimecode(draw_list, ofGetElapsedTimef());
 		ofxImGuiSurfing::AddTooltipHelp("Urbs, Virus y Bits se propone como un piloto de lo que imaginamos como una escuela que se aproxime a la ciudad desde las humanidades ambientales. Propone un acercamiento a las humanidades ambientales desde las pr�cticas digitales, art�sticas y de invenci�n de ciudad, respondiendo a los desaf�os clim�ticos y de justicia ambiental.");
-		ofxImGuiSurfing::AddLinkUrlButton("Open URL Info", "http://google.com");
+		ofxImGuiSurfing::AddLinkURL("Open URL Info", "http://google.com");
 
 		ImGui::TextWrapped(
 			"This text should automatically wrap on the edge of the window. The current implementation "
