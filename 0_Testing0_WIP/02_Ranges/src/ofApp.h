@@ -3,6 +3,7 @@
 #include "ofMain.h"
 
 #include "ofxSurfingImGui.h"
+#include "RangeSliderFloat.h"
 
 class ofApp : public ofBaseApp{
     
