@@ -1,10 +1,11 @@
 #include "ofApp.h"
 
 //--------------------------------------------------------------
-void ofApp::setup() 
-{
+void ofApp::setup() {
+	ofSetWindowPosition(-2100, -250);
+
 	// parameters
-	params.setName("paramsGroup");// main container
+	params.setName("paramsGroup"); // main container
 	//params2.setName("paramsGroup2");// nested
 	//params3.setName("paramsGroup3");// nested
 	//params.add(bPrevious.set("<", false));
@@ -32,39 +33,60 @@ void ofApp::setup()
 }
 
 //--------------------------------------------------------------
-void ofApp::draw() 
-{
+void ofApp::draw() {
+	auto p = glm::vec2(ofGetWindowPositionX(), ofGetWindowPositionY());
+	ofSetWindowTitle(ofToString(p.x) + ","+ ofToString(p.y));
+
 	ui.Begin();
 	{
-		if (ui.BeginWindow(bGui))
-		{
+		if (ui.BeginWindow(bGui)) {
 			ui.AddAutoResizeToggle();
 
-			//ui.AddGroup(params);
+			static float vmin1 = 0.2f;
+			static float vmax1 = 0.8f;
+			RangeSliderFloat("Range 1", &vmin1, &vmax1, 0.0f, 1.0f, true, "%.3f", "%.3f", ImGuiSliderFlags_AlwaysClamp);
 
-			////TODO:
-			////Range
-			//string n = "MONOCHR";
-			//float power = 1; 
-			//float _sp = ui.getWidgetsSpacingX();
-			//float _w = ui.getWidgetsWidth(1) /*- _sp*/;
-			//float _h = ui.getWidgetsHeightUnit();
-			//ImGui::PushItemWidth(_w);
-			//std::string ss = "%.3f    %.3f";
-			//ImVec2 shape = ImVec2(_w, _h);
-			////ImVec2 shape = ImVec2(-1, -1);
-			//bool bfullsize = true;
-			//bool bNoLabel = true;
-			//ofxImGuiSurfing::AddRange("one", lineMin, lineMax, ss.c_str(), power, shape, bfullsize, bNoLabel);
+			static float vmin2= 0.1f;
+			static float vmax2 = 0.9f;
+			RangeSliderFloat("Range 2", &vmin2, &vmax2, 0.0f, 1.0f, true, "%.2f", "%.2f", ImGuiSliderFlags_AlwaysClamp);
 
-			string n1 = "one";
-			string n2 = "two";
+			ui.AddSeparated();
 
-			ofxImGuiSurfing::AddRangeParam(n1, lineMin, lineMax);
-			ofxImGuiSurfing::AddRangeParam(n2, separationMin, separationMax);
-			
-			//ImGui::PopItemWidth();
-			
+			//TODO: DEBUG
+			static bool bShow = 0;
+			AddToggle("show", bShow);
+			if (bShow) {
+				//ui.AddGroup(params);
+
+				////TODO:
+				////Range
+				//string n = "MONOCHR";
+				//float power = 1;
+				//float _sp = ui.getWidgetsSpacingX();
+				//float _w = ui.getWidgetsWidth(1) /*- _sp*/;
+				//float _h = ui.getWidgetsHeightUnit();
+				//ImGui::PushItemWidth(_w);
+				//std::string ss = "%.3f    %.3f";
+				//ImVec2 shape = ImVec2(_w, _h);
+				////ImVec2 shape = ImVec2(-1, -1);
+				//bool bfullsize = true;
+				//bool bNoLabel = true;
+				////AddRange("one", lineMin, lineMax, ss.c_str(), power, shape, bfullsize, bNoLabel);
+				//ImGui::PopItemWidth();
+
+				AddRange("one", lineMin, lineMax, 0.01);
+
+				ui.AddSeparated();
+
+				if (1) {
+					string n1 = "one";
+					string n2 = "two";
+
+					ofxImGuiSurfing::AddRangeParam(n1, lineMin, lineMax);
+					ofxImGuiSurfing::AddRangeParam(n2, separationMin, separationMax);
+				}
+
+			}
 			ui.EndWindow();
 		}
 	}
@@ -72,8 +94,7 @@ void ofApp::draw()
 }
 
 //--------------------------------------------------------------
-void ofApp::keyPressed(int key) 
-{
+void ofApp::keyPressed(int key) {
 	if (key == 'g') {
 		bGui = !bGui;
 	}

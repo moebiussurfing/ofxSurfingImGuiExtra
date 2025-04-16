@@ -3,27 +3,6 @@
 #include "ofxImGui.h"
 using namespace ImGui;
 
-/*
- * ImGUIUtilities::RangeSliderFloat
- *
- *	A slider with two handles to define a min max float range inside the slider.
- */
-inline bool RangeSliderFloat(
-	char const* label,
-	float* vmin,
-	float* vmax,
-	float rangeMin,
-	float rangeMax,
-	bool fSlideBlock,
-	const char* formatMin,
-	const char* formatMax,
-	ImGuiSliderFlags flags)
-{
-	ImGui::PushID(label);
-	bool result = RangeSliderScalar(label, ImGuiDataType_Float, vmin, vmax, &rangeMin, &rangeMax, fSlideBlock, formatMin, formatMax, flags);
-	ImGui::PopID();
-	return result;
-}
 
 
 /*
@@ -80,7 +59,8 @@ inline bool RangeSliderScalar(
 	bool temp_input_is_active_min = temp_input_allowed && ImGui::TempInputIsActive(idMin);
 	bool temp_input_is_active_max = temp_input_allowed && ImGui::TempInputIsActive(idMax);
 
-	const bool hoveredMin = !temp_input_is_active_max && ImGui::ItemHoverable(frame_bb_Min, idMin);
+	ImGuiItemFlags item_flags = ImGuiItemFlags_Default_;//fix
+	const bool hoveredMin = !temp_input_is_active_max && ImGui::ItemHoverable(frame_bb_Min, idMin, item_flags);
 	if (!temp_input_is_active_min)
 	{
 		//bool focus_requested = temp_input_allowed && ImGui::FocusableItemRegister(window, idMin);
@@ -121,7 +101,7 @@ inline bool RangeSliderScalar(
 		return ImGui::TempInputScalar(frame_bb, idMin, "Min", data_type, p_dataMin, formatMin, clamp_to_min ? p_rangeMin : nullptr, clamp_to_max ? p_clampMax : nullptr);
 	}
 
-	const bool hoveredMax = !temp_input_is_active_min && ImGui::ItemHoverable(frame_bb_Max, idMax);
+	const bool hoveredMax = !temp_input_is_active_min && ImGui::ItemHoverable(frame_bb_Max, idMax, ImGuiItemFlags_Default_);
 	if (!temp_input_is_active_max)
 	{
 		//bool focus_requested = temp_input_allowed && ImGui::FocusableItemRegister(window, idMax);
@@ -267,4 +247,25 @@ inline bool RangeSliderScalar(
 
 	IMGUI_TEST_ENGINE_ITEM_INFO(id, label, window->DC.ItemFlags);
 	return minChanged || maxChanged;
+}
+
+/*
+ * ImGUIUtilities::RangeSliderFloat
+ *
+ *	A slider with two handles to define a min max float range inside the slider.
+ */
+inline bool RangeSliderFloat(
+	char const * label,
+	float * vmin,
+	float * vmax,
+	float rangeMin,
+	float rangeMax,
+	bool fSlideBlock,
+	const char * formatMin,
+	const char * formatMax,
+	ImGuiSliderFlags flags) {
+	ImGui::PushID(label);
+	bool result = RangeSliderScalar(label, ImGuiDataType_Float, vmin, vmax, &rangeMin, &rangeMax, fSlideBlock, formatMin, formatMax, flags);
+	ImGui::PopID();
+	return result;
 }
