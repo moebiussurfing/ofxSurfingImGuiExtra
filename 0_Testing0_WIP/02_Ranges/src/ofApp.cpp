@@ -48,7 +48,7 @@ void ofApp::draw() {
 
 			static float vmin2= 0.1f;
 			static float vmax2 = 0.9f;
-			RangeSliderFloat("Range 2", &vmin2, &vmax2, 0.0f, 1.0f, true, "%.2f", "%.2f", ImGuiSliderFlags_AlwaysClamp);
+			RangeSliderFloat("Range 2", &vmin2, &vmax2, 0.0f, 1.0f, true, "%.1f", "%.1f", ImGuiSliderFlags_AlwaysClamp);
 
 			ui.AddSeparated();
 
