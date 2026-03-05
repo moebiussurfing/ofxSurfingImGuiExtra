@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxSurfingImGui.h"
+#include "SurfingHelpers.h"
 
 class MyClass
 {
@@ -41,7 +42,7 @@ public:
 
 	~MyClass() {
 		// Session Settings
-		ofxSurfingHelpers::saveGroup(params);
+		ofxImGuiSurfing::saveGroup(params);
 	};
 
 	void setupImGui() {
@@ -65,7 +66,7 @@ public:
 
 		// Session Settings
 		params.add(bGui);
-		ofxSurfingHelpers::loadGroup(params);
+		ofxImGuiSurfing::loadGroup(params);
 	};
 
 	void draw() 
@@ -144,24 +145,31 @@ public:
 			}
 			if (ui.BeginWindowSpecial(bGui_3))
 			{
-				ui.AddLabelBig("This a non auto resized window.");
-				ui.AddLabel("Distributed Toggles on a Responsive Layout of one column.");
-				ui.AddSpacing();
+				//ui.AddLabelBig("This a non auto resized window.");
+				//ui.AddLabel("Distributed Toggles on a Responsive Layout of one column.");
+				//ui.AddSpacing();
 
-				int spcy = ofxImGuiSurfing::getWidgetsSpacingY();
-				int w = ofxImGuiSurfing::getWindowContentWidth();//gets window column width
+				//int spcy = ofxImGuiSurfing::getWidgetsSpacingY();
+				//int w = ofxImGuiSurfing::getWindowContentWidth();//gets window column width
 
-				//calculate widgets height for responsive
-				const int _amount = 6;
-				int hfull = ofxImGuiSurfing::getWindowContentHeight();
-				int h = (hfull - ((_amount - 1) * spcy)) / _amount;
+				////calculate widgets height for responsive
+				//const int _amount = 6;
+				//int hfull = ofxImGuiSurfing::getWindowContentHeight();
+				//int h = (hfull - ((_amount - 1) * spcy)) / _amount;
 
-				ofxImGuiSurfing::AddToggle(b1, ImVec2(w, h));
-				ofxImGuiSurfing::AddToggle(b2, ImVec2(w, h));
-				ofxImGuiSurfing::AddToggle(b3, ImVec2(w, h));
-				ofxImGuiSurfing::AddToggle(b4, ImVec2(w, h));
-				ofxImGuiSurfing::AddToggle(b5, ImVec2(w, h));
-				ofxImGuiSurfing::AddToggle(b6, ImVec2(w, h));
+				//ofxImGuiSurfing::AddToggle(b1, ImVec2(w, h));
+				//ofxImGuiSurfing::AddToggle(b2, ImVec2(w, h));
+				//ofxImGuiSurfing::AddToggle(b3, ImVec2(w, h));
+				//ofxImGuiSurfing::AddToggle(b4, ImVec2(w, h));
+				//ofxImGuiSurfing::AddToggle(b5, ImVec2(w, h));
+				//ofxImGuiSurfing::AddToggle(b6, ImVec2(w, h));
+
+				ofxImGuiSurfing::AddToggle(b1);
+				ofxImGuiSurfing::AddToggle(b2);
+				ofxImGuiSurfing::AddToggle(b3);
+				ofxImGuiSurfing::AddToggle(b4);
+				ofxImGuiSurfing::AddToggle(b5);
+				ofxImGuiSurfing::AddToggle(b6);
 
 				ui.EndWindowSpecial();
 			}

@@ -169,7 +169,7 @@ void ofApp::draw_MainWindow() {
 		ui.AddHelpToggle();
 
 		ui.AddSpacing();
-		ui.DrawWindgetsTheme();
+		//ui.DrawWindgetsTheme();
 
 		ui.AddSpacingSeparated();
 
@@ -399,17 +399,17 @@ void ofApp::buildHelpInfo()
 	if (bGui)
 	{
 		helpInfo += "\n\n";
-		helpInfo += "0      GLOBAL VISIBLE " + ofToString(ui.getGuiToggleGlobalState() ? "ON" : "OFF") + "\n";
+		helpInfo += "0      GLOBAL VISIBLE " + ofToString(ui.getGuiToggleGlobal() ? "ON" : "OFF") + "\n";
 
-		if (ui.getGuiToggleGlobalState())
+		if (ui.getGuiToggleGlobal())
 		{
 			helpInfo += "\n";
-			helpInfo += "1      WINDOW 1 " + ofToString(ui.getWindowSpecialVisibleState(0) ? "ON" : "OFF") + "\n";
-			helpInfo += "2      WINDOW 2 " + ofToString(ui.getWindowSpecialVisibleState(1) ? "ON" : "OFF") + "\n";
-			helpInfo += "3      WINDOW 3 " + ofToString(ui.getWindowSpecialVisibleState(2) ? "ON" : "OFF") + "\n";
-			helpInfo += "4      WINDOW 4 " + ofToString(ui.getWindowSpecialVisibleState(3) ? "ON" : "OFF") + "\n";
-			helpInfo += "5      WINDOW 5 " + ofToString(ui.getWindowSpecialVisibleState(4) ? "ON" : "OFF") + "\n";
-			helpInfo += "6      WINDOW 6 " + ofToString(ui.getWindowSpecialVisibleState(5) ? "ON" : "OFF") + "\n";
+			helpInfo += "1      WINDOW 1 " + ofToString(ui.getWindowSpecialVisible(0) ? "ON" : "OFF") + "\n";
+			helpInfo += "2      WINDOW 2 " + ofToString(ui.getWindowSpecialVisible(1) ? "ON" : "OFF") + "\n";
+			helpInfo += "3      WINDOW 3 " + ofToString(ui.getWindowSpecialVisible(2) ? "ON" : "OFF") + "\n";
+			helpInfo += "4      WINDOW 4 " + ofToString(ui.getWindowSpecialVisible(3) ? "ON" : "OFF") + "\n";
+			helpInfo += "5      WINDOW 5 " + ofToString(ui.getWindowSpecialVisible(4) ? "ON" : "OFF") + "\n";
+			helpInfo += "6      WINDOW 6 " + ofToString(ui.getWindowSpecialVisible(5) ? "ON" : "OFF") + "\n";
 		}
 	}
 	helpInfo += "\n\n";
@@ -418,5 +418,5 @@ void ofApp::buildHelpInfo()
 
 	// We can use an internal Help Manager on the Gui Manager
 	// Enabler toggle will be auto integrated in the common panels.
-	ui.setHelpInfoApp(helpInfo);
+	ui.setHelpAppText(helpInfo);
 }
