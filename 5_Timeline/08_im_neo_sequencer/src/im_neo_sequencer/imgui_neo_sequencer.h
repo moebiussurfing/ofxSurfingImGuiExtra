@@ -158,7 +158,7 @@ namespace ImGui {
 
 #ifdef __cplusplus
     // C++ helper
-    IMGUI_API bool BeginNeoTimeline(const char* label,std::vector<int32_t> & keyframes ,bool * open = nullptr, ImGuiNeoTimelineFlags flags = ImGuiNeoTimelineFlags_None);
+    IMGUI_API bool BeginNeoTimeline(const char* label,std::vector<int32_t> & keyframes, bool * open = nullptr, ImGuiNeoTimelineFlags flags = ImGuiNeoTimelineFlags_None);
 #endif
 
     // Retrieves the currently viewed frame range

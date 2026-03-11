@@ -119,6 +119,10 @@ namespace ImGui {
             const ImRect area = {cursor, cursor + size};
             drawList->AddRectFilled(area.Min, area.Max, ColorConvertFloat4ToU32(highlightColor));
         }
+        else {
+            const ImRect area = {cursor, cursor + size};
+            drawList->AddRectFilled(area.Min, area.Max, ColorConvertFloat4ToU32(highlightColor));
+        }
     }
 
     float GetPerFrameWidth(float totalSizeX, float valuesWidth, uint32_t endFrame, uint32_t startFrame, float zoom) {
