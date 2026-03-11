@@ -45,6 +45,8 @@ private:
 
   void drawMainBangPanel();
   void onBangEvent(std::size_t lane, ImGui::FrameIndexType step, bool fromTimeline);
+  ofVec2f getLaneAnchorPosition(std::size_t lane) const;
+  void drawLaneAnchors() const;
   void spawnParticleForLane(std::size_t lane);
   void updateParticles(float deltaSeconds);
   void drawParticles() const;

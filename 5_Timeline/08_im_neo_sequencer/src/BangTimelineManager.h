@@ -55,11 +55,12 @@ public:
     updateTimelineBounds();
     sanitizeAllLanes();
     resolveScenePath();
+    loadSceneIfAvailable();
 
     auto& style = ImGui::GetNeoSequencerStyle();
     style.MaxSizePerTick = 8.0f;
-    style.Colors[ImGuiNeoSequencerCol_Bg] = ImVec4(0.18f, 0.18f, 0.18f, 1.00f);
-    style.Colors[ImGuiNeoSequencerCol_TimelinesBg] = ImVec4(0.22f, 0.22f, 0.22f, 1.00f);
+    style.Colors[ImGuiNeoSequencerCol_Bg] = ImVec4(0.14f, 0.14f, 0.14f, 1.00f);
+    style.Colors[ImGuiNeoSequencerCol_TimelinesBg] = ImVec4(0.16f, 0.16f, 0.16f, 1.00f);
     style.Colors[ImGuiNeoSequencerCol_TopBarBg] = ImVec4(0.12f, 0.12f, 0.12f, 1.00f);
     style.Colors[ImGuiNeoSequencerCol_ZoomBarBg] = ImVec4(0.20f, 0.20f, 0.20f, 0.95f);
     style.Colors[ImGuiNeoSequencerCol_ZoomBarSlider] = ImVec4(0.30f, 0.30f, 0.30f, 0.88f);
@@ -202,6 +203,14 @@ private:
     }
   }
 
+  void loadSceneIfAvailable()
+  {
+    ofFile file(scenePathAbsolute_);
+    if (file.exists()) {
+      loadSceneFromDisk();
+    }
+  }
+
   void setupBangParameters()
   {
     bangs_.clear();
@@ -283,11 +292,10 @@ private:
     const float controlsY = rect.y + std::max(0.0f, (laneHeight - frameHeight) * 0.5f);
     const float controlsX = rect.x + 4.0f;
 
-    const float wSel = ImGui::CalcTextSize("SEL").x + style.FramePadding.x * 2.0f;
     const float wSolo = ImGui::CalcTextSize("solo").x + style.FramePadding.x * 2.0f;
     const float wMute = ImGui::CalcTextSize("mute").x + style.FramePadding.x * 2.0f;
     const float spacing = 2.0f;
-    const float controlsWidth = wSel + spacing + wSolo + spacing + wMute;
+    const float controlsWidth = wSolo + spacing + wMute;
     const float labelMinWidth = 40.0f;
     const float labelColumnX = std::min(controlsX + controlsWidth + 8.0f, rect.z - labelMinWidth - 2.0f);
     const float labelWidth = std::max(labelMinWidth, rect.z - labelColumnX - 4.0f);
@@ -300,23 +308,6 @@ private:
     ImGui::SetCursorScreenPos(ImVec2(controlsX, controlsY));
 
     ImGui::PushID(static_cast<int>(laneIndex) + 1000);
-    const bool isSelectedLane = selectedLane_ == static_cast<int>(laneIndex);
-    if (isSelectedLane) {
-      ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(0, 0, 0, 180));
-      ImGui::PushStyleColor(ImGuiCol_ButtonHovered, IM_COL32(0, 0, 0, 210));
-      ImGui::PushStyleColor(ImGuiCol_ButtonActive, IM_COL32(0, 0, 0, 230));
-      ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(250, 250, 250, 255));
-    }
-
-    if (ImGui::SmallButton("SEL")) {
-      pendingSelectedLane_ = static_cast<int>(laneIndex);
-      selectedLane_ = static_cast<int>(laneIndex);
-    }
-    if (isSelectedLane) {
-      ImGui::PopStyleColor(4);
-    }
-
-    ImGui::SameLine(0.0f, 2.0f);
     const bool wasSoloEnabled = laneSolo_[laneIndex];
     if (wasSoloEnabled) {
       ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(60, 160, 60, 255));
@@ -658,7 +649,7 @@ private:
 
   std::string getLaneTimelineId(std::size_t laneIndex) const
   {
-    return "                                          " + getLaneLabel(laneIndex) + "##lane_" + ofToString(laneIndex);
+    return "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW  " + getLaneLabel(laneIndex) + "##lane_" + ofToString(laneIndex);
   }
 
   std::string formatStepMusical(ImGui::FrameIndexType step) const

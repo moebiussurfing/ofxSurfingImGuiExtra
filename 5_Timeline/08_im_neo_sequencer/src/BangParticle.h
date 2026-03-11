@@ -56,4 +56,3 @@ private:
   float ageSeconds_ = 0.0f;
   bool alive_ = false;
 };
-

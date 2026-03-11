@@ -37,6 +37,7 @@ void ofApp::update()
 //--------------------------------------------------------------
 void ofApp::draw()
 {
+  drawLaneAnchors();
   drawParticles();
   drawGui();
 }
@@ -107,6 +108,13 @@ void ofApp::spawnParticleForLane(std::size_t lane)
 {
   if (lane >= BangTimelineManager::kBangCount) return;
 
+  const ofVec2f position = getLaneAnchorPosition(lane);
+  particles_.emplace_back(position, laneColors_[lane], 56.0f, 1.0f);
+}
+
+//--------------------------------------------------------------
+ofVec2f ofApp::getLaneAnchorPosition(std::size_t lane) const
+{
   const float laneCount = static_cast<float>(BangTimelineManager::kBangCount);
   const float w = static_cast<float>(ofGetWidth());
   const float h = static_cast<float>(ofGetHeight());
@@ -114,8 +122,21 @@ void ofApp::spawnParticleForLane(std::size_t lane)
 
   const float x = laneWidth * static_cast<float>(lane) + laneWidth * 0.5f;
   const float y = std::max(16.0f, h - 56.0f);
+  return { x, y };
+}
 
-  particles_.emplace_back(ofVec2f(x, y), laneColors_[lane], 56.0f, 1.0f);
+//--------------------------------------------------------------
+void ofApp::drawLaneAnchors() const
+{
+  ofPushStyle();
+  ofFill();
+  for (std::size_t lane = 0; lane < BangTimelineManager::kBangCount; ++lane) {
+    ofFloatColor color = laneColors_[lane];
+    color.a = 0.9f;
+    ofSetColor(color);
+    ofDrawCircle(getLaneAnchorPosition(lane), 10.0f);
+  }
+  ofPopStyle();
 }
 
 //--------------------------------------------------------------
