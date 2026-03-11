@@ -11,6 +11,12 @@ void ofApp::setup()
   ui.bLog = true;
 
   manager_.setup(this, &ui);
+  laneColors_ = manager_.getLaneColors();
+  particles_.reserve(256);
+
+  manager_.setBangCallback([this](std::size_t lane, ImGui::FrameIndexType step, bool fromTimeline) {
+    onBangEvent(lane, step, fromTimeline);
+  });
 
   lastUpdateTime_ = ofGetElapsedTimef();
 }
@@ -23,12 +29,13 @@ void ofApp::update()
   lastUpdateTime_ = now;
 
   manager_.update(deltaSeconds);
+  updateParticles(static_cast<float>(deltaSeconds));
 }
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-  manager_.drawParticles();
+  drawParticles();
   drawGui();
 }
 
@@ -38,7 +45,7 @@ void ofApp::drawGui()
   ui.Begin();
   {
     if (ui.BeginWindow(bGuiMain)) {
-      manager_.drawMainUi();
+      drawMainBangPanel();
       ui.EndWindow();
     }
 
@@ -48,6 +55,76 @@ void ofApp::drawGui()
     }
   }
   ui.End();
+}
+
+//--------------------------------------------------------------
+void ofApp::drawMainBangPanel()
+{
+  ui.AddLabelBig("Bang Actions");
+  ui.AddLabel("Manual bangs + preview int (driven by timeline bangs).");
+
+  ui.Add(bangDrawInt_, OFX_IM_HSLIDER_BIG);
+  ui.AddSpacingSeparated();
+
+  ui.AddLabelBig("Manual Bang Buttons");
+
+  auto& bangs = manager_.getBangParameters();
+  for (std::size_t i = 0; i < bangs.size(); ++i) {
+    const bool sameLine = (i % 2 == 0);
+    ui.Add(bangs[i], OFX_IM_BUTTON_BIG_BORDER, 2, sameLine);
+  }
+}
+
+//--------------------------------------------------------------
+void ofApp::onBangEvent(std::size_t lane, ImGui::FrameIndexType step, bool fromTimeline)
+{
+  if (lane >= BangTimelineManager::kBangCount) return;
+
+  (void)step;
+  (void)fromTimeline;
+
+  bangDrawInt_ = static_cast<int>(lane);
+  spawnParticleForLane(lane);
+}
+
+//--------------------------------------------------------------
+void ofApp::spawnParticleForLane(std::size_t lane)
+{
+  if (lane >= BangTimelineManager::kBangCount) return;
+
+  const float laneCount = static_cast<float>(BangTimelineManager::kBangCount);
+  const float w = static_cast<float>(ofGetWidth());
+  const float h = static_cast<float>(ofGetHeight());
+  const float laneWidth = std::max(1.0f, w / laneCount);
+
+  const float x = laneWidth * static_cast<float>(lane) + laneWidth * 0.5f;
+  const float y = std::max(16.0f, h - 56.0f);
+
+  particles_.emplace_back(ofVec2f(x, y), laneColors_[lane], 56.0f, 1.0f);
+}
+
+//--------------------------------------------------------------
+void ofApp::updateParticles(float deltaSeconds)
+{
+  for (auto& particle : particles_) {
+    particle.update(deltaSeconds);
+  }
+
+  particles_.erase(std::remove_if(
+    particles_.begin(), particles_.end(), [](const BangParticle& particle) {
+    return !particle.isAlive();
+  }), particles_.end());
+}
+
+//--------------------------------------------------------------
+void ofApp::drawParticles() const
+{
+  ofPushStyle();
+  ofFill();
+  for (const auto& particle : particles_) {
+    particle.draw();
+  }
+  ofPopStyle();
 }
 
 //--------------------------------------------------------------

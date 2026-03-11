@@ -4,12 +4,13 @@
 #include <array>
 #include <cstddef>
 #include <cstdint>
+#include <exception>
+#include <functional>
 #include <string>
 #include <vector>
 
 #include "ofMain.h"
 
-#include "BangParticle.h"
 #include "imgui_neo_internal.h"
 #include "imgui_neo_sequencer.h"
 #include "ofxSurfingImGui.h"
@@ -19,6 +20,7 @@ class ofApp;
 class BangTimelineManager {
 public:
   static constexpr std::size_t kBangCount = 8;
+  using BangCallback = std::function<void(std::size_t lane, ImGui::FrameIndexType step, bool fromTimeline)>;
 
   void setup(ofApp* app, ofxSurfingGui* ui)
   {
@@ -33,10 +35,6 @@ public:
     lanesOpen_.assign(kBangCount, true);
     laneMute_.assign(kBangCount, false);
     laneSolo_.assign(kBangCount, false);
-    effectState_.assign(kBangCount, false);
-    lastBangTriggeredTime_.assign(kBangCount, -1000.0f);
-
-    particles_.reserve(256);
 
     laneColors_ = {
       ofFloatColor::fromHex(0xFF4D6D),
@@ -49,7 +47,6 @@ public:
       ofFloatColor::fromHex(0xEC4899)
     };
 
-    // Seed a small pattern so the app starts with visible activity.
     timelineKeys_[0] = { 0, 8, 16, 24, 32, 40, 48, 56 };
     timelineKeys_[1] = { 4, 12, 20, 28, 36, 44, 52, 60 };
     timelineKeys_[2] = { 0, 16, 32, 48 };
@@ -57,50 +54,31 @@ public:
 
     updateTimelineBounds();
     sanitizeAllLanes();
+    resolveScenePath();
 
     auto& style = ImGui::GetNeoSequencerStyle();
     style.MaxSizePerTick = 8.0f;
-
-    if (ui_) {
-      ui_->AddToLog("Neo sequencer ready. Mouse edit + drag enabled.", "INFO");
-    }
+    style.Colors[ImGuiNeoSequencerCol_SelectedTimeline] = ImVec4(0.0f, 0.0f, 0.0f, 0.34f);
   }
 
   void update(double deltaSeconds)
   {
     updateTransport(deltaSeconds);
-    updateParticles(static_cast<float>(deltaSeconds));
   }
 
-  void drawParticles() const
-  {
-    ofPushStyle();
-    ofFill();
-    for (const auto& particle : particles_) {
-      particle.draw();
-    }
-    ofPopStyle();
-  }
-
-  void drawMainUi()
+  void drawTimelineUi()
   {
     if (!ui_) return;
 
-    ui_->AddLabelBig("Bang Sequencer");
-    ui_->AddLabel("8 tracks of ofParameter<void> bangs. Mouse timeline editor.");
-    ui_->AddSpacingSeparated();
-
-    ui_->Add(play_, OFX_IM_TOGGLE_BIG_BORDER_BLINK, 2, true);
-    ui_->Add(loop_, OFX_IM_TOGGLE_BIG_BORDER, 2);
+    ui_->AddLabel("Transport");
+    ui_->Add(play_, OFX_IM_TOGGLE_BIG_BORDER_BLINK, 3, true);
+    ui_->Add(loop_, OFX_IM_TOGGLE_BIG_BORDER, 3, true);
+    ui_->Add(stop_, OFX_IM_BUTTON_BORDER, 3);
 
     ui_->Add(bpm_, OFX_IM_HSLIDER_BIG);
     ui_->Add(bars_, OFX_IM_STEPPER);
 
-    ui_->Add(ui_->bLog, OFX_IM_TOGGLE_ROUNDED_SMALL);
-    ui_->AddLabel("Cursor: " + formatStepMusical(currentFrame_) + " (step " + ofToString(currentFrame_) + ")");
-
-    ui_->AddSpacingSeparated();
-    ui_->AddLabelBig("Scene");
+    ui_->AddLabel("Scene");
     ui_->Add(saveScene_, OFX_IM_BUTTON_BORDER, 2, true);
     ui_->Add(loadScene_, OFX_IM_BUTTON_BORDER, 2);
 
@@ -115,56 +93,21 @@ public:
       ui_->AddLabel("Selected lane: none");
     }
 
-    ui_->AddLabel("JSON: " + ofToDataPath(scenePath_, true));
-
-    ui_->AddSpacingSeparated();
-    ui_->AddLabelBig("Manual Bang Buttons");
-    for (std::size_t i = 0; i < kBangCount; ++i) {
-      const bool sameLine = (i % 2 == 0);
-      ui_->Add(bangs_[i], OFX_IM_BUTTON_BIG_BORDER, 2, sameLine);
-    }
-
-    ui_->AddSpacingSeparated();
-    for (std::size_t i = 0; i < kBangCount; ++i) {
-      if (i % 4 != 0) ImGui::SameLine();
-      const bool active = effectState_[i];
-      ImGui::TextColored(toImVec4(laneColors_[i], active ? 1.0f : 0.45f), "%s:%s",
-        getLaneLabel(i).c_str(), active ? "ON" : "off");
-    }
-  }
-
-  void drawTimelineUi()
-  {
-    if (!ui_) return;
-
-    ui_->AddLabel("Mouse timeline edit:");
-    ui_->AddLabel("- Double Left Click on selected lane: add bang at cursor");
-    ui_->AddLabel("- Right Click empty selected lane: add bang at cursor");
-    ui_->AddLabel("- Right Click keyframe: remove bang");
-    ui_->AddLabel("- Left Drag selected keyframes: move bangs");
+    ui_->AddLabel("Cursor: " + formatStepMusical(currentFrame_) + " (step " + ofToString(currentFrame_) + ")");
+    ui_->AddLabel("JSON: " + scenePathAbsolute_);
     ui_->AddSpacingSeparated();
 
-    constexpr float leftPanelWidth = 210.0f;
-    ImGui::BeginChild("##tracks_left", ImVec2(leftPanelWidth, 0.0f), true);
-    drawTracksLeftPanel();
-    ImGui::EndChild();
-
-    ImGui::SameLine();
-
-    ImGui::BeginChild("##tracks_timeline", ImVec2(0.0f, 0.0f), false);
     drawTimelineSequencer();
-    ImGui::EndChild();
   }
 
   void keyPressed(int key)
   {
     if (key == ' ') play_ = !play_;
     if (key == 'r' || key == 'R') currentFrame_ = startFrame_;
-    if (key >= '1' && key <= '8') {
-      const std::size_t index = static_cast<std::size_t>(key - '1');
-      if (index < bangs_.size()) {
-        bangs_[index].trigger();
-      }
+    if (key == 's' || key == 'S') stopTransport();
+
+    if (key >= '0' && key <= '7') {
+      triggerBang(static_cast<std::size_t>(key - '0'));
     }
   }
 
@@ -173,29 +116,68 @@ public:
     saveSceneToDisk();
   }
 
+  void setBangCallback(BangCallback callback)
+  {
+    bangCallback_ = std::move(callback);
+  }
+
+  std::vector<ofParameter<void>>& getBangParameters()
+  {
+    return bangs_;
+  }
+
+  const std::vector<ofParameter<void>>& getBangParameters() const
+  {
+    return bangs_;
+  }
+
+  std::size_t getBangCount() const
+  {
+    return kBangCount;
+  }
+
+  const std::array<ofFloatColor, kBangCount>& getLaneColors() const
+  {
+    return laneColors_;
+  }
+
+  int getSelectedLane() const
+  {
+    return selectedLane_;
+  }
+
+  void triggerBang(std::size_t laneIndex)
+  {
+    if (laneIndex >= kBangCount) return;
+
+    timelineTriggerContext_ = false;
+    timelineTriggerStep_ = currentFrame_;
+    bangs_[laneIndex].trigger();
+  }
+
 private:
   ofApp* app_ = nullptr;
   ofxSurfingGui* ui_ = nullptr;
 
+  BangCallback bangCallback_;
+
   std::vector<ofParameter<void>> bangs_;
   std::array<ofEventListener, kBangCount> bangListeners_;
-  std::array<ofEventListener, 4> actionListeners_;
+  std::array<ofEventListener, 5> actionListeners_;
 
   std::vector<std::vector<ImGui::FrameIndexType>> timelineKeys_;
   std::vector<bool> lanesOpen_;
   std::vector<bool> laneMute_;
   std::vector<bool> laneSolo_;
-  std::vector<bool> effectState_;
-  std::vector<float> lastBangTriggeredTime_;
 
   std::array<ofFloatColor, kBangCount> laneColors_{};
-  std::vector<BangParticle> particles_;
 
   ofParameter<float> bpm_{ "BPM", 120.0f, 40.0f, 240.0f };
   ofParameter<int> bars_{ "Bars", 4, 1, 32 };
   ofParameter<bool> play_{ "Play", false };
   ofParameter<bool> loop_{ "Loop", true };
 
+  ofParameter<void> stop_{ "Stop" };
   ofParameter<void> clearAll_{ "Clear All Tracks" };
   ofParameter<void> clearSelected_{ "Clear Selected Track" };
   ofParameter<void> saveScene_{ "Save Scene JSON" };
@@ -216,11 +198,22 @@ private:
   bool wasPlaying_ = false;
 
   std::string scenePath_ = "bang_timeline_scene.json";
+  std::string scenePathAbsolute_ = "bang_timeline_scene.json";
 
   static ImVec4 toImVec4(const ofFloatColor& color, float alpha = -1.0f)
   {
     const float finalAlpha = (alpha < 0.0f) ? color.a : alpha;
     return { color.r, color.g, color.b, finalAlpha };
+  }
+
+  void resolveScenePath()
+  {
+    try {
+      scenePathAbsolute_ = ofToDataPath(scenePath_, true);
+    } catch (const std::exception& exception) {
+      scenePathAbsolute_ = scenePath_;
+      ofLogWarning("BangTimelineManager") << "Using fallback scene path due filesystem exception: " << exception.what();
+    }
   }
 
   void setupBangParameters()
@@ -229,7 +222,7 @@ private:
     bangs_.reserve(kBangCount);
     for (std::size_t i = 0; i < kBangCount; ++i) {
       bangs_.emplace_back();
-      bangs_.back().set("FX " + ofToString(i + 1));
+      bangs_.back().set("FX " + ofToString(i));
     }
   }
 
@@ -244,88 +237,70 @@ private:
 
   void setupActionListeners()
   {
-    actionListeners_[0] = clearAll_.newListener([this](const void*) {
+    actionListeners_[0] = stop_.newListener([this](const void*) {
+      stopTransport();
+    });
+
+    actionListeners_[1] = clearAll_.newListener([this](const void*) {
       clearAllLanes();
     });
 
-    actionListeners_[1] = clearSelected_.newListener([this](const void*) {
+    actionListeners_[2] = clearSelected_.newListener([this](const void*) {
       clearSelectedLane();
     });
 
-    actionListeners_[2] = saveScene_.newListener([this](const void*) {
+    actionListeners_[3] = saveScene_.newListener([this](const void*) {
       saveSceneToDisk();
     });
 
-    actionListeners_[3] = loadScene_.newListener([this](const void*) {
+    actionListeners_[4] = loadScene_.newListener([this](const void*) {
       loadSceneFromDisk();
     });
   }
 
-  void drawTracksLeftPanel()
+  void drawInlineLaneControls(std::size_t laneIndex)
   {
-    ImGui::TextUnformatted("Tracks");
-    ImGui::Separator();
+    const ImVec4 rect = ImGui::NeoGetCurrentTimelineLabelRect();
+    const ImVec2 backupCursor = ImGui::GetCursorScreenPos();
 
-    for (std::size_t i = 0; i < kBangCount; ++i) {
-      ImGui::PushID(static_cast<int>(i));
+    const float yPad = 2.0f;
+    ImGui::SetCursorScreenPos(ImVec2(rect.x + 4.0f, rect.y + yPad));
 
-      const bool selected = (selectedLane_ == static_cast<int>(i));
-      if (selected) {
-        ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 220, 120, 255));
-      }
+    ImGui::PushID(static_cast<int>(laneIndex) + 1000);
 
-      if (ImGui::SmallButton(selected ? "SEL*" : "SEL")) {
-        pendingSelectedLane_ = static_cast<int>(i);
-        selectedLane_ = static_cast<int>(i);
-      }
-
-      if (selected) {
-        ImGui::PopStyleColor();
-      }
-
-      ImGui::SameLine();
-      if (laneSolo_[i]) {
-        ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(60, 160, 60, 255));
-        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, IM_COL32(80, 190, 80, 255));
-      }
-      if (ImGui::SmallButton(laneSolo_[i] ? "SOLO" : "solo")) {
-        laneSolo_[i] = !laneSolo_[i];
-      }
-      if (laneSolo_[i]) {
-        ImGui::PopStyleColor(2);
-      }
-
-      ImGui::SameLine();
-      if (laneMute_[i]) {
-        ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(190, 60, 60, 255));
-        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, IM_COL32(220, 80, 80, 255));
-      }
-      if (ImGui::SmallButton(laneMute_[i] ? "MUTE" : "mute")) {
-        laneMute_[i] = !laneMute_[i];
-      }
-      if (laneMute_[i]) {
-        ImGui::PopStyleColor(2);
-      }
-
-      ImGui::SameLine();
-      ImGui::TextColored(toImVec4(laneColors_[i], 1.0f), "%s", getLaneLabel(i).c_str());
-
-      ImGui::SameLine();
-      ImGui::TextDisabled("(%d)", static_cast<int>(timelineKeys_[i].size()));
-
-      ImGui::PopID();
+    if (ImGui::SmallButton(selectedLane_ == static_cast<int>(laneIndex) ? "SEL*" : "SEL")) {
+      pendingSelectedLane_ = static_cast<int>(laneIndex);
+      selectedLane_ = static_cast<int>(laneIndex);
     }
 
-    ImGui::Separator();
-    if (ImGui::Button("Clear ALL", ImVec2(-1.0f, 0.0f))) {
-      clearAllLanes();
+    ImGui::SameLine(0.0f, 2.0f);
+    const bool wasSoloEnabled = laneSolo_[laneIndex];
+    if (wasSoloEnabled) {
+      ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(60, 160, 60, 255));
+      ImGui::PushStyleColor(ImGuiCol_ButtonHovered, IM_COL32(80, 190, 80, 255));
+    }
+    if (ImGui::SmallButton(laneSolo_[laneIndex] ? "SOLO" : "solo")) {
+      laneSolo_[laneIndex] = !laneSolo_[laneIndex];
+    }
+    if (wasSoloEnabled) {
+      ImGui::PopStyleColor(2);
     }
 
-    ImGui::BeginDisabled(selectedLane_ < 0);
-    if (ImGui::Button("Clear Selected", ImVec2(-1.0f, 0.0f))) {
-      clearSelectedLane();
+    ImGui::SameLine(0.0f, 2.0f);
+    const bool wasMuteEnabled = laneMute_[laneIndex];
+    if (wasMuteEnabled) {
+      ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(190, 60, 60, 255));
+      ImGui::PushStyleColor(ImGuiCol_ButtonHovered, IM_COL32(220, 80, 80, 255));
     }
-    ImGui::EndDisabled();
+    if (ImGui::SmallButton(laneMute_[laneIndex] ? "MUTE" : "mute")) {
+      laneMute_[laneIndex] = !laneMute_[laneIndex];
+    }
+    if (wasMuteEnabled) {
+      ImGui::PopStyleColor(2);
+    }
+
+    ImGui::PopID();
+    ImGui::SetCursorScreenPos(backupCursor);
   }
 
   void drawTimelineSequencer()
@@ -367,6 +342,8 @@ private:
           if (ImGui::IsNeoTimelineSelected()) {
             selectedLane_ = static_cast<int>(i);
           }
+
+          drawInlineLaneControls(i);
 
           auto& lane = timelineKeys_[i];
           bool hoveredAnyKey = false;
@@ -430,57 +407,12 @@ private:
   {
     if (index >= kBangCount) return;
 
-    effectState_[index] = !effectState_[index];
-    lastBangTriggeredTime_[index] = ofGetElapsedTimef();
+    const ImGui::FrameIndexType step = timelineTriggerContext_ ? timelineTriggerStep_ : currentFrame_;
+    const bool fromTimeline = timelineTriggerContext_;
 
-    spawnParticle(index);
-
-    const std::string stateLabel = effectState_[index] ? "ON" : "OFF";
-    std::string text = getLaneLabel(index) + " -> " + stateLabel;
-    std::string tag = "BANG";
-    if (timelineTriggerContext_) {
-      text += " @ " + formatStepMusical(timelineTriggerStep_);
-      tag = "SEQ";
+    if (bangCallback_) {
+      bangCallback_(index, step, fromTimeline);
     }
-
-    if (ui_) {
-      ui_->AddToLog(text, tag);
-    }
-
-    ofLogNotice("BangTimelineManager") << text;
-  }
-
-  void spawnParticle(std::size_t index)
-  {
-    if (index >= kBangCount) return;
-
-    const float w = static_cast<float>(ofGetWidth());
-    const float h = static_cast<float>(ofGetHeight());
-    const float marginX = std::min(80.0f, w * 0.35f);
-    const float marginY = std::min(80.0f, h * 0.35f);
-
-    const float xMin = marginX;
-    const float xMax = std::max(xMin + 1.0f, w - marginX);
-    const float yMin = marginY;
-    const float yMax = std::max(yMin + 1.0f, h - marginY);
-
-    const float x = ofRandom(xMin, xMax);
-    const float y = ofRandom(yMin, yMax);
-    const float radius = ofRandom(34.0f, 88.0f);
-
-    particles_.emplace_back(ofVec2f(x, y), laneColors_[index], radius, 1.0f);
-  }
-
-  void updateParticles(float deltaSeconds)
-  {
-    for (auto& particle : particles_) {
-      particle.update(deltaSeconds);
-    }
-
-    particles_.erase(std::remove_if(
-      particles_.begin(), particles_.end(), [](const BangParticle& particle) {
-      return !particle.isAlive();
-    }), particles_.end());
   }
 
   void triggerBangFromTimeline(std::size_t index, ImGui::FrameIndexType step)
@@ -497,8 +429,8 @@ private:
   {
     if (index >= kBangCount) return false;
 
-    const bool anySolo = std::any_of(laneSolo_.begin(), laneSolo_.end(), [](bool b) {
-      return b;
+    const bool anySolo = std::any_of(laneSolo_.begin(), laneSolo_.end(), [](bool enabled) {
+      return enabled;
     });
 
     if (anySolo) {
@@ -506,6 +438,14 @@ private:
     }
 
     return !laneMute_[index];
+  }
+
+  void stopTransport()
+  {
+    play_ = false;
+    currentFrame_ = startFrame_;
+    transportAccumulator_ = 0.0;
+    wasPlaying_ = false;
   }
 
   void updateTransport(double deltaSeconds)
@@ -568,11 +508,6 @@ private:
 
     lane.push_back(clamped);
     sanitizeLane(laneIndex);
-
-    if (ui_) {
-      ui_->AddToLog("Add " + getLaneLabel(laneIndex) + " @ " + formatStepMusical(clamped), "EDIT");
-    }
-
     return true;
   }
 
@@ -586,11 +521,6 @@ private:
 
     lane.erase(it, lane.end());
     sanitizeLane(laneIndex);
-
-    if (ui_) {
-      ui_->AddToLog("Remove " + getLaneLabel(laneIndex) + " @ " + formatStepMusical(step), "EDIT");
-    }
-
     return true;
   }
 
@@ -611,10 +541,6 @@ private:
 
     sanitizeLane(laneIndex);
     ImGui::NeoClearSelection();
-
-    if (ui_) {
-      ui_->AddToLog("Delete selection on " + getLaneLabel(laneIndex), "EDIT");
-    }
   }
 
   void clearAllLanes()
@@ -622,29 +548,15 @@ private:
     for (auto& lane : timelineKeys_) {
       lane.clear();
     }
-
-    if (ui_) {
-      ui_->AddToLog("Clear all lanes", "EDIT");
-    }
-
-    ofLogNotice("BangTimelineManager") << "All lanes cleared.";
   }
 
   void clearSelectedLane()
   {
     if (selectedLane_ < 0 || selectedLane_ >= static_cast<int>(kBangCount)) {
-      if (ui_) {
-        ui_->AddToLog("Clear selected ignored: no lane selected", "WARN");
-      }
       return;
     }
 
-    auto& lane = timelineKeys_[static_cast<std::size_t>(selectedLane_)];
-    lane.clear();
-
-    if (ui_) {
-      ui_->AddToLog("Clear " + getLaneLabel(static_cast<std::size_t>(selectedLane_)), "EDIT");
-    }
+    timelineKeys_[static_cast<std::size_t>(selectedLane_)].clear();
   }
 
   void sanitizeLane(std::size_t laneIndex)
@@ -683,12 +595,12 @@ private:
   std::string getLaneLabel(std::size_t laneIndex) const
   {
     if (laneIndex < bangs_.size()) return bangs_[laneIndex].getName();
-    return "FX " + ofToString(laneIndex + 1);
+    return "FX " + ofToString(laneIndex);
   }
 
   std::string getLaneTimelineId(std::size_t laneIndex) const
   {
-    return getLaneLabel(laneIndex) + "##lane_" + ofToString(laneIndex);
+    return "            " + getLaneLabel(laneIndex) + "##lane_" + ofToString(laneIndex);
   }
 
   std::string formatStepMusical(ImGui::FrameIndexType step) const
@@ -702,103 +614,100 @@ private:
 
   void saveSceneToDisk() const
   {
-    ofJson root;
-    root["version"] = 1;
-    root["bpm"] = bpm_.get();
-    root["bars"] = bars_.get();
-    root["currentFrame"] = currentFrame_;
-    root["loop"] = loop_.get();
-    root["play"] = play_.get();
+    try {
+      ofJson root;
+      root["version"] = 1;
+      root["bpm"] = bpm_.get();
+      root["bars"] = bars_.get();
+      root["currentFrame"] = currentFrame_;
+      root["loop"] = loop_.get();
+      root["play"] = play_.get();
 
-    root["lanes"] = ofJson::array();
-    for (std::size_t i = 0; i < kBangCount; ++i) {
-      ofJson lane;
-      lane["index"] = static_cast<int>(i);
-      lane["name"] = getLaneLabel(i);
-      lane["mute"] = laneMute_[i];
-      lane["solo"] = laneSolo_[i];
-      lane["keys"] = ofJson::array();
+      root["lanes"] = ofJson::array();
+      for (std::size_t i = 0; i < kBangCount; ++i) {
+        ofJson lane;
+        lane["index"] = static_cast<int>(i);
+        lane["name"] = getLaneLabel(i);
+        lane["mute"] = laneMute_[i];
+        lane["solo"] = laneSolo_[i];
+        lane["keys"] = ofJson::array();
 
-      for (const auto frame : timelineKeys_[i]) {
-        lane["keys"].push_back(frame);
+        for (const auto frame : timelineKeys_[i]) {
+          lane["keys"].push_back(frame);
+        }
+
+        root["lanes"].push_back(lane);
       }
 
-      root["lanes"].push_back(lane);
-    }
-
-    const std::string path = ofToDataPath(scenePath_, true);
-    const bool ok = ofSavePrettyJson(path, root);
-    if (ok) {
-      ofLogNotice("BangTimelineManager") << "Scene saved: " << path;
-      if (ui_) ui_->AddToLog("Scene saved", "FILE");
-    } else {
-      ofLogError("BangTimelineManager") << "Unable to save scene: " << path;
-      if (ui_) ui_->AddToLog("Scene save failed", "ERROR");
+      const bool ok = ofSavePrettyJson(scenePathAbsolute_, root);
+      if (!ok) {
+        ofLogError("BangTimelineManager") << "Unable to save scene: " << scenePathAbsolute_;
+      }
+    } catch (const std::exception& exception) {
+      ofLogError("BangTimelineManager") << "Scene save exception: " << exception.what();
     }
   }
 
   void loadSceneFromDisk()
   {
-    const std::string path = ofToDataPath(scenePath_, true);
-    ofFile file(path);
-    if (!file.exists()) {
-      ofLogWarning("BangTimelineManager") << "Scene file not found: " << path;
-      if (ui_) ui_->AddToLog("Scene file not found", "WARN");
-      return;
-    }
-
-    const ofJson root = ofLoadJson(path);
-    if (root.is_discarded()) {
-      ofLogError("BangTimelineManager") << "Invalid JSON scene file: " << path;
-      if (ui_) ui_->AddToLog("Scene load failed (invalid JSON)", "ERROR");
-      return;
-    }
-
-    if (root.contains("bpm")) {
-      bpm_ = ofClamp(root["bpm"].get<float>(), bpm_.getMin(), bpm_.getMax());
-    }
-    if (root.contains("bars")) {
-      bars_ = ofClamp(root["bars"].get<int>(), bars_.getMin(), bars_.getMax());
-    }
-    if (root.contains("loop")) {
-      loop_ = root["loop"].get<bool>();
-    }
-    if (root.contains("play")) {
-      play_ = root["play"].get<bool>();
-    }
-
-    if (root.contains("lanes") && root["lanes"].is_array()) {
-      for (auto& lane : timelineKeys_) {
-        lane.clear();
+    try {
+      ofFile file(scenePathAbsolute_);
+      if (!file.exists()) {
+        ofLogWarning("BangTimelineManager") << "Scene file not found: " << scenePathAbsolute_;
+        return;
       }
 
-      const auto& lanesJson = root["lanes"];
-      const std::size_t count = std::min<std::size_t>(kBangCount, lanesJson.size());
-      for (std::size_t i = 0; i < count; ++i) {
-        const auto& lane = lanesJson[i];
+      const ofJson root = ofLoadJson(scenePathAbsolute_);
+      if (root.is_discarded()) {
+        ofLogError("BangTimelineManager") << "Invalid JSON scene file: " << scenePathAbsolute_;
+        return;
+      }
 
-        laneMute_[i] = lane.value("mute", false);
-        laneSolo_[i] = lane.value("solo", false);
+      if (root.contains("bpm")) {
+        bpm_ = ofClamp(root["bpm"].get<float>(), bpm_.getMin(), bpm_.getMax());
+      }
+      if (root.contains("bars")) {
+        bars_ = ofClamp(root["bars"].get<int>(), bars_.getMin(), bars_.getMax());
+      }
+      if (root.contains("loop")) {
+        loop_ = root["loop"].get<bool>();
+      }
+      if (root.contains("play")) {
+        play_ = root["play"].get<bool>();
+      }
 
-        if (lane.contains("keys") && lane["keys"].is_array()) {
-          timelineKeys_[i].reserve(lane["keys"].size());
-          for (const auto& key : lane["keys"]) {
-            if (key.is_number_integer()) {
-              timelineKeys_[i].push_back(key.get<ImGui::FrameIndexType>());
-            }
-          }
+      if (root.contains("lanes") && root["lanes"].is_array()) {
+        for (auto& lane : timelineKeys_) {
+          lane.clear();
         }
 
-        sanitizeLane(i);
+        const auto& lanesJson = root["lanes"];
+        const std::size_t count = std::min<std::size_t>(kBangCount, lanesJson.size());
+        for (std::size_t i = 0; i < count; ++i) {
+          const auto& lane = lanesJson[i];
+
+          laneMute_[i] = lane.value("mute", false);
+          laneSolo_[i] = lane.value("solo", false);
+
+          if (lane.contains("keys") && lane["keys"].is_array()) {
+            timelineKeys_[i].reserve(lane["keys"].size());
+            for (const auto& key : lane["keys"]) {
+              if (key.is_number_integer()) {
+                timelineKeys_[i].push_back(key.get<ImGui::FrameIndexType>());
+              }
+            }
+          }
+
+          sanitizeLane(i);
+        }
       }
-    }
 
-    updateTimelineBounds();
-    if (root.contains("currentFrame") && root["currentFrame"].is_number_integer()) {
-      currentFrame_ = std::clamp(root["currentFrame"].get<ImGui::FrameIndexType>(), startFrame_, endFrame_);
+      updateTimelineBounds();
+      if (root.contains("currentFrame") && root["currentFrame"].is_number_integer()) {
+        currentFrame_ = std::clamp(root["currentFrame"].get<ImGui::FrameIndexType>(), startFrame_, endFrame_);
+      }
+    } catch (const std::exception& exception) {
+      ofLogError("BangTimelineManager") << "Scene load exception: " << exception.what();
     }
-
-    ofLogNotice("BangTimelineManager") << "Scene loaded: " << path;
-    if (ui_) ui_->AddToLog("Scene loaded", "FILE");
   }
 };

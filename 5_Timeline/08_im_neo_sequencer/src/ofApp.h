@@ -1,7 +1,11 @@
 #pragma once
 
+#include <array>
+#include <vector>
+
 #include "ofMain.h"
 
+#include "BangParticle.h"
 #include "BangTimelineManager.h"
 #include "ofxSurfingImGui.h"
 
@@ -32,4 +36,15 @@ public:
 private:
   BangTimelineManager manager_;
   double lastUpdateTime_ = 0.0;
+
+  ofParameter<int> bangDrawInt_{ "Bang Draw Int", 0, 0, static_cast<int>(BangTimelineManager::kBangCount) - 1 };
+
+  std::array<ofFloatColor, BangTimelineManager::kBangCount> laneColors_{};
+  std::vector<BangParticle> particles_;
+
+  void drawMainBangPanel();
+  void onBangEvent(std::size_t lane, ImGui::FrameIndexType step, bool fromTimeline);
+  void spawnParticleForLane(std::size_t lane);
+  void updateParticles(float deltaSeconds);
+  void drawParticles() const;
 };

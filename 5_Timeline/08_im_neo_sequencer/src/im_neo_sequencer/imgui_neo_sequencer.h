@@ -155,6 +155,7 @@ namespace ImGui {
     IMGUI_API void SetSelectedTimeline(const char* timelineLabel);
 
     IMGUI_API bool IsNeoTimelineSelected(ImGuiNeoTimelineIsSelectedFlags flags = ImGuiNeoTimelineIsSelectedFlags_None);
+    IMGUI_API ImVec4 NeoGetCurrentTimelineLabelRect();
 
 #ifdef __cplusplus
     // C++ helper

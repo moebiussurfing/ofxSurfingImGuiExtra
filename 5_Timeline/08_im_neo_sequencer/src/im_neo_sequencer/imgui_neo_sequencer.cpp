@@ -87,6 +87,8 @@ namespace ImGui
         bool DeleteDataDirty = false;
         bool DeleteEnabled = true;
         ImVector<ImGuiNeoTimelineKeyframes> SelectionData;
+
+        ImRect CurrentTimelineLabelRect = ImRect{ImVec2{0, 0}, ImVec2{0, 0}};
     };
 
     static ImGuiNeoSequencerStyle style; // NOLINT(cert-err58-cpp)
@@ -1105,6 +1107,20 @@ namespace ImGui
                context.SelectedTimeline == openTimeline;
     }
 
+    ImVec4 NeoGetCurrentTimelineLabelRect()
+    {
+        IM_ASSERT(inSequencer && "Not in active sequencer!");
+        auto& context = sequencerData[currentSequencer];
+        IM_ASSERT(!context.TimelineStack.empty() && "No active timelines are present!");
+
+        return ImVec4{
+            context.CurrentTimelineLabelRect.Min.x,
+            context.CurrentTimelineLabelRect.Min.y,
+            context.CurrentTimelineLabelRect.Max.x,
+            context.CurrentTimelineLabelRect.Max.y
+        };
+    }
+
     bool BeginNeoTimelineEx(const char* label, bool* open, ImGuiNeoTimelineFlags flags)
     {
         IM_ASSERT(inSequencer && "Not in active sequencer!");
@@ -1137,6 +1153,11 @@ namespace ImGui
         {
             context.ValuesCursor = {context.TopBarStartCursor.x, context.ValuesCursor.y};
         }
+
+        context.CurrentTimelineLabelRect = ImRect{
+            context.ValuesCursor,
+            context.ValuesCursor + labelSize
+        };
 
         currentTimelineHeight = labelSize.y;
         context.FilledHeight += currentTimelineHeight;
