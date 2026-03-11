@@ -6,6 +6,7 @@
 
 #include "imgui_neo_internal.h"
 #include "imgui_internal.h"
+#include <algorithm>
 #include <cstdint>
 
 namespace ImGui {
@@ -41,45 +42,42 @@ namespace ImGui {
 
         if(drawFrameLines) {
             const auto count = (int32_t)((float)((viewEnd + 1) - viewStart) / zoom);
+            if(count <= 0) return;
 
-            int32_t counter = 0;
-            uint32_t primaryFrames = pow(10, counter++);
-            uint32_t secondaryFrames = pow(10, counter);
-
-            float perFrameWidth = GetPerFrameWidth(size.x, valuesWidth, endFrame, startFrame, zoom);
-
+            const float perFrameWidth = GetPerFrameWidth(size.x, valuesWidth, endFrame, startFrame, zoom);
             if(perFrameWidth <= 0.0f) return;
 
-            while (perFrameWidth < maxPixelsPerTick)
-            {
-                primaryFrames = pow(10, counter++);
-                secondaryFrames = pow(10, counter);
-
-                perFrameWidth *= (float)primaryFrames;
+            // Use powers-of-two ticks for musical workflows (8/16/32/64...).
+            uint32_t subStep = 1;
+            const float minPixels = std::max(1.0f, maxPixelsPerTick);
+            while ((perFrameWidth * (float)subStep) < minPixels && subStep < 4096) {
+                subStep *= 2;
             }
 
-            if(primaryFrames == 0 || secondaryFrames == 0) {
-                primaryFrames = 1;
-                secondaryFrames = 10;
-            }
+            const uint32_t beatStep = std::max<uint32_t>(4, subStep);
+            const uint32_t majorStep = std::max<uint32_t>(8, beatStep * 2);
 
             for(int32_t i = 0; i < count; i++) {
+                const uint32_t frame = viewStart + (uint32_t)i;
+                const bool isSub = (frame % subStep) == 0;
+                const bool isBeat = (frame % beatStep) == 0;
+                const bool isMajor = (frame % majorStep) == 0;
 
-                const auto primaryFrame = ((viewStart + i) % primaryFrames == 0);
-                const auto secondaryFrame = ((viewStart + i) % secondaryFrames == 0);
+                if(!isSub && !isBeat && !isMajor) continue;
 
-                if(!primaryFrame && !secondaryFrame) continue;
+                float lineHeight = barArea.GetSize().y * 0.45f;
+                if(isBeat) lineHeight = barArea.GetSize().y * 0.7f;
+                if(isMajor) lineHeight = barArea.GetSize().y;
 
-                const auto lineHeight = secondaryFrame ? barArea.GetSize().y : barArea.GetSize().y / 2.0f;
-
-                const ImVec2 p1 = {barArea.Min.x + (float)i * (perFrameWidth / (float)primaryFrames), barArea.Max.y};
-                const ImVec2 p2 = {barArea.Min.x + (float)i * (perFrameWidth / (float)primaryFrames), barArea.Max.y - lineHeight};
+                const float x = barArea.Min.x + ((float)i * perFrameWidth);
+                const ImVec2 p1 = {x, barArea.Max.y};
+                const ImVec2 p2 = {x, barArea.Max.y - lineHeight};
 
                 drawList->AddLine(p1,p2, IM_COL32_WHITE, 1.0f);
 
-                if(drawFrameText && secondaryFrame) {
-                    char text[10];
-                    const auto printRes = snprintf(text, sizeof(text), "%i", viewStart + i);
+                if(drawFrameText && isMajor && frame > 0) {
+                    char text[16];
+                    const auto printRes = snprintf(text, sizeof(text), "%u", frame);
                     if(printRes > 0) {
                         drawList->AddText(NULL, 0, {p1.x + 2.0f, barArea.Min.y }, IM_COL32_WHITE,text);
                     }
