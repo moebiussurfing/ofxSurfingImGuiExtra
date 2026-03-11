@@ -1,6 +1,8 @@
 #include "ofApp.h"
 
 #include <algorithm>
+#include <iomanip>
+#include <sstream>
 
 //--------------------------------------------------------------
 void ofApp::setup()
@@ -49,6 +51,11 @@ void ofApp::drawGui()
       ui.EndWindow();
     }
 
+    if (ui.BeginWindow(bGuiTransport)) {
+      manager_.drawTransportUi();
+      ui.EndWindow();
+    }
+
     if (ui.BeginWindow(bGuiTimeline)) {
       manager_.drawTimelineUi();
       ui.EndWindow();
@@ -80,11 +87,19 @@ void ofApp::onBangEvent(std::size_t lane, ImGui::FrameIndexType step, bool fromT
 {
   if (lane >= BangTimelineManager::kBangCount) return;
 
-  (void)step;
-  (void)fromTimeline;
-
   bangDrawInt_ = static_cast<int>(lane);
   spawnParticleForLane(lane);
+
+  const int r = ofClamp(static_cast<int>(laneColors_[lane].r * 255.0f), 0, 255);
+  const int g = ofClamp(static_cast<int>(laneColors_[lane].g * 255.0f), 0, 255);
+  const int b = ofClamp(static_cast<int>(laneColors_[lane].b * 255.0f), 0, 255);
+  std::ostringstream colorHex;
+  colorHex << '#' << std::uppercase << std::hex << std::setfill('0')
+           << std::setw(2) << r << std::setw(2) << g << std::setw(2) << b;
+
+  const std::string source = fromTimeline ? "[SEQ] " : "[MAN] ";
+  const std::string message = source + "bang " + ofToString(lane) + " @ step " + ofToString(step);
+  ui.AddToLog(message, "INFO");
 }
 
 //--------------------------------------------------------------
@@ -140,6 +155,7 @@ void ofApp::keyPressed(int key)
   manager_.keyPressed(key);
 
   if (key == 'g' || key == 'G') bGuiMain = !bGuiMain;
+  if (key == 'u' || key == 'U') bGuiTransport = !bGuiTransport;
   if (key == 't' || key == 'T') bGuiTimeline = !bGuiTimeline;
 }
 

@@ -58,6 +58,14 @@ public:
 
     auto& style = ImGui::GetNeoSequencerStyle();
     style.MaxSizePerTick = 8.0f;
+    style.Colors[ImGuiNeoSequencerCol_Bg] = ImVec4(0.18f, 0.18f, 0.18f, 1.00f);
+    style.Colors[ImGuiNeoSequencerCol_TimelinesBg] = ImVec4(0.22f, 0.22f, 0.22f, 1.00f);
+    style.Colors[ImGuiNeoSequencerCol_TopBarBg] = ImVec4(0.12f, 0.12f, 0.12f, 1.00f);
+    style.Colors[ImGuiNeoSequencerCol_ZoomBarBg] = ImVec4(0.20f, 0.20f, 0.20f, 0.95f);
+    style.Colors[ImGuiNeoSequencerCol_ZoomBarSlider] = ImVec4(0.30f, 0.30f, 0.30f, 0.88f);
+    style.Colors[ImGuiNeoSequencerCol_ZoomBarSliderHovered] = ImVec4(0.38f, 0.38f, 0.38f, 0.93f);
+    style.Colors[ImGuiNeoSequencerCol_ZoomBarSliderEnds] = ImVec4(0.24f, 0.24f, 0.24f, 0.90f);
+    style.Colors[ImGuiNeoSequencerCol_ZoomBarSliderEndsHovered] = ImVec4(0.34f, 0.34f, 0.34f, 0.95f);
     style.Colors[ImGuiNeoSequencerCol_SelectedTimeline] = ImVec4(0.0f, 0.0f, 0.0f, 0.34f);
   }
 
@@ -69,35 +77,13 @@ public:
   void drawTimelineUi()
   {
     if (!ui_) return;
-
-    ui_->AddLabel("Transport");
-    ui_->Add(play_, OFX_IM_TOGGLE_BIG_BORDER_BLINK, 3, true);
-    ui_->Add(loop_, OFX_IM_TOGGLE_BIG_BORDER, 3, true);
-    ui_->Add(stop_, OFX_IM_BUTTON_BORDER, 3);
-
-    ui_->Add(bpm_, OFX_IM_HSLIDER_BIG);
-    ui_->Add(bars_, OFX_IM_STEPPER);
-
-    ui_->AddLabel("Scene");
-    ui_->Add(saveScene_, OFX_IM_BUTTON_BORDER, 2, true);
-    ui_->Add(loadScene_, OFX_IM_BUTTON_BORDER, 2);
-
-    ui_->Add(clearAll_, OFX_IM_BUTTON_BORDER_BLINK, 2, true);
-    ImGui::BeginDisabled(selectedLane_ < 0);
-    ui_->Add(clearSelected_, OFX_IM_BUTTON_BORDER, 2);
-    ImGui::EndDisabled();
-
-    if (selectedLane_ >= 0) {
-      ui_->AddLabel("Selected lane: " + getLaneLabel(static_cast<std::size_t>(selectedLane_)));
-    } else {
-      ui_->AddLabel("Selected lane: none");
-    }
-
-    ui_->AddLabel("Cursor: " + formatStepMusical(currentFrame_) + " (step " + ofToString(currentFrame_) + ")");
-    ui_->AddLabel("JSON: " + scenePathAbsolute_);
-    ui_->AddSpacingSeparated();
-
     drawTimelineSequencer();
+  }
+
+  void drawTransportUi()
+  {
+    if (!ui_) return;
+    drawTransportControls();
   }
 
   void keyPressed(int key)
@@ -222,8 +208,37 @@ private:
     bangs_.reserve(kBangCount);
     for (std::size_t i = 0; i < kBangCount; ++i) {
       bangs_.emplace_back();
-      bangs_.back().set("FX " + ofToString(i));
+      bangs_.back().set(ofToString(i));
     }
+  }
+
+  void drawTransportControls()
+  {
+    ui_->AddLabel("Transport");
+    ui_->Add(play_, OFX_IM_TOGGLE_BIG_BORDER_BLINK, 3, true);
+    ui_->Add(loop_, OFX_IM_TOGGLE_BIG_BORDER, 3, true);
+    ui_->Add(stop_, OFX_IM_BUTTON_BORDER, 3);
+
+    ui_->Add(bpm_, OFX_IM_HSLIDER_BIG);
+    ui_->Add(bars_, OFX_IM_STEPPER);
+
+    ui_->AddLabel("Scene");
+    ui_->Add(saveScene_, OFX_IM_BUTTON_BORDER, 2, true);
+    ui_->Add(loadScene_, OFX_IM_BUTTON_BORDER, 2);
+
+    ui_->Add(clearAll_, OFX_IM_BUTTON_BORDER_BLINK, 2, true);
+    ImGui::BeginDisabled(selectedLane_ < 0);
+    ui_->Add(clearSelected_, OFX_IM_BUTTON_BORDER, 2);
+    ImGui::EndDisabled();
+
+    if (selectedLane_ >= 0) {
+      ui_->AddLabel("Selected lane: " + getLaneLabel(static_cast<std::size_t>(selectedLane_)));
+    } else {
+      ui_->AddLabel("Selected lane: none");
+    }
+
+    ui_->AddLabel("Cursor: " + formatStepMusical(currentFrame_) + " (step " + ofToString(currentFrame_) + ")");
+    ui_->AddLabel("JSON: " + scenePathAbsolute_);
   }
 
   void setupBangListeners()
@@ -262,15 +277,43 @@ private:
   {
     const ImVec4 rect = ImGui::NeoGetCurrentTimelineLabelRect();
     const ImVec2 backupCursor = ImGui::GetCursorScreenPos();
+    const float laneHeight = rect.w - rect.y;
+    const auto& style = ImGui::GetStyle();
+    const float frameHeight = ImGui::GetFrameHeight();
+    const float controlsY = rect.y + std::max(0.0f, (laneHeight - frameHeight) * 0.5f);
+    const float controlsX = rect.x + 4.0f;
 
-    const float yPad = 2.0f;
-    ImGui::SetCursorScreenPos(ImVec2(rect.x + 4.0f, rect.y + yPad));
+    const float wSel = ImGui::CalcTextSize("SEL").x + style.FramePadding.x * 2.0f;
+    const float wSolo = ImGui::CalcTextSize("solo").x + style.FramePadding.x * 2.0f;
+    const float wMute = ImGui::CalcTextSize("mute").x + style.FramePadding.x * 2.0f;
+    const float spacing = 2.0f;
+    const float controlsWidth = wSel + spacing + wSolo + spacing + wMute;
+    const float labelMinWidth = 40.0f;
+    const float labelColumnX = std::min(controlsX + controlsWidth + 8.0f, rect.z - labelMinWidth - 2.0f);
+    const float labelWidth = std::max(labelMinWidth, rect.z - labelColumnX - 4.0f);
+
+    auto* drawList = ImGui::GetWindowDrawList();
+    drawList->AddRectFilled(ImVec2(rect.x, rect.y), ImVec2(labelColumnX - 4.0f, rect.w), IM_COL32(0, 0, 0, 34));
+    drawList->AddRectFilled(ImVec2(labelColumnX - 4.0f, rect.y), ImVec2(rect.z, rect.w), IM_COL32(0, 0, 0, 14));
+    drawList->AddLine(ImVec2(labelColumnX - 4.0f, rect.y), ImVec2(labelColumnX - 4.0f, rect.w), IM_COL32(255, 255, 255, 35), 1.0f);
+
+    ImGui::SetCursorScreenPos(ImVec2(controlsX, controlsY));
 
     ImGui::PushID(static_cast<int>(laneIndex) + 1000);
+    const bool isSelectedLane = selectedLane_ == static_cast<int>(laneIndex);
+    if (isSelectedLane) {
+      ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(0, 0, 0, 180));
+      ImGui::PushStyleColor(ImGuiCol_ButtonHovered, IM_COL32(0, 0, 0, 210));
+      ImGui::PushStyleColor(ImGuiCol_ButtonActive, IM_COL32(0, 0, 0, 230));
+      ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(250, 250, 250, 255));
+    }
 
-    if (ImGui::SmallButton(selectedLane_ == static_cast<int>(laneIndex) ? "SEL*" : "SEL")) {
+    if (ImGui::SmallButton("SEL")) {
       pendingSelectedLane_ = static_cast<int>(laneIndex);
       selectedLane_ = static_cast<int>(laneIndex);
+    }
+    if (isSelectedLane) {
+      ImGui::PopStyleColor(4);
     }
 
     ImGui::SameLine(0.0f, 2.0f);
@@ -298,6 +341,17 @@ private:
     if (wasMuteEnabled) {
       ImGui::PopStyleColor(2);
     }
+
+    ImGui::SetCursorScreenPos(ImVec2(labelColumnX, controlsY));
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(0, 0, 0, 0));
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, IM_COL32(0, 0, 0, 36));
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, IM_COL32(0, 0, 0, 52));
+    ImGui::PushStyleColor(ImGuiCol_Text, ImGui::ColorConvertFloat4ToU32(toImVec4(laneColors_[laneIndex], 1.0f)));
+    if (ImGui::Button(getLaneLabel(laneIndex).c_str(), ImVec2(labelWidth, frameHeight))) {
+      pendingSelectedLane_ = static_cast<int>(laneIndex);
+      selectedLane_ = static_cast<int>(laneIndex);
+    }
+    ImGui::PopStyleColor(4);
 
     ImGui::PopID();
     ImGui::SetCursorScreenPos(backupCursor);
@@ -338,7 +392,11 @@ private:
         bool laneOpen = lanesOpen_[i];
         const std::string laneId = getLaneTimelineId(i);
 
-        if (ImGui::BeginNeoTimelineEx(laneId.c_str(), &laneOpen)) {
+        ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(0, 0, 0, 0));
+        const bool timelineOpened = ImGui::BeginNeoTimelineEx(laneId.c_str(), &laneOpen);
+        ImGui::PopStyleColor();
+
+        if (timelineOpened) {
           if (ImGui::IsNeoTimelineSelected()) {
             selectedLane_ = static_cast<int>(i);
           }
@@ -595,12 +653,12 @@ private:
   std::string getLaneLabel(std::size_t laneIndex) const
   {
     if (laneIndex < bangs_.size()) return bangs_[laneIndex].getName();
-    return "FX " + ofToString(laneIndex);
+    return ofToString(laneIndex);
   }
 
   std::string getLaneTimelineId(std::size_t laneIndex) const
   {
-    return "            " + getLaneLabel(laneIndex) + "##lane_" + ofToString(laneIndex);
+    return "                                          " + getLaneLabel(laneIndex) + "##lane_" + ofToString(laneIndex);
   }
 
   std::string formatStepMusical(ImGui::FrameIndexType step) const

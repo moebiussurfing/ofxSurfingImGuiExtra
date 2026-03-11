@@ -13,6 +13,7 @@ class ofApp : public ofBaseApp {
 public:
   ofxSurfingGui ui;
   ofParameter<bool> bGuiMain{ "Main", true };
+  ofParameter<bool> bGuiTransport{ "Transport", true };
   ofParameter<bool> bGuiTimeline{ "Timeline", true };
 
   void setup();
